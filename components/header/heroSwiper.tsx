@@ -7,6 +7,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 
 export default function HeroSwiper() {
   return (
@@ -28,7 +29,7 @@ export default function HeroSwiper() {
         <SwiperSlide>
           <div className="relative w-full h-full">
             <Image
-              src=""
+              src="/gravastart1.webp"
               alt="keyboard"
               fill
               priority
@@ -40,24 +41,34 @@ export default function HeroSwiper() {
         {/* Slide 2 */}
         <SwiperSlide>
           <div className="relative w-full h-full">
-            <Image src="" alt="keyboard" fill className="object-cover" />
+            <Image
+              src="/gravaStar.webp"
+              alt="keyboard"
+              fill
+              className="object-cover"
+            />
           </div>
         </SwiperSlide>
 
         {/* Slide 3 */}
         <SwiperSlide>
           <div className="relative w-full h-full">
-            <Image src="" alt="keyboard" fill className="object-cover" />
+            <Image
+              src="/nuphy1.webp"
+              alt="keyboard"
+              fill
+              className="object-cover"
+            />
           </div>
         </SwiperSlide>
       </Swiper>
 
       <div className="absolute bottom-4 right-4 z-20 flex items-center gap-3">
         <button className="hero-prev flex h-10 w-10 items-center justify-center rounded-lg bg-pink-600 text-white">
-          ←
+          <ArrowBigLeft className="size-4 cursor-pointer" />
         </button>
         <button className="hero-next flex h-10 w-10 items-center justify-center rounded-lg bg-pink-600 text-white">
-          →
+          <ArrowBigRight className="size-4 cursor-pointer" />
         </button>
       </div>
 

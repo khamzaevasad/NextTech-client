@@ -3,30 +3,29 @@ import { useScroll } from "@/hooks/use-scroll";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MobileNav } from "./mobile-nav";
-import { Logo } from "./logo";
 import { ThemeToggle } from "../web/theme-toggle";
 import Link from "next/link";
 
 export const navLinks = [
   {
     label: "Home",
-    href: "#",
+    href: "/",
   },
   {
     label: "Products",
-    href: "#",
+    href: "/products",
   },
   {
     label: "Stores",
-    href: "#",
+    href: "/stores",
   },
   {
     label: "Community",
-    href: "#",
+    href: "/community",
   },
   {
     label: "CS",
-    href: "#",
+    href: "/cs",
   },
 ];
 
