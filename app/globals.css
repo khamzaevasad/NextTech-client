@@ -122,4 +122,11 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .align-elements {
+    @apply mx-auto max-w-7xl px-4 w-full;
+  }
+  .text-special {
+    @apply text-[#FF0096];
+  }
 }

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { MobileNav } from "./mobile-nav";
 import { Logo } from "./logo";
 import { ThemeToggle } from "../web/theme-toggle";
+import Link from "next/link";
 
 export const navLinks = [
   {
@@ -39,11 +40,12 @@ export function Header() {
           scrolled,
       })}
     >
-      <nav className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between px-4">
-        <div className="rounded-md p-2 hover:bg-accent">
-          {/* <Logo className="h-4.5" /> */}
-          LOGO
-        </div>
+      <nav className="flex h-14 align-elements items-center justify-between">
+        <Link href="/">
+          <h1 className="font-bold text-3xl">
+            Next<span className="text-special">Tech</span>
+          </h1>
+        </Link>
         <div className="hidden items-center gap-1 md:flex">
           {navLinks.map((link, i) => (
             <a
