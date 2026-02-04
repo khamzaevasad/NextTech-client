@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Header } from "@/components/header/header";
+import { ApolloProvider } from "@apollo/client";
+import { ApolloWrapper } from "@/apollo/apollo-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,14 +31,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <main className="align-elements">{children}</main>
-        </ThemeProvider>
+        <ApolloWrapper>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <main className="align-elements">{children}</main>
+          </ThemeProvider>
+        </ApolloWrapper>
       </body>
     </html>
   );

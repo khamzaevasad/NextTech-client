@@ -59,8 +59,15 @@ export function Header() {
         <div className="flex gap-1">
           <ThemeToggle />
           <div className="hidden items-center gap-1 md:flex">
-            <Button variant="outline">Sign In</Button>
-            <Button>Login</Button>
+            <Link
+              href="/auth/sign-up/"
+              className={buttonVariants({ variant: "outline" })}
+            >
+              Sign up
+            </Link>
+            <Link className={buttonVariants({})} href="/auth/login">
+              Login
+            </Link>
           </div>
           <MobileNav />
         </div>
