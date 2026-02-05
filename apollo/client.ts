@@ -11,7 +11,6 @@ import createUploadLink from "apollo-upload-client/public/createUploadLink.js";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { onError } from "@apollo/client/link/error";
-import { TokenRefreshLink } from "apollo-link-token-refresh";
 import { getJwtToken } from "@/lib/auth";
 
 function getHeaders() {

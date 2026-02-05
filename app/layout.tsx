@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import { Header } from "@/components/header/header";
-import { ApolloProvider } from "@apollo/client";
 import { ApolloWrapper } from "@/apollo/apollo-wrapper";
+import { AuthInitializer } from "@/lib/auth/AuthInitializer";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ApolloWrapper>
+          <AuthInitializer />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -39,6 +40,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <main className="align-elements">{children}</main>
+            <Toaster closeButton />
           </ThemeProvider>
         </ApolloWrapper>
       </body>

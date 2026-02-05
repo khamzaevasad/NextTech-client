@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { MobileNav } from "./mobile-nav";
 import { ThemeToggle } from "../web/theme-toggle";
 import Link from "next/link";
+import { useReactiveVar } from "@apollo/client";
+import { authReadyVar, userVar } from "@/apollo/store";
 
 export const navLinks = [
   {
@@ -31,7 +33,12 @@ export const navLinks = [
 
 export function Header() {
   const scrolled = useScroll(10);
+  const user = useReactiveVar(userVar);
+  const authReady = useReactiveVar(authReadyVar);
 
+  if (!authReady) {
+    return null; // yoki skeleton
+  }
   return (
     <header
       className={cn("sticky top-0 z-50 w-full border-transparent border-b", {
@@ -59,15 +66,21 @@ export function Header() {
         <div className="flex gap-1">
           <ThemeToggle />
           <div className="hidden items-center gap-1 md:flex">
-            <Link
-              href="/auth/sign-up/"
-              className={buttonVariants({ variant: "outline" })}
-            >
-              Sign up
-            </Link>
-            <Link className={buttonVariants({})} href="/auth/login">
-              Login
-            </Link>
+            {!user?._id ? (
+              <>
+                <Link
+                  href="/auth/sign-up/"
+                  className={buttonVariants({ variant: "outline" })}
+                >
+                  Sign up
+                </Link>
+                <Link className={buttonVariants({})} href="/auth/login">
+                  Login
+                </Link>
+              </>
+            ) : (
+              <Button className="cursor-pointer">Logout</Button>
+            )}
           </div>
           <MobileNav />
         </div>
