@@ -2,6 +2,7 @@
 import decodeJWT from "jwt-decode";
 import { CustomJwtPayload } from "../types/customJwtPayloads";
 import { userVar } from "@/apollo/store";
+import { toast } from "sonner";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getJwtToken(): any {
   if (typeof window !== "undefined") {
@@ -48,6 +49,12 @@ export const updateUserInfo = (jwtToken: any) => {
   });
 };
 
+export const logout = () => {
+  deleteStorage();
+  deleteUserInfo();
+  toast.success("logout successfully");
+};
+/* ------------------------------ deleteStorage ----------------------------- */
 export const deleteStorage = () => {
   localStorage.removeItem("accessToken");
   window.localStorage.setItem("login", Date.now().toString());

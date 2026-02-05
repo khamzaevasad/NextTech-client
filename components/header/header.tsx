@@ -7,6 +7,7 @@ import { ThemeToggle } from "../web/theme-toggle";
 import Link from "next/link";
 import { useReactiveVar } from "@apollo/client";
 import { authReadyVar, userVar } from "@/apollo/store";
+import { logout } from "@/lib/auth";
 
 export const navLinks = [
   {
@@ -79,7 +80,9 @@ export function Header() {
                 </Link>
               </>
             ) : (
-              <Button className="cursor-pointer">Logout</Button>
+              <Button onClick={() => logout()} className="cursor-pointer">
+                Logout
+              </Button>
             )}
           </div>
           <MobileNav />
