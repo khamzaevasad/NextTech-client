@@ -1,6 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { userVar } from "@/apollo/store";
-import { LOGIN, SIGNUP } from "@/apollo/user/user-mutation";
 import { signUpSchema } from "@/app/schemas/auth";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,19 +18,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { updateStorage, updateUserInfo } from "@/lib/auth";
-import { useMutation } from "@apollo/client";
+import { signUpService } from "@/lib/auth/signup";
+import { useApolloClient } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { StoreIcon, User2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 export default function SignupPage() {
-  const [signUpMutate, { loading, error }] = useMutation(SIGNUP);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const client = useApolloClient();
 
   const form = useForm({
     resolver: zodResolver(signUpSchema),
@@ -43,29 +43,15 @@ export default function SignupPage() {
     },
   });
 
-  const handleSignUp = async (input: z.infer<typeof signUpSchema>) => {
-    try {
-      const { data } = await signUpMutate({
-        variables: {
-          input: input,
-        },
-        fetchPolicy: "network-only",
-      });
-
-      if (data?.signup.accessToken) {
-        const jwtToken = data?.signup.accessToken;
-        updateStorage({ jwtToken });
-        updateUserInfo(jwtToken);
-        alert("Xush kelibsiz!");
-        router.replace("/");
-      }
-    } catch (err) {
-      console.log("signup error", err);
-    }
-  };
-
   async function onSubmit(data: z.infer<typeof signUpSchema>) {
-    await handleSignUp(data);
+    try {
+      await signUpService(client, data);
+      toast.success("welcome");
+      router.replace("/");
+    } catch (err: any) {
+      console.log(err.message);
+      toast.error(err.message);
+    }
   }
 
   return (
