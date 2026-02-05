@@ -19,7 +19,9 @@ import { Input } from "@/components/ui/input";
 import { loginService } from "@/lib/auth/login";
 import { useApolloClient } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
@@ -27,6 +29,7 @@ import z from "zod";
 export default function LoginPage() {
   const router = useRouter();
   const client = useApolloClient();
+  const [isPending, startTransition] = useTransition();
 
   /* -------------------------------------------------------------------------- */
   /*                                  HANDLERS                                  */
@@ -40,15 +43,17 @@ export default function LoginPage() {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof loginSchema>) {
-    try {
-      await loginService(client, data);
-      toast.success("welcome");
-      router.replace("/");
-    } catch (err: any) {
-      console.log(err.message);
-      toast.error(err.message);
-    }
+  function onSubmit(data: z.infer<typeof loginSchema>) {
+    startTransition(async () => {
+      try {
+        await loginService(client, data);
+        toast.success("welcome");
+        router.replace("/");
+      } catch (err: any) {
+        console.log(err.message);
+        toast.error(err.message);
+      }
+    });
   }
 
   return (
@@ -98,7 +103,15 @@ export default function LoginPage() {
                 </Field>
               )}
             />
-            <Button>Login</Button>
+            <Button disabled={isPending}>
+              {isPending ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                </>
+              ) : (
+                <span>login</span>
+              )}
+            </Button>
           </FieldGroup>
         </form>
       </CardContent>

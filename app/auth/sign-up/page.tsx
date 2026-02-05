@@ -21,7 +21,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { signUpService } from "@/lib/auth/signup";
 import { useApolloClient } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { StoreIcon, User2 } from "lucide-react";
+import { Loader2, StoreIcon, User2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -46,15 +46,17 @@ export default function SignupPage() {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof signUpSchema>) {
-    try {
-      await signUpService(client, data);
-      toast.success("welcome");
-      router.replace("/");
-    } catch (err: any) {
-      console.log(err.message);
-      toast.error(err.message);
-    }
+  function onSubmit(data: z.infer<typeof signUpSchema>) {
+    startTransition(async () => {
+      try {
+        await signUpService(client, data);
+        toast.success("welcome");
+        router.replace("/");
+      } catch (err: any) {
+        console.log(err.message);
+        toast.error(err.message);
+      }
+    });
   }
 
   return (
@@ -167,7 +169,15 @@ export default function SignupPage() {
               )}
             />
 
-            <Button className="mt-4 cursor-pointer">Sign up</Button>
+            <Button disabled={isPending}>
+              {isPending ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                </>
+              ) : (
+                <span>Sign Up</span>
+              )}
+            </Button>
           </FieldGroup>
         </form>
       </CardContent>
