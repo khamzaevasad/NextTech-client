@@ -33,6 +33,9 @@ export default function SignupPage() {
   const router = useRouter();
   const client = useApolloClient();
 
+  /* -------------------------------------------------------------------------- */
+  /*                                   HANDLERS                                  */
+  /* -------------------------------------------------------------------------- */
   const form = useForm({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
