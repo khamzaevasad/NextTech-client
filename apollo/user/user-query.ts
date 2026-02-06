@@ -35,3 +35,55 @@ export const GET_SELLER = gql`
     }
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                  PRODUCTS                                  */
+/* -------------------------------------------------------------------------- */
+
+export const GET_PRODUCTS = gql`
+  query GetProducts($input: ProductsInquiry!) {
+    getProducts(input: $input) {
+      list {
+        _id
+        productName
+        productSlug
+        productDesc
+        productBrand
+        productPrice
+        productStock
+        productStatus
+        productCategory
+        storeId
+        productSpecsKeys
+        productSpecs
+        productImages
+        productViews
+        productLikes
+        productComments
+        createdAt
+        updatedAt
+        meLiked {
+          memberId
+          likeRefId
+          myFavorite
+        }
+        storeData {
+          _id
+          storeName
+          ownerId
+          storeDesc
+          storeStatus
+          storeAddress
+          storeProductsCount
+          storeRating
+          storeComments
+          storeViews
+          storeLikes
+        }
+      }
+      metaCounter {
+        total
+      }
+    }
+  }
+`;

@@ -1,54 +1,59 @@
 // lib/apollo-client.ts
 import {
   ApolloClient,
-  ApolloLink,
   InMemoryCache,
   split,
+  HttpLink,
   from,
-  NormalizedCacheObject,
 } from "@apollo/client";
-import createUploadLink from "apollo-upload-client/public/createUploadLink.js";
-import { WebSocketLink } from "@apollo/client/link/ws";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { onError } from "@apollo/client/link/error";
+import createUploadLink from "apollo-upload-client/public/createUploadLink.js";
 import { getJwtToken } from "@/lib/auth";
 
 function getHeaders() {
-  const headers = {} as HeadersInit;
+  const headers: Record<string, string> = {};
   const token = getJwtToken();
   if (token) {
-    // @ts-expect-error HeadersInit
     headers["Authorization"] = `Bearer ${token}`;
   }
   return headers;
 }
 
-// Client-ni yaratuvchi asosiy funksiya
 export const createApolloClient = () => {
-  const authLink = new ApolloLink((operation, forward) => {
-    operation.setContext(({ headers = {} }) => ({
-      headers: { ...headers, ...getHeaders() },
-    }));
-    return forward(operation);
-  });
-
-  // @ts-expect-error upload link types
-  const httpLink = new createUploadLink({
+  const httpLink = createUploadLink({
     uri: process.env.NEXT_PUBLIC_API_GRAPHQL_URL,
+    headers: getHeaders(),
   });
 
   const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
-      graphQLErrors.map(({ message }) =>
-        console.log(`[GraphQL error]: ${message}`),
+      graphQLErrors.forEach(({ message }) =>
+        console.error("[GraphQL error]:", message),
       );
     }
-    if (networkError) console.log(`[Network error]: ${networkError}`);
+    if (networkError) {
+      console.error("[Network error]:", networkError);
+    }
   });
 
-  // WebSocket faqat brauzerda ishlaydi
+  const wsLink =
+    typeof window !== "undefined" && process.env.NEXT_PUBLIC_API_WS
+      ? new GraphQLWsLink(
+          createClient({
+            url: process.env.NEXT_PUBLIC_API_WS, // 🔒 fallback YO‘Q
+            connectionParams: () => ({
+              headers: getHeaders(),
+            }),
+            retryAttempts: 3, // 🔥 CHEKSIZ EMAS
+          }),
+        )
+      : null;
+
   const splitLink =
-    typeof window !== "undefined"
+    typeof window !== "undefined" && wsLink
       ? split(
           ({ query }) => {
             const definition = getMainDefinition(query);
@@ -57,14 +62,8 @@ export const createApolloClient = () => {
               definition.operation === "subscription"
             );
           },
-          new WebSocketLink({
-            uri: process.env.NEXT_PUBLIC_API_WS || "ws://127.0.0.1:3007",
-            options: {
-              reconnect: true,
-              connectionParams: () => ({ headers: getHeaders() }),
-            },
-          }),
-          authLink.concat(httpLink),
+          wsLink,
+          httpLink,
         )
       : httpLink;
 

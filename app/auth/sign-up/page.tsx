@@ -50,10 +50,9 @@ export default function SignupPage() {
     startTransition(async () => {
       try {
         await signUpService(client, data);
-        toast.success("welcome");
+        toast.success("Welcome to Next Tech");
         router.replace("/");
       } catch (err: any) {
-        console.log(err.message);
         toast.error(err.message);
       }
     });

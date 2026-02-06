@@ -1,12 +1,13 @@
 "use client";
 import HeroSwiper from "@/components/header/heroSwiper";
 import ProductCard from "@/components/home/card";
+import LatestProducts from "@/components/home/LatestProducts";
 
 export default function Home() {
   return (
     <div>
       <HeroSwiper />
-      <h2 className="text-xl font-bold mb-4"></h2>
+      <LatestProducts />
     </div>
   );
 }

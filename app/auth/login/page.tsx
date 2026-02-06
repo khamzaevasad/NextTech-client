@@ -47,10 +47,9 @@ export default function LoginPage() {
     startTransition(async () => {
       try {
         await loginService(client, data);
-        toast.success("welcome");
+        toast.success(`Login successfully`);
         router.replace("/");
       } catch (err: any) {
-        console.log(err.message);
         toast.error(err.message);
       }
     });
