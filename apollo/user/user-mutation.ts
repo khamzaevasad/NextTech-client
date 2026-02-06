@@ -55,3 +55,28 @@ export const SIGNUP = gql`
     }
   }
 `;
+
+export const LIKE_TARGET_PRODUCT = gql`
+  mutation LikeTargetProduct($input: String!) {
+    likeTargetProduct(productId: $input) {
+      _id
+      productName
+      productSlug
+      productDesc
+      productBrand
+      productPrice
+      productStock
+      productStatus
+      productCategory
+      storeId
+      productSpecsKeys
+      productSpecs
+      productImages
+      productViews
+      productLikes
+      productComments
+      createdAt
+      updatedAt
+    }
+  }
+`;

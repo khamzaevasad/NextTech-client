@@ -19,26 +19,28 @@ import { Badge } from "../ui/badge";
 import { API_URL } from "../../lib/config";
 import { useState } from "react";
 import type { Store } from "@/lib/types/store/store";
-interface Product {
-  _id: string;
-  productName: string;
-  productPrice: number;
-  productBrand: string;
-  productImages: string[];
-  productViews: number;
-  storeData?: Store;
-}
+import { Product } from "@/lib/types/product/product";
+import { Member } from "@/lib/types/member/member";
+import { useReactiveVar } from "@apollo/client";
+import { userVar } from "@/apollo/store";
+import { T } from "@/lib/types/common";
 
 interface ProductCardProps {
   product: Product;
   className?: string;
+  likeProductHandler: (user: T, id: string) => Promise<void>;
 }
 
-export default function ProductCard({ product, className }: ProductCardProps) {
+export default function ProductCard({
+  product,
+  className,
+  likeProductHandler,
+}: ProductCardProps) {
   const [currentSlide, setCurrentSlide] = useState<number>(1);
   const rating = 5;
   const currency = "USD";
   const formattedPrice = product.productPrice.toLocaleString("usd-US");
+  const user = useReactiveVar(userVar);
 
   return (
     <Card
@@ -81,18 +83,34 @@ export default function ProductCard({ product, className }: ProductCardProps) {
 
         {/* Wishlist */}
         <button
-          className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 rounded-full shadow-sm 
-             hover:text-red-500 transition"
+          type="button"
+          className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 rounded-full shadow-sm cursor-pointer"
           aria-label="Add to wishlist"
+          onClick={(e) => likeProductHandler(user, product._id)}
         >
-          <Heart className="h-4 w-4 sm:h-5 sm:w-5" />
+          {product?.meLiked && product?.meLiked[0]?.myFavorite ? (
+            <Image
+              src="/liked-true.png"
+              alt="like-icon"
+              width={20}
+              height={20}
+            />
+          ) : (
+            <Image
+              src="/liked-false.png"
+              alt="like-icon"
+              width={20}
+              height={20}
+            />
+          )}
+          {/* <Heart className="h-4 w-4 sm:h-5 sm:w-5" /> */}
         </button>
 
         {/* Brand Badge */}
         {product.productBrand && (
           <CardAction className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10">
             <Badge variant={"secondary"} className="">
-              {product.productBrand}
+              {product.productBrand.toLowerCase()}
             </Badge>
           </CardAction>
         )}
@@ -104,9 +122,9 @@ export default function ProductCard({ product, className }: ProductCardProps) {
       </div>
 
       {/* CONTENT */}
-      <CardContent className="p-2 sm:p-4 space-y-2 sm:space-y-3">
+      <CardContent className="p-2 sm:p-4 space-y-2 sm:space-y-3 mt-5">
         {/* Product name */}
-        <h3 className="text-xs sm:text-sm font-medium leading-snug line-clamp-2 min-h-[2rem] sm:min-h-[2.5rem]">
+        <h3 className="text-xs sm:text-sm font-medium leading-snug line-clamp-2">
           {product.productName}
         </h3>
 
