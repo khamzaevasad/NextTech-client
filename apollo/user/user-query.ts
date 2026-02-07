@@ -87,3 +87,50 @@ export const GET_PRODUCTS = gql`
     }
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                  CATEGORY                                  */
+/* -------------------------------------------------------------------------- */
+
+export const GET_CATEGORIES = gql`
+  query GetCategories($input: CategoriesInquiry!) {
+    getCategories(input: $input) {
+      list {
+        _id
+        categoryName
+        categorySlug
+        categoryImage
+        categoryDesc
+        parentId
+        categoryFilterKeys
+        createdAt
+        updatedAt
+        children {
+          _id
+          categoryName
+          categorySlug
+          categoryImage
+          categoryDesc
+          parentId
+          categoryFilterKeys
+          createdAt
+          updatedAt
+          children {
+            _id
+            categoryName
+            categorySlug
+            categoryImage
+            categoryDesc
+            parentId
+            categoryFilterKeys
+            createdAt
+            updatedAt
+          }
+        }
+      }
+      metaCounter {
+        total
+      }
+    }
+  }
+`;

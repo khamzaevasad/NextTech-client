@@ -1,4 +1,3 @@
-import { categories } from "@/lib/data/category";
 import DeviceCard from "../web/DeviceCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Grid } from "swiper/modules";
@@ -7,8 +6,44 @@ import "swiper/css/navigation";
 import "swiper/css/grid";
 import { Button } from "../ui/button";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
+import { useState } from "react";
+import { Category } from "@/lib/types/category/category";
+import { CategoriesInquiry } from "@/lib/types/category/category.input";
+import { useQuery } from "@apollo/client";
+import { GET_CATEGORIES } from "@/apollo/user/user-query";
+import { T } from "@/lib/types/common";
 
-function Devices() {
+interface CategoryProps {
+  initialInput?: CategoriesInquiry;
+}
+
+function Devices({
+  initialInput = {
+    page: 1,
+    limit: 40,
+    // sort: "createdAt",
+    search: {
+      parentId: null,
+    },
+  },
+}: CategoryProps) {
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  /* ------------------------------ APOLLO CLIENT ------------------------------ */
+  const {
+    loading: getCategoriesLoading,
+    error: getCategoriesError,
+    refetch: getCategoriesRefetch,
+    data: getCategoriesData,
+  } = useQuery(GET_CATEGORIES, {
+    fetchPolicy: "cache-and-network",
+    variables: { input: initialInput },
+    notifyOnNetworkStatusChange: true,
+    onCompleted: (data: T) => {
+      setCategories(data?.getCategories?.list ?? []);
+    },
+  });
+
   return (
     <div className="my-8">
       <div className="flex justify-between items-center my-6">

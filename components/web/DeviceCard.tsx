@@ -24,7 +24,7 @@ export default function DeviceCard({ className, category }: DeviceCardProps) {
       {/* image */}
       <div className="aspect-[4/3] overflow-hidden relative">
         <Image
-          src={"/asus1.webp"}
+          src={`${API_URL}/${category.categoryImage}`}
           alt={category.categoryName}
           fill
           className="object-contain p-4 sm:p-6"
@@ -35,7 +35,8 @@ export default function DeviceCard({ className, category }: DeviceCardProps) {
 
       <div className="text-center py-4 px-2">
         <Badge variant={"outline"}>
-          {category.categoryName} <ArrowUpRight className="ml-1 w-3 h-3" />
+          {category.categoryName.toLowerCase()}{" "}
+          <ArrowUpRight className="ml-1 w-3 h-3" />
         </Badge>
       </div>
     </Link>
