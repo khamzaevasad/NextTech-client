@@ -13,14 +13,12 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, ShoppingBasket, Star } from "lucide-react";
+import { ShoppingBasket, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 import { API_URL } from "../../lib/config";
 import { useState } from "react";
-import type { Store } from "@/lib/types/store/store";
 import { Product } from "@/lib/types/product/product";
-import { Member } from "@/lib/types/member/member";
 import { useReactiveVar } from "@apollo/client";
 import { userVar } from "@/apollo/store";
 import { T } from "@/lib/types/common";

@@ -8,8 +8,6 @@ import { T } from "@/lib/types/common";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
 import { toast } from "sonner";
-import { error } from "console";
-import { Member } from "@/lib/types/member/member";
 import { Message } from "@/lib/enums/common.enum";
 import { LIKE_TARGET_PRODUCT } from "@/apollo/user/user-mutation";
 
