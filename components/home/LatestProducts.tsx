@@ -10,6 +10,7 @@ import { buttonVariants } from "../ui/button";
 import { toast } from "sonner";
 import { Message } from "@/lib/enums/common.enum";
 import { LIKE_TARGET_PRODUCT } from "@/apollo/user/user-mutation";
+import { ArrowUpRight } from "lucide-react";
 
 interface LatestProductsProps {
   initialInput?: ProductsInquiry;
@@ -72,7 +73,7 @@ function LatestProducts({
       <div className="flex items-center justify-between">
         <h2 className="text-4xl font-semibold my-6">Latest Products</h2>
         <Link href="/products" className={buttonVariants({ variant: "ghost" })}>
-          View All
+          View All <ArrowUpRight />
         </Link>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-3">

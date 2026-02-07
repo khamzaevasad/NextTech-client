@@ -17,7 +17,7 @@ export default function DeviceCard({ className, category }: DeviceCardProps) {
       href="#"
       className={cn(
         "block group relative overflow-hidden rounded-xl border border-border/60 bg-background",
-        "transition-all duration-300 hover:border-pink-500/50 hover:bg-accent hover:shadow-md",
+        "transition-all duration-300 hover:border-pink-500/50 dark:bg-[radial-gradient(35%_80%_at_30%_0%,--theme(--color-foreground/.1),transparent)] hover:shadow-md",
         className,
       )}
     >
