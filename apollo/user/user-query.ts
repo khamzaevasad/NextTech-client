@@ -1,41 +1,4 @@
 import { gql } from "@apollo/client";
-
-export const GET_SELLER = gql`
-  query GetSeller($input: SellersInquiry!) {
-    getSeller(memberId: $input) {
-      list {
-        _id
-        memberType
-        memberStatus
-        memberAuthType
-        memberPhone
-        memberNick
-        memberFullName
-        memberImage
-        memberAddress
-        memberDesc
-        memberArticles
-        memberFollowers
-        memberFollowings
-        memberPoints
-        memberRank
-        memberWarnings
-        memberBlocks
-        deletedAt
-        createdAt
-        updatedAt
-        accessToken
-        storeData {
-          storeName
-        }
-      }
-      metaCounter {
-        total
-      }
-    }
-  }
-`;
-
 /* -------------------------------------------------------------------------- */
 /*                                  PRODUCTS                                  */
 /* -------------------------------------------------------------------------- */
@@ -135,6 +98,9 @@ export const GET_CATEGORIES = gql`
   }
 `;
 
+/* -------------------------------------------------------------------------- */
+/*                                    STORE                                   */
+/* -------------------------------------------------------------------------- */
 export const GET_STORES = gql`
   query GetStores($input: StoresInquiry!) {
     getStores(memberId: $input) {
@@ -180,6 +146,50 @@ export const GET_STORES = gql`
           myFavorite
         }
         storeLogo
+      }
+      metaCounter {
+        total
+      }
+    }
+  }
+`;
+
+/* -------------------------------------------------------------------------- */
+/*                                   MEMBER                                   */
+/* -------------------------------------------------------------------------- */
+export const GET_SELLER = gql`
+  query GetSeller($input: SellersInquiry!) {
+    getSeller(memberId: $input) {
+      list {
+        _id
+        memberType
+        memberStatus
+        memberAuthType
+        memberPhone
+        memberNick
+        memberFullName
+        memberImage
+        memberAddress
+        memberDesc
+        memberArticles
+        memberFollowers
+        memberFollowings
+        memberPoints
+        memberRank
+        memberWarnings
+        memberBlocks
+        deletedAt
+        createdAt
+        updatedAt
+        accessToken
+        storeData {
+          storeName
+        }
+        meFollowed {
+          followingId
+          followerId
+          myFollowing
+        }
       }
       metaCounter {
         total
