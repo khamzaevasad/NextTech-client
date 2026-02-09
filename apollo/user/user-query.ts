@@ -134,3 +134,56 @@ export const GET_CATEGORIES = gql`
     }
   }
 `;
+
+export const GET_STORES = gql`
+  query GetStores($input: StoresInquiry!) {
+    getStores(memberId: $input) {
+      list {
+        _id
+        storeName
+        ownerId
+        storeDesc
+        storeStatus
+        storeAddress
+        storeProductsCount
+        storeRating
+        storeComments
+        storeViews
+        storeLikes
+        storeLogo
+        ownerData {
+          _id
+          memberType
+          memberStatus
+          memberAuthType
+          memberPhone
+          memberNick
+          memberFullName
+          memberImage
+          memberAddress
+          memberDesc
+          memberArticles
+          memberFollowers
+          memberFollowings
+          memberPoints
+          memberRank
+          memberWarnings
+          memberBlocks
+          deletedAt
+          createdAt
+          updatedAt
+          accessToken
+        }
+        meLiked {
+          memberId
+          likeRefId
+          myFavorite
+        }
+        storeLogo
+      }
+      metaCounter {
+        total
+      }
+    }
+  }
+`;
