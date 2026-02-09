@@ -46,7 +46,7 @@ export default function ProductCard({
       href="#"
       className={cn(
         "group relative overflow-hidden rounded-xl border border-border/60",
-        "transition-all duration-300 hover:border-pink-500/50 hover:shadow-md dark:bg-[radial-gradient(35%_80%_at_30%_0%,--theme(--color-foreground/.1),transparent)] hover:shadow-md",
+        "transition-all duration-300 hover:border-pink-500/50 hover:shadow-md dark:bg-[radial-gradient(35%_80%_at_30%_0%,--theme(--color-foreground/.1),transparent)]",
         className,
       )}
     >
