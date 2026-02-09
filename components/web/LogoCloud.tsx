@@ -38,7 +38,6 @@ export function LogoCloud({
       setStores(data?.getStores?.list ?? []);
     },
   });
-  console.log("stores", stores);
 
   return (
     <div className="mask-[linear-gradient(to_right,transparent,black,transparent)] overflow-hidden py-4">

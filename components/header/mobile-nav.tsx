@@ -1,3 +1,4 @@
+"use client";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -5,8 +6,13 @@ import { MenuIcon, XIcon } from "lucide-react";
 import React from "react";
 import { createPortal } from "react-dom";
 import { navLinks } from "./header";
+import Link from "next/link";
+import { logout } from "@/lib/auth";
+import { useReactiveVar } from "@apollo/client";
+import { userVar } from "@/apollo/store";
 
 export function MobileNav() {
+  const user = useReactiveVar(userVar);
   const [open, setOpen] = React.useState(false);
   const { isMobile } = useMediaQuery();
 
@@ -57,24 +63,81 @@ export function MobileNav() {
               data-slot={open ? "open" : "closed"}
             >
               <div className="grid gap-y-2">
-                {navLinks.map((link) => (
-                  <a
+                <Link
+                  href="/"
+                  className={buttonVariants({
+                    variant: "ghost",
+                    className: "justify-start",
+                  })}
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/products"
+                  className={buttonVariants({
+                    variant: "ghost",
+                    className: "justify-start",
+                  })}
+                >
+                  Products
+                </Link>
+                <Link
+                  href="/stores"
+                  className={buttonVariants({
+                    variant: "ghost",
+                    className: "justify-start",
+                  })}
+                >
+                  Stores
+                </Link>
+                <Link
+                  href="/community"
+                  className={buttonVariants({
+                    variant: "ghost",
+                    className: "justify-start",
+                  })}
+                >
+                  Community
+                </Link>
+                <Link
+                  href="/cs"
+                  className={buttonVariants({
+                    variant: "ghost",
+                    className: "justify-start",
+                  })}
+                >
+                  CS
+                </Link>
+                {user?._id && (
+                  <Link
+                    href="/myPage"
                     className={buttonVariants({
                       variant: "ghost",
                       className: "justify-start",
                     })}
-                    href={link.href}
-                    key={link.label}
                   >
-                    {link.label}
-                  </a>
-                ))}
+                    My Page
+                  </Link>
+                )}
               </div>
               <div className="mt-12 flex flex-col gap-2">
-                <Button className="w-full" variant="outline">
-                  Sign In
-                </Button>
-                <Button className="w-full">Login</Button>
+                {!user?._id ? (
+                  <>
+                    <Link
+                      href="/auth/sign-up/"
+                      className={buttonVariants({ variant: "outline" })}
+                    >
+                      Sign up
+                    </Link>
+                    <Link className={buttonVariants({})} href="/auth/login">
+                      Login
+                    </Link>
+                  </>
+                ) : (
+                  <Button onClick={() => logout()} className="cursor-pointer">
+                    Logout
+                  </Button>
+                )}
               </div>
             </div>
           </div>,

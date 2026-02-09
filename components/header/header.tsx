@@ -54,15 +54,35 @@ export function Header() {
           </h1>
         </Link>
         <div className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link, i) => (
+          <Link href="/" className={buttonVariants({ variant: "ghost" })}>
+            Home
+          </Link>
+          <Link
+            href="/products"
+            className={buttonVariants({ variant: "ghost" })}
+          >
+            Products
+          </Link>
+          <Link href="/stores" className={buttonVariants({ variant: "ghost" })}>
+            Stores
+          </Link>
+          <Link
+            href="/community"
+            className={buttonVariants({ variant: "ghost" })}
+          >
+            Community
+          </Link>
+          <Link href="/cs" className={buttonVariants({ variant: "ghost" })}>
+            CS
+          </Link>
+          {user?._id && (
             <Link
+              href="/myPage"
               className={buttonVariants({ variant: "ghost" })}
-              href={link.href}
-              key={i}
             >
-              {link.label}
+              My Page
             </Link>
-          ))}
+          )}
         </div>
         <div className="flex gap-1">
           <ThemeToggle />
