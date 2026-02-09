@@ -35,7 +35,7 @@ export default function RootLayout({
           <AuthInitializer />
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >

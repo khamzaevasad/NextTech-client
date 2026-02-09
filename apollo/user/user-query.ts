@@ -98,6 +98,15 @@ export const GET_CATEGORIES = gql`
   }
 `;
 
+export const GET_FILTER_OPTIONS = gql`
+  query GetFilterOptions($categoryId: String!) {
+    getFilterOptions(categoryId: $categoryId) {
+      brands
+      specOptions
+      filterKeys
+    }
+  }
+`;
 /* -------------------------------------------------------------------------- */
 /*                                    STORE                                   */
 /* -------------------------------------------------------------------------- */
