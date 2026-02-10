@@ -43,7 +43,7 @@ export default function ProductCard({
 
   return (
     <Link
-      href="#"
+      href={`/products/${product.productSlug}`}
       className={cn(
         "group relative overflow-hidden rounded-xl border border-border/60",
         "transition-all duration-300 hover:border-pink-500/50 hover:shadow-md dark:bg-[radial-gradient(35%_80%_at_30%_0%,--theme(--color-foreground/.1),transparent)]",
@@ -86,7 +86,11 @@ export default function ProductCard({
           type="button"
           className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 rounded-full shadow-sm cursor-pointer"
           aria-label="Add to wishlist"
-          onClick={(e) => likeProductHandler(user, product._id)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            likeProductHandler(user, product._id);
+          }}
         >
           {product?.meLiked && product?.meLiked[0]?.myFavorite ? (
             <Image
@@ -194,6 +198,10 @@ export default function ProductCard({
           size="lg"
           className="cursor-pointer w-full bg-pink-600 text-white font-semibold hover:bg-pink-500 transition-colors
                  text-xs sm:text-sm h-9 sm:h-11"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
           <ShoppingBasket className="mr-1.5 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
           Add to cart

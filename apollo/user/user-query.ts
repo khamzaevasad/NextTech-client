@@ -3,6 +3,50 @@ import { gql } from "@apollo/client";
 /*                                  PRODUCTS                                  */
 /* -------------------------------------------------------------------------- */
 
+export const GET_PRODUCT = gql`
+  query GetProduct($input: String!) {
+    getProduct(input: $input) {
+      _id
+      productName
+      productSlug
+      productDesc
+      productBrand
+      productPrice
+      productStock
+      productStatus
+      productCategory
+      storeId
+      productSpecsKeys
+      productSpecs
+      productImages
+      productViews
+      productLikes
+      productComments
+      createdAt
+      updatedAt
+      storeData {
+        _id
+        storeName
+        ownerId
+        storeDesc
+        storeStatus
+        storeAddress
+        storeProductsCount
+        storeRating
+        storeComments
+        storeViews
+        storeLikes
+        storeLogo
+      }
+      meLiked {
+        memberId
+        likeRefId
+        myFavorite
+      }
+    }
+  }
+`;
+
 export const GET_PRODUCTS = gql`
   query GetProducts($input: ProductsInquiry!) {
     getProducts(input: $input) {
