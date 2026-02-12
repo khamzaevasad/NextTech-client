@@ -88,15 +88,18 @@ export default function Page({ params }: DetailProps) {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen ">
       {/* Navigation Breadcrumb */}
       <div className="container mx-auto px-4 py-6">
         <div className="text-sm text-gray-400 mb-8">
-          <Link href="/products" className="hover:text-pink-500 cursor-pointer">
+          <Link
+            href="/products"
+            className="hover:text-pink-500 text-muted-foreground cursor-pointer"
+          >
             Products
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-white">{product.productName}</span>
+          <span>{product.productName}</span>
         </div>
 
         {/* Product Title */}
@@ -169,10 +172,10 @@ export default function Page({ params }: DetailProps) {
 
               {/* Custom Navigation Buttons */}
               <button className="swiper-button-prev-custom absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-pink-600 hover:bg-pink-500 w-12 h-12 flex items-center justify-center transition-colors cursor-pointer">
-                <ArrowBigLeft />
+                <ArrowBigLeft className="text-white" />
               </button>
               <button className="swiper-button-next-custom absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-pink-500 hover:bg-pink-600 w-12 h-12 flex items-center justify-center transition-colors cursor-pointer">
-                <ArrowBigRight />
+                <ArrowBigRight className="text-white" />
               </button>
             </div>
           </div>
