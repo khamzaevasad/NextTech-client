@@ -58,7 +58,10 @@ export default function Page({ params }: DetailProps) {
     );
   }
 
-  const rating = 5;
+  const rating =
+    getProductData.productRatingCount > 0
+      ? getProductData.productRating / getProductData.productRatingCount
+      : 0;
 
   if (getProductError || !getProductData?.getProduct) {
     return (

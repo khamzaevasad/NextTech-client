@@ -43,7 +43,6 @@ export default function ProductCard({
   const currency = "USD";
   const formattedPrice = product.productPrice.toLocaleString("usd-US");
   const user = useReactiveVar(userVar);
-  console.log("product", product);
 
   return (
     <Link
