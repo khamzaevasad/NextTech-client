@@ -39,6 +39,10 @@ export interface Product {
 
   productComments: number;
 
+  productRating: number;
+
+  productRatingCount: number;
+
   createdAt: Date;
 
   updatedAt: Date;

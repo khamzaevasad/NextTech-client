@@ -22,6 +22,8 @@ export const GET_PRODUCT = gql`
       productViews
       productLikes
       productComments
+      productRating
+      productRatingCount
       createdAt
       updatedAt
       storeData {
@@ -67,6 +69,8 @@ export const GET_PRODUCTS = gql`
         productViews
         productLikes
         productComments
+        productRating
+        productRatingCount
         createdAt
         updatedAt
         meLiked {

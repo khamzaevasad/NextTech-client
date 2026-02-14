@@ -36,10 +36,14 @@ export default function ProductCard({
   likeProductHandler,
 }: ProductCardProps) {
   const [currentSlide, setCurrentSlide] = useState<number>(1);
-  const rating = 5;
+  const rating =
+    product.productRatingCount > 0
+      ? product.productRating / product.productRatingCount
+      : 0;
   const currency = "USD";
   const formattedPrice = product.productPrice.toLocaleString("usd-US");
   const user = useReactiveVar(userVar);
+  console.log("product", product);
 
   return (
     <Link
