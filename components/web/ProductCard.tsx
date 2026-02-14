@@ -27,7 +27,7 @@ import Link from "next/link";
 interface ProductCardProps {
   product: Product;
   className?: string;
-  likeProductHandler: (user: T, id: string) => Promise<void>;
+  likeProductHandler?: (user: T, id: string) => Promise<void>;
 }
 
 export default function ProductCard({
@@ -92,7 +92,7 @@ export default function ProductCard({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            likeProductHandler(user, product._id);
+            likeProductHandler?.(user, product._id);
           }}
         >
           {product?.meLiked && product?.meLiked[0]?.myFavorite ? (

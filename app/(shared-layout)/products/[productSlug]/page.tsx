@@ -28,6 +28,7 @@ import { T } from "@/lib/types/common";
 import { Message } from "@/lib/enums/common.enum";
 import { toast } from "sonner";
 import { userVar } from "@/apollo/store";
+import StoreProduct from "@/components/products/StoreProduct";
 
 interface DetailProps {
   params: Promise<{
@@ -82,28 +83,30 @@ export default function ProductDetailage({ params }: DetailProps) {
       }
     }
   };
-  if (getProductLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
-      </div>
-    );
-  }
 
-  const rating =
-    getProductData.productRatingCount > 0
-      ? getProductData.productRating / getProductData.productRatingCount
-      : 0;
+  // if (getProductLoading) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <div className="text-white text-xl">Loading...</div>
+  //     </div>
+  //   );
+  // }
 
   if (getProductError || !getProductData?.getProduct) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-white text-xl">Product not found</div>
       </div>
     );
   }
 
   const product = getProductData.getProduct;
+
+  const rating =
+    product?.productRatingCount > 0
+      ? product?.productRating / product?.productRatingCount
+      : 0;
+
   const specifications = [
     { label: "Type", value: product.productCategory || "Gaming Laptop" },
     { label: "CPU", value: product.productSpecs?.cpu || "N/A" },
@@ -125,7 +128,7 @@ export default function ProductDetailage({ params }: DetailProps) {
   return (
     <div className="min-h-screen ">
       {/* Navigation Breadcrumb */}
-      <div className="container mx-auto px-4 py-6">
+      <div className="mx-auto px-4 py-6">
         <div className="text-sm text-gray-400 mb-8">
           <Link
             href="/products"
@@ -422,6 +425,17 @@ export default function ProductDetailage({ params }: DetailProps) {
               Comments
             </div>
           </div>
+        </div>
+
+        {/* Comment & review */}
+        <div>comment section</div>
+
+        {/* Store Products */}
+        <div>
+          <StoreProduct
+            likeProductHandler={likeProductHandler}
+            storeId={product.storeId}
+          />
         </div>
       </div>
 
