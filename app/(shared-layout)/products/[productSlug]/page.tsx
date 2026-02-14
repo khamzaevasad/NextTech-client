@@ -1,6 +1,6 @@
 "use client";
 import { GET_PRODUCT } from "@/apollo/user/user-query";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { use, useState } from "react";
 import {
   Heart,
@@ -23,6 +23,11 @@ import { API_URL } from "@/lib/config";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { LIKE_TARGET_PRODUCT } from "@/apollo/user/user-mutation";
+import { T } from "@/lib/types/common";
+import { Message } from "@/lib/enums/common.enum";
+import { toast } from "sonner";
+import { userVar } from "@/apollo/store";
 
 interface DetailProps {
   params: Promise<{
@@ -30,14 +35,18 @@ interface DetailProps {
   }>;
 }
 
-export default function Page({ params }: DetailProps) {
+export default function ProductDetailage({ params }: DetailProps) {
   const { productSlug } = use(params);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [activeTab, setActiveTab] = useState<"specs" | "description">("specs");
 
+  const user = useReactiveVar(userVar);
+
   /* -------------------------------------------------------------------------- */
   /*                                APOLLO CLIENT                               */
   /* -------------------------------------------------------------------------- */
+  const [LikeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT, {});
+
   const {
     loading: getProductLoading,
     error: getProductError,
@@ -50,6 +59,29 @@ export default function Page({ params }: DetailProps) {
     skip: !productSlug,
   });
 
+  /* --------------------------- likeProductHandler --------------------------- */
+  const likeProductHandler = async (user: T, id: string) => {
+    try {
+      if (!id) return;
+      if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+
+      await LikeTargetProduct({
+        variables: {
+          input: id,
+        },
+      });
+
+      await getProductRefetch({ input: productSlug });
+      toast("success");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.log("likePropertyHandler error", err.message);
+        toast(err.message);
+      } else {
+        toast("Unexpected error occurred");
+      }
+    }
+  };
   if (getProductLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -193,18 +225,47 @@ export default function Page({ params }: DetailProps) {
             </div>
 
             {/* Rating */}
-            <div className="flex items-center gap-0.5 my-4">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className={cn(
-                    "h-3 w-3 sm:h-4 sm:w-4",
-                    i < Math.floor(rating)
-                      ? "fill-pink-500 text-pink-500"
-                      : "text-muted-foreground/60",
-                  )}
-                />
-              ))}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-0.5 my-4">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star
+                    key={i}
+                    className={cn(
+                      "h-3 w-3 sm:h-4 sm:w-4",
+                      i < Math.floor(rating)
+                        ? "fill-pink-500 text-pink-500"
+                        : "text-muted-foreground/60",
+                    )}
+                  />
+                ))}
+              </div>
+              <button
+                type="button"
+                className="rounded-full shadow-sm cursor-pointer"
+                aria-label="Add to wishlist"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  likeProductHandler(user, product._id);
+                }}
+              >
+                {product?.meLiked && product?.meLiked[0]?.myFavorite ? (
+                  <Image
+                    src="/liked-true.png"
+                    alt="like-icon"
+                    width={20}
+                    height={20}
+                  />
+                ) : (
+                  <Image
+                    src="/liked-false.png"
+                    alt="like-icon"
+                    width={20}
+                    height={20}
+                  />
+                )}
+                {/* <Heart className="h-4 w-4 sm:h-5 sm:w-5" /> */}
+              </button>
             </div>
 
             {/* Price */}

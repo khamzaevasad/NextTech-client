@@ -1,4 +1,3 @@
-// lib/apollo-client.ts
 import {
   ApolloClient,
   InMemoryCache,
@@ -6,6 +5,7 @@ import {
   HttpLink,
   from,
 } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
@@ -13,63 +13,72 @@ import { onError } from "@apollo/client/link/error";
 import createUploadLink from "apollo-upload-client/public/createUploadLink.js";
 import { getJwtToken } from "@/lib/auth";
 
-function getHeaders() {
-  const headers: Record<string, string> = {};
+/* --------------------------- AUTH LINK (MUHIM) --------------------------- */
+const authLink = setContext((_, { headers }) => {
   const token = getJwtToken();
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+
+  return {
+    headers: {
+      ...headers,
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  };
+});
+
+/* ------------------------------ HTTP LINK ------------------------------ */
+const httpLink = createUploadLink({
+  uri: process.env.NEXT_PUBLIC_API_GRAPHQL_URL,
+});
+
+/* ------------------------------ ERROR LINK ------------------------------ */
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    graphQLErrors.forEach(({ message }) =>
+      console.error("[GraphQL error]:", message),
+    );
   }
-  return headers;
-}
+  if (networkError) {
+    console.error("[Network error]:", networkError);
+  }
+});
 
-export const createApolloClient = () => {
-  const httpLink = createUploadLink({
-    uri: process.env.NEXT_PUBLIC_API_GRAPHQL_URL,
-    headers: getHeaders(),
-  });
-
-  const errorLink = onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors) {
-      graphQLErrors.forEach(({ message }) =>
-        console.error("[GraphQL error]:", message),
-      );
-    }
-    if (networkError) {
-      console.error("[Network error]:", networkError);
-    }
-  });
-
-  const wsLink =
-    typeof window !== "undefined" && process.env.NEXT_PUBLIC_API_WS
-      ? new GraphQLWsLink(
-          createClient({
-            url: process.env.NEXT_PUBLIC_API_WS, // 🔒 fallback YO‘Q
-            connectionParams: () => ({
-              headers: getHeaders(),
-            }),
-            retryAttempts: 3, // 🔥 CHEKSIZ EMAS
-          }),
-        )
-      : null;
-
-  const splitLink =
-    typeof window !== "undefined" && wsLink
-      ? split(
-          ({ query }) => {
-            const definition = getMainDefinition(query);
-            return (
-              definition.kind === "OperationDefinition" &&
-              definition.operation === "subscription"
-            );
+/* ------------------------------- WS LINK ------------------------------- */
+const wsLink =
+  typeof window !== "undefined" && process.env.NEXT_PUBLIC_API_WS
+    ? new GraphQLWsLink(
+        createClient({
+          url: process.env.NEXT_PUBLIC_API_WS,
+          connectionParams: () => {
+            const token = getJwtToken();
+            return {
+              Authorization: token ? `Bearer ${token}` : "",
+            };
           },
-          wsLink,
-          httpLink,
-        )
-      : httpLink;
+          retryAttempts: 3,
+        }),
+      )
+    : null;
 
-  return new ApolloClient({
+/* ------------------------------- SPLIT ------------------------------- */
+const splitLink =
+  typeof window !== "undefined" && wsLink
+    ? split(
+        ({ query }) => {
+          const definition = getMainDefinition(query);
+          return (
+            definition.kind === "OperationDefinition" &&
+            definition.operation === "subscription"
+          );
+        },
+        wsLink,
+        httpLink,
+      )
+    : httpLink;
+
+/* --------------------------- APOLLO CLIENT --------------------------- */
+export const createApolloClient = () =>
+  new ApolloClient({
     ssrMode: typeof window === "undefined",
-    link: from([errorLink, splitLink]),
+    link: from([errorLink, authLink, splitLink]),
     cache: new InMemoryCache(),
   });
-};
