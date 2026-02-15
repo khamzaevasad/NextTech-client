@@ -3,32 +3,22 @@
 import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { Heart } from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { ProductsInquiry } from "@/lib/types/product/product.input";
+import { useState } from "react";
+import { Direction } from "@/lib/enums/comment.enum";
+import { GET_PRODUCTS } from "@/apollo/user/user-query";
+import { Product } from "@/lib/types/product/product";
 
 interface WishlistButtonProps {
   userId?: string;
   className?: string;
 }
 
-// Mock query - replace with your actual GraphQL query
-const GET_WISHLIST_COUNT = `
-  query GetWishlistCount {
-    getWishlistCount
-  }
-`;
-
 export function WishlistButton({ userId, className }: WishlistButtonProps) {
-  // Replace this with your actual Apollo query
-  // const { data, loading } = useQuery(GET_WISHLIST_COUNT, {
-  //   skip: !userId,
-  //   fetchPolicy: "cache-and-network",
-  // });
-
-  // Mock count - replace with actual data from query
-  // const wishlistCount = data?.getWishlistCount || 0;
-  const wishlistCount = 0; // Remove this line when using real query
+  const wishlistCount = 0;
 
   return (
     <Link

@@ -23,4 +23,5 @@ export interface ProductsInquiry {
   sort?: string;
   direction?: "ASC" | "DESC";
   search: SearchProduct;
+  onlyMyWishlist?: boolean;
 }
