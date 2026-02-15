@@ -29,6 +29,7 @@ import { Message } from "@/lib/enums/common.enum";
 import { toast } from "sonner";
 import { userVar } from "@/apollo/store";
 import StoreProduct from "@/components/products/StoreProduct";
+import Reviews from "@/components/web/Reviews";
 
 interface DetailProps {
   params: Promise<{
@@ -92,15 +93,15 @@ export default function ProductDetailage({ params }: DetailProps) {
   //   );
   // }
 
-  if (getProductError || !getProductData?.getProduct) {
+  if (!getProductData?.getProduct) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-white text-xl">Product not found</div>
+        <div className="text-white text-xl">Loading....</div>
       </div>
     );
   }
 
-  const product = getProductData.getProduct;
+  const product = getProductData?.getProduct;
 
   const rating =
     product?.productRatingCount > 0
@@ -166,13 +167,12 @@ export default function ProductDetailage({ params }: DetailProps) {
               >
                 {product.productImages?.map((image: string, index: number) => (
                   <SwiperSlide key={index}>
-                    <div className="flex items-center justify-center h-[500px]">
+                    <div className="relative h-[500px] flex items-center justify-center">
                       <Image
                         src={`${API_URL}/${image}`}
                         alt={`${product.productName} - ${index + 1}`}
-                        className="max-h-full max-w-full object-contain"
-                        width={500}
-                        height={500}
+                        fill
+                        className="object-contain"
                         unoptimized
                       />
                     </div>
@@ -194,13 +194,12 @@ export default function ProductDetailage({ params }: DetailProps) {
               >
                 {product.productImages?.map((image: string, index: number) => (
                   <SwiperSlide key={index}>
-                    <div className="cursor-pointer border-2 border-transparent hover:border-pink-600 rounded-lg overflow-hidden transition-all">
+                    <div className="relative w-full h-20 cursor-pointer border-2 border-transparent hover:border-pink-600 rounded-lg overflow-hidden transition-all">
                       <Image
                         src={`${API_URL}/${image}`}
                         alt={`Thumbnail ${index + 1}`}
-                        className="w-full h-20 object-cover"
-                        width={100}
-                        height={80}
+                        fill
+                        className="object-cover"
                         unoptimized
                       />
                     </div>
@@ -428,7 +427,9 @@ export default function ProductDetailage({ params }: DetailProps) {
         </div>
 
         {/* Comment & review */}
-        <div>comment section</div>
+        <div>
+          <Reviews productId={product._id} />
+        </div>
 
         {/* Store Products */}
         <div>

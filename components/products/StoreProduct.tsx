@@ -56,35 +56,28 @@ function StoreProduct({ storeId, likeProductHandler }: StoreProducts) {
 
       <Swiper
         slidesPerView={4}
-        grid={{
-          rows: 2,
-          fill: "row",
-        }}
+        slidesPerGroup={4}
         spaceBetween={16}
         navigation={{
           prevEl: ".devices-prev",
           nextEl: ".devices-next",
         }}
-        modules={[Navigation, Grid]}
+        modules={[Navigation]}
         breakpoints={{
           320: {
             slidesPerView: 1,
-            grid: { rows: 2 },
             spaceBetween: 12,
           },
           640: {
             slidesPerView: 2,
-            grid: { rows: 2 },
             spaceBetween: 12,
           },
           1024: {
             slidesPerView: 3,
-            grid: { rows: 2 },
             spaceBetween: 16,
           },
           1280: {
             slidesPerView: 4,
-            grid: { rows: 2 },
             spaceBetween: 16,
           },
         }}

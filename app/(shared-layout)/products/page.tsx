@@ -5,11 +5,10 @@ import { useMutation, useQuery } from "@apollo/client";
 import ProductCard from "@/components/web/ProductCard";
 import { ProductsInquiry } from "@/lib/types/product/product.input";
 import { Product } from "@/lib/types/product/product";
-import { Category } from "@/lib/types/category/category";
 import { Direction } from "@/lib/enums/comment.enum";
 import { GET_CATEGORIES, GET_PRODUCTS } from "@/apollo/user/user-query";
 import { Button } from "@/components/ui/button";
-import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ProductFilter } from "@/components/web/Hybridproductfilter";
 import { LIKE_TARGET_PRODUCT } from "@/apollo/user/user-mutation";
@@ -20,7 +19,7 @@ import { toast } from "sonner";
 export default function ProductsPage() {
   const [filters, setFilters] = useState<ProductsInquiry>({
     page: 1,
-    limit: 9, // Talab qilinganidek 9 ta
+    limit: 9,
     sort: "createdAt",
     direction: Direction.DESC,
     search: {},
