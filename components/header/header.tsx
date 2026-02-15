@@ -8,6 +8,8 @@ import Link from "next/link";
 import { useReactiveVar } from "@apollo/client";
 import { authReadyVar, userVar } from "@/apollo/store";
 import { logout } from "@/lib/auth";
+import { CartDropdown } from "./Cartdropdown";
+import { WishlistButton } from "./Wishlistbutton";
 
 export const navLinks = [
   {
@@ -40,6 +42,7 @@ export function Header() {
   if (!authReady) {
     return null;
   }
+
   return (
     <header
       className={cn("sticky top-0 z-50 w-full border-transparent border-b", {
@@ -84,8 +87,10 @@ export function Header() {
             </Link>
           )}
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-1 items-center">
           <ThemeToggle />
+          <WishlistButton userId={user?._id} />
+          <CartDropdown userId={user?._id} />
           <div className="hidden items-center gap-1 md:flex">
             {!user?._id ? (
               <>

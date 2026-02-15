@@ -30,6 +30,7 @@ import { toast } from "sonner";
 import { userVar } from "@/apollo/store";
 import StoreProduct from "@/components/products/StoreProduct";
 import Reviews from "@/components/web/Reviews";
+import { useCartStore } from "@/stores/cartStore";
 
 interface DetailProps {
   params: Promise<{
@@ -43,6 +44,7 @@ export default function ProductDetailage({ params }: DetailProps) {
   const [activeTab, setActiveTab] = useState<"specs" | "description">("specs");
 
   const user = useReactiveVar(userVar);
+  const { onAdd } = useCartStore();
 
   /* -------------------------------------------------------------------------- */
   /*                                APOLLO CLIENT                               */
@@ -280,7 +282,20 @@ export default function ProductDetailage({ params }: DetailProps) {
 
             {/* Action Buttons */}
             <div className="space-y-4 mb-8">
-              <button className="w-full bg-pink-600 hover:bg-pink-500 text-white py-4 rounded-lg font-semibold transition-colors">
+              <button
+                onClick={(e) => {
+                  onAdd({
+                    _id: product._id,
+                    productName: product.productName,
+                    productPrice: product.productPrice,
+                    productImages: product.productImages[0],
+                    productStock: product.productStock,
+                    productSlug: product?.productSlug,
+                    quantity: 1,
+                  });
+                }}
+                className="w-full bg-pink-600 hover:bg-pink-500 text-white py-4 rounded-lg font-semibold transition-colors cursor-pointer"
+              >
                 Add to Cart
               </button>
             </div>

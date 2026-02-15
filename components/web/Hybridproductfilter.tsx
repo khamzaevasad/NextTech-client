@@ -20,7 +20,13 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { SlidersHorizontal, Loader2, ChevronRight } from "lucide-react";
+import {
+  SlidersHorizontal,
+  Loader2,
+  ChevronRight,
+  Search,
+  X,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface FilterOptions {
@@ -59,6 +65,7 @@ export function ProductFilter({
     filters.search.priceRange?.start || PRICE_RANGE.min,
     filters.search.priceRange?.end || PRICE_RANGE.max,
   ]);
+  const [searchText, setSearchText] = useState(filters.search.text || "");
 
   // Spec filter
   const { data: filterOptionsData, loading: filterOptionsLoading } = useQuery<{
@@ -108,6 +115,20 @@ export function ProductFilter({
     updateFilters({ specs: newSpecs.length ? newSpecs : undefined });
   };
 
+  const handleSearchChange = (value: string) => {
+    setSearchText(value);
+    if (value.trim()) {
+      updateFilters({ text: value.trim() });
+    } else {
+      updateFilters({ text: undefined });
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearchText("");
+    updateFilters({ text: undefined });
+  };
+
   const parents = categories.filter((c) => !c.parentId);
 
   return (
@@ -121,19 +142,57 @@ export function ProductFilter({
         <div className="flex items-center gap-2 font-bold text-lg">
           <SlidersHorizontal className="w-5 h-5" /> Filters
         </div>
-        {(filters.search.categoryId || filters.search.priceRange) && (
+        {(filters.search.categoryId ||
+          filters.search.priceRange ||
+          filters.search.text) && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => onFilterChange({ ...filters, page: 1, search: {} })}
+            onClick={() => {
+              setSearchText("");
+              setPriceRange([PRICE_RANGE.min, PRICE_RANGE.max]);
+              onFilterChange({ ...filters, page: 1, search: {} });
+            }}
           >
             Clear
           </Button>
         )}
       </div>
 
-      {/* 1. CATEGORIES IERARXIYA */}
+      {/* SEARCH INPUT */}
       <div className="space-y-2">
+        <h3 className="font-semibold text-sm uppercase text-muted-foreground tracking-wider">
+          Search Products
+        </h3>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search by product name..."
+            value={searchText}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            className="pl-9 pr-9 h-10 bg-background border-border focus:border-pink-500 focus:ring-pink-500 transition-colors"
+          />
+          {searchText && (
+            <button
+              onClick={handleClearSearch}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Clear search"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+        {searchText && (
+          <p className="text-xs text-muted-foreground">
+            Searching for:{" "}
+            <span className="text-pink-500 font-medium">{searchText}</span>
+          </p>
+        )}
+      </div>
+
+      {/* 1. CATEGORIES IERARXIYA */}
+      <div className="space-y-2 pt-4 border-t">
         <h3 className="font-semibold text-sm uppercase text-muted-foreground tracking-wider">
           Categories
         </h3>

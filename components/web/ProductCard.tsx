@@ -6,14 +6,9 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import Image from "next/image";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { CardAction, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ShoppingBasket, Star } from "lucide-react";
+import { ShoppingCart, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 import { API_URL } from "../../lib/config";
@@ -23,6 +18,7 @@ import { useReactiveVar } from "@apollo/client";
 import { userVar } from "@/apollo/store";
 import { T } from "@/lib/types/common";
 import Link from "next/link";
+import { useCartStore } from "@/stores/cartStore";
 
 interface ProductCardProps {
   product: Product;
@@ -43,6 +39,7 @@ export default function ProductCard({
   const currency = "USD";
   const formattedPrice = product.productPrice.toLocaleString("usd-US");
   const user = useReactiveVar(userVar);
+  const { onAdd } = useCartStore();
 
   return (
     <Link
@@ -204,9 +201,18 @@ export default function ProductCard({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
+            onAdd({
+              _id: product._id,
+              productName: product.productName,
+              productPrice: product.productPrice,
+              productImages: product.productImages[0],
+              productStock: product.productStock,
+              productSlug: product?.productSlug,
+              quantity: 1,
+            });
           }}
         >
-          <ShoppingBasket className="mr-1.5 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+          <ShoppingCart className="mr-1.5 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
           Add to cart
         </Button>
       </CardFooter>
