@@ -12,3 +12,8 @@ export interface CartItem {
   productSlug: string;
   quantity: number;
 }
+
+export interface SortOption {
+  label: string;
+  value: string;
+}

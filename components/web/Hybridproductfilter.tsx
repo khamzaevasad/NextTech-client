@@ -20,13 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import {
-  SlidersHorizontal,
-  Loader2,
-  ChevronRight,
-  Search,
-  X,
-} from "lucide-react";
+import { SlidersHorizontal, Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface FilterOptions {

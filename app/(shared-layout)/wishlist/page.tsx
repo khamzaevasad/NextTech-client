@@ -71,6 +71,7 @@ export default function WishListPage() {
   const totalProducts =
     getFavoritesData?.getFavorites?.metaCounter?.[0]?.total ??
     favoriteProducts.length;
+
   const totalPages = Math.ceil(totalProducts / favorite.limit);
 
   return (
