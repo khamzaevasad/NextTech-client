@@ -203,6 +203,53 @@ export const GET_FILTER_OPTIONS = gql`
 /* -------------------------------------------------------------------------- */
 /*                                    STORE                                   */
 /* -------------------------------------------------------------------------- */
+
+export const GET_STORE = gql`
+  query GetStore($input: String!) {
+    getStore(storeId: $input) {
+      storeName
+      ownerId
+      storeDesc
+      storeStatus
+      storeAddress
+      storeProductsCount
+      storeRating
+      storeComments
+      storeViews
+      storeLikes
+      meLiked {
+        memberId
+        likeRefId
+        myFavorite
+      }
+      ownerData {
+        _id
+        memberType
+        memberStatus
+        memberAuthType
+        memberPhone
+        memberNick
+        memberFullName
+        memberImage
+        memberAddress
+        memberDesc
+        memberArticles
+        memberFollowers
+        memberFollowings
+        memberPoints
+        memberRank
+        memberWarnings
+        memberBlocks
+        deletedAt
+        createdAt
+        updatedAt
+        accessToken
+      }
+      storeLogo
+    }
+  }
+`;
+
 export const GET_STORES = gql`
   query GetStores($input: StoresInquiry!) {
     getStores(memberId: $input) {
