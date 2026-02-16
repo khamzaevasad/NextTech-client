@@ -24,22 +24,29 @@ interface ProductCardProps {
   product: Product;
   className?: string;
   likeProductHandler?: (user: T, id: string) => Promise<void>;
+  forceLiked?: boolean;
 }
 
 export default function ProductCard({
   product,
   className,
   likeProductHandler,
+  forceLiked,
 }: ProductCardProps) {
   const [currentSlide, setCurrentSlide] = useState<number>(1);
+
   const rating =
     product.productRatingCount > 0
       ? product.productRating / product.productRatingCount
       : 0;
+
   const currency = "USD";
   const formattedPrice = product.productPrice.toLocaleString("usd-US");
   const user = useReactiveVar(userVar);
   const { onAdd } = useCartStore();
+
+  const isLiked =
+    forceLiked || (product?.meLiked && product?.meLiked[0]?.myFavorite);
 
   return (
     <Link
@@ -51,7 +58,7 @@ export default function ProductCard({
       )}
     >
       {/* IMAGE */}
-      <div className="relative aspect-[4/3] overflow-hidden glow-wrapper">
+      <div className="relative aspect-4/3 overflow-hidden glow-wrapper">
         <Swiper
           modules={[Pagination]}
           pagination={{
@@ -92,7 +99,7 @@ export default function ProductCard({
             likeProductHandler?.(user, product._id);
           }}
         >
-          {product?.meLiked && product?.meLiked[0]?.myFavorite ? (
+          {isLiked ? (
             <Image
               src="/liked-true.png"
               alt="like-icon"
@@ -107,7 +114,6 @@ export default function ProductCard({
               height={20}
             />
           )}
-          {/* <Heart className="h-4 w-4 sm:h-5 sm:w-5" /> */}
         </button>
 
         {/* Brand Badge */}

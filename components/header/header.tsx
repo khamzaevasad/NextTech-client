@@ -5,34 +5,13 @@ import { cn } from "@/lib/utils";
 import { MobileNav } from "./mobile-nav";
 import { ThemeToggle } from "../web/theme-toggle";
 import Link from "next/link";
-import { useQuery, useReactiveVar } from "@apollo/client";
+import { useReactiveVar } from "@apollo/client";
 import { authReadyVar, userVar } from "@/apollo/store";
 import { logout } from "@/lib/auth";
 import { CartDropdown } from "./Cartdropdown";
 import { WishlistButton } from "./Wishlistbutton";
-import { useState } from "react";
-import { ProductsInquiry } from "@/lib/types/product/product.input";
-import { Direction } from "@/lib/enums/comment.enum";
-import { GET_PRODUCTS } from "@/apollo/user/user-query";
 
 export function Header() {
-  /* -------------------------------------------------------------------------- */
-  /*                                APOLLO CLIENT                               */
-  /* -------------------------------------------------------------------------- */
-  const { data: wishListData } = useQuery(GET_PRODUCTS, {
-    variables: {
-      input: {
-        page: 1,
-        limit: 100,
-        sort: "createdAt",
-        direction: Direction.DESC,
-        search: {},
-      },
-    },
-    fetchPolicy: "cache-first",
-  });
-
-  const favoriteProducts = wishListData?.getProducts?.list || [];
   const scrolled = useScroll(10);
   const user = useReactiveVar(userVar);
   const authReady = useReactiveVar(authReadyVar);

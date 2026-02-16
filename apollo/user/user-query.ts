@@ -99,6 +99,51 @@ export const GET_PRODUCTS = gql`
   }
 `;
 
+export const GET_FAVORITES = gql`
+  query GetFavorites($input: OrdinaryInquiry!) {
+    getFavorites(input: $input) {
+      list {
+        _id
+        productName
+        productSlug
+        productDesc
+        productBrand
+        productPrice
+        productStock
+        productStatus
+        productCategory
+        storeId
+        productSpecsKeys
+        productSpecs
+        productImages
+        productViews
+        productLikes
+        productComments
+        createdAt
+        updatedAt
+        storeData {
+          _id
+          storeName
+          ownerId
+          storeDesc
+          storeStatus
+          storeAddress
+          storeProductsCount
+          storeRating
+          storeComments
+          storeViews
+          storeLikes
+        }
+        productRating
+        productRatingCount
+      }
+      metaCounter {
+        total
+      }
+    }
+  }
+`;
+
 /* -------------------------------------------------------------------------- */
 /*                                  CATEGORY                                  */
 /* -------------------------------------------------------------------------- */

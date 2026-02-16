@@ -86,7 +86,7 @@ export default function ProductsPage() {
     <div className="container mx-auto px-4 py-10 min-h-screen">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* SIDEBAR */}
-        <div className="w-full lg:w-72 flex-shrink-0">
+        <div className="w-full lg:w-72 shrink-0">
           <ProductFilter
             filters={filters}
             onFilterChange={setFilters}
@@ -112,7 +112,7 @@ export default function ProductsPage() {
               {[...Array(6)].map((_, i) => (
                 <div
                   key={i}
-                  className="h-[400px] bg-card/50 animate-pulse rounded-2xl border"
+                  className="h-100 bg-card/50 animate-pulse rounded-2xl border"
                 />
               ))}
             </div>

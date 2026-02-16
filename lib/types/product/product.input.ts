@@ -1,4 +1,4 @@
-import { Direction } from "readline";
+import { Direction, Interface } from "readline";
 
 interface PriceRange {
   start: number;
@@ -24,4 +24,9 @@ export interface ProductsInquiry {
   direction?: "ASC" | "DESC";
   search: SearchProduct;
   onlyMyWishlist?: boolean;
+}
+
+export interface OrdinaryInquiry {
+  page: number;
+  limit: number;
 }

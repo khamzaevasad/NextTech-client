@@ -1,14 +1,12 @@
 "use client";
-import { userVar } from "@/apollo/store";
 import { LIKE_TARGET_PRODUCT } from "@/apollo/user/user-mutation";
-import { GET_PRODUCTS } from "@/apollo/user/user-query";
+import { GET_FAVORITES } from "@/apollo/user/user-query";
 import { Button, buttonVariants } from "@/components/ui/button";
 import ProductCard from "@/components/web/ProductCard";
-import { Direction } from "@/lib/enums/comment.enum";
 import { Message } from "@/lib/enums/common.enum";
 import { T } from "@/lib/types/common";
 import { Product } from "@/lib/types/product/product";
-import { ProductsInquiry } from "@/lib/types/product/product.input";
+import { OrdinaryInquiry } from "@/lib/types/product/product.input";
 import { cn } from "@/lib/utils";
 import { useMutation, useQuery } from "@apollo/client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -17,35 +15,33 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function WishListPage() {
-  const [wishList, setWishList] = useState<ProductsInquiry>({
+  const [favorite, setFavorite] = useState<OrdinaryInquiry>({
     page: 1,
     limit: 8,
-    sort: "createdAt",
-    onlyMyWishlist: true,
-    direction: Direction.DESC,
-    search: {},
   });
+
   /* -------------------------------------------------------------------------- */
   /*                                APOLLO CLIENT                               */
   /* -------------------------------------------------------------------------- */
   const [LikeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT, {});
-  const { data: wishListData, refetch: getProductsRefetch } = useQuery(
-    GET_PRODUCTS,
+
+  const { data: getFavoritesData, refetch: getFavoritesRefetch } = useQuery(
+    GET_FAVORITES,
     {
       variables: {
-        input: wishList,
+        input: favorite,
       },
-      fetchPolicy: "cache-first",
+      fetchPolicy: "cache-and-network",
     },
   );
 
-  const favoriteProducts = wishListData?.getProducts?.list || [];
+  const favoriteProducts = getFavoritesData?.getFavorites?.list || [];
 
   /* -------------------------------------------------------------------------- */
   /*                                  HANDLERS                                  */
   /* -------------------------------------------------------------------------- */
   const handlePageChange = (newPage: number) => {
-    setWishList((prev) => ({ ...prev, page: newPage }));
+    setFavorite((prev) => ({ ...prev, page: newPage }));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -60,7 +56,7 @@ export default function WishListPage() {
         },
       });
 
-      await getProductsRefetch({ input: wishList });
+      await getFavoritesRefetch({ input: favorite });
       toast("success");
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -73,9 +69,9 @@ export default function WishListPage() {
   };
 
   const totalProducts =
-    wishListData?.getProducts?.metaCounter?.[0]?.total ??
+    getFavoritesData?.getFavorites?.metaCounter?.[0]?.total ??
     favoriteProducts.length;
-  const totalPages = Math.ceil(totalProducts / wishList.limit);
+  const totalPages = Math.ceil(totalProducts / favorite.limit);
 
   return (
     <div className="my-8">
@@ -90,6 +86,7 @@ export default function WishListPage() {
                 likeProductHandler={likeProductHandler}
                 key={product._id}
                 product={product}
+                forceLiked
               />
             ))}
           </div>
@@ -100,8 +97,8 @@ export default function WishListPage() {
               <Button
                 variant="outline"
                 size="icon"
-                disabled={wishList.page === 1}
-                onClick={() => handlePageChange(wishList.page - 1)}
+                disabled={favorite.page === 1}
+                onClick={() => handlePageChange(favorite.page - 1)}
               >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
@@ -109,10 +106,10 @@ export default function WishListPage() {
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                 <Button
                   key={p}
-                  variant={wishList.page === p ? "default" : "outline"}
+                  variant={favorite.page === p ? "default" : "outline"}
                   className={cn(
                     "w-10 h-10",
-                    wishList.page === p && "bg-pink-500 hover:bg-pink-600",
+                    favorite.page === p && "bg-pink-500 hover:bg-pink-600",
                   )}
                   onClick={() => handlePageChange(p)}
                 >
@@ -123,8 +120,8 @@ export default function WishListPage() {
               <Button
                 variant="outline"
                 size="icon"
-                disabled={wishList.page === totalPages}
-                onClick={() => handlePageChange(wishList.page + 1)}
+                disabled={favorite.page === totalPages}
+                onClick={() => handlePageChange(favorite.page + 1)}
               >
                 <ChevronRight className="w-4 h-4" />
               </Button>
