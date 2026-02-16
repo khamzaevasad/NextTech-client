@@ -2,7 +2,7 @@ import { StoreLocation, StoreStatus } from "@/lib/enums/store.enum";
 import { MeLiked, TotalCounter } from "../product/product";
 import { Member } from "../member/member";
 
-export interface Store {
+export interface _Store {
   _id: string;
   storeName: string;
   ownerId: string;
@@ -10,6 +10,7 @@ export interface Store {
   storeStatus: StoreStatus;
   storeAddress: StoreLocation;
   storeProductsCount: number;
+  storeLogo: string;
   storeRating: number;
   storeComments: number;
   storeViews: number;
@@ -20,6 +21,6 @@ export interface Store {
 }
 
 export interface Stores {
-  list: Store[];
+  list: _Store[];
   metaCounter?: TotalCounter[];
 }
