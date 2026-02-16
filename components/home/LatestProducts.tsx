@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Message } from "@/lib/enums/common.enum";
 import { LIKE_TARGET_PRODUCT } from "@/apollo/user/user-mutation";
 import { ArrowUpRight } from "lucide-react";
+import { LoadingBar } from "../web/LoadingBar";
 
 interface LatestProductsProps {
   initialInput?: ProductsInquiry;
@@ -66,26 +67,30 @@ function LatestProducts({
     }
   };
 
-  // TODO: MODIFY LOADING SPINER
-  // if (getProductsLoading) return <h3 className="text-center">Loading...</h3>;
   return (
-    <div className="my-8">
-      <div className="flex items-center justify-between">
-        <h2 className="text-4xl font-semibold my-6">Latest Products</h2>
-        <Link href="/products" className={buttonVariants({ variant: "ghost" })}>
-          View All <ArrowUpRight />
-        </Link>
+    <>
+      <LoadingBar loading={getProductsLoading} />
+      <div className="my-8">
+        <div className="flex items-center justify-between">
+          <h2 className="text-4xl font-semibold my-6">Latest Products</h2>
+          <Link
+            href="/products"
+            className={buttonVariants({ variant: "ghost" })}
+          >
+            View All <ArrowUpRight />
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-3">
+          {products.map((product) => (
+            <ProductCard
+              key={product._id}
+              product={product}
+              likeProductHandler={likeProductHandler}
+            />
+          ))}
+        </div>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-3">
-        {products.map((product) => (
-          <ProductCard
-            key={product._id}
-            product={product}
-            likeProductHandler={likeProductHandler}
-          />
-        ))}
-      </div>
-    </div>
+    </>
   );
 }
 
