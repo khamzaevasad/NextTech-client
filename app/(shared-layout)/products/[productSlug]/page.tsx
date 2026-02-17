@@ -31,6 +31,7 @@ import { userVar } from "@/apollo/store";
 import StoreProduct from "@/components/products/StoreProduct";
 import Reviews from "@/components/web/Reviews";
 import { useCartStore } from "@/stores/cartStore";
+import { buttonVariants } from "@/components/ui/button";
 
 interface DetailProps {
   params: Promise<{
@@ -169,7 +170,7 @@ export default function ProductDetailage({ params }: DetailProps) {
               >
                 {product.productImages?.map((image: string, index: number) => (
                   <SwiperSlide key={index}>
-                    <div className="relative h-[500px] flex items-center justify-center">
+                    <div className="relative h-125 flex items-center justify-center">
                       <Image
                         src={`${API_URL}/${image}`}
                         alt={`${product.productName} - ${index + 1}`}
@@ -308,9 +309,15 @@ export default function ProductDetailage({ params }: DetailProps) {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-xl font-semibold">
+                <Link
+                  href={`/stores/${product.storeData._id}`}
+                  className={cn(
+                    buttonVariants({ variant: "link" }),
+                    "text-xl font-semibold m-0 p-0",
+                  )}
+                >
                   {product.storeData.storeName}
-                </div>
+                </Link>
                 {product.storeData.storeDesc && (
                   <div className="text-sm text-muted-foreground mt-2">
                     {product.storeData.storeDesc}
@@ -318,19 +325,6 @@ export default function ProductDetailage({ params }: DetailProps) {
                 )}
               </CardContent>
             </Card>
-
-            {/* Action Icons */}
-            <div className="flex gap-4">
-              <button className="flex items-center justify-center w-12 h-12 border border-gray-700 hover:border-pink-500 rounded-lg transition-colors">
-                <Heart className="w-5 h-5" />
-              </button>
-              <button className="flex items-center justify-center w-12 h-12 border border-gray-700 hover:border-pink-500 rounded-lg transition-colors">
-                <Scale className="w-5 h-5" />
-              </button>
-              <button className="flex items-center justify-center w-12 h-12 border border-gray-700 hover:border-pink-500 rounded-lg transition-colors">
-                <Share2 className="w-5 h-5" />
-              </button>
-            </div>
           </div>
         </div>
 

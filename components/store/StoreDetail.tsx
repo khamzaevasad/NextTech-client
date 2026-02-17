@@ -9,6 +9,8 @@ import {
   Store as StoreIcon,
   Phone,
   User,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -28,6 +30,9 @@ import { LIKE_TARGET_PRODUCT } from "@/apollo/user/user-mutation";
 import { T } from "@/lib/types/common";
 import { Message } from "@/lib/enums/common.enum";
 import { toast } from "sonner";
+import { ProductsInquiry } from "@/lib/types/product/product.input";
+import { Direction } from "@/lib/enums/comment.enum";
+import { Button } from "../ui/button";
 
 interface StoreDetailProps {
   store: _Store;
@@ -37,6 +42,15 @@ interface StoreDetailProps {
 
 export default function StoreDetailPage({ store }: StoreDetailProps) {
   const [activeTab, setActiveTab] = useState("products");
+  const [filters, setFilters] = useState<ProductsInquiry>({
+    page: 1,
+    limit: 8,
+    sort: "createdAt",
+    direction: Direction.DESC,
+    search: {
+      storeId: store._id,
+    },
+  });
 
   /* -------------------------------------------------------------------------- */
   /*                                APOLLO CLIENT                               */
@@ -51,13 +65,7 @@ export default function StoreDetailPage({ store }: StoreDetailProps) {
   } = useQuery(GET_PRODUCTS, {
     fetchPolicy: "cache-and-network",
     variables: {
-      input: {
-        page: 1,
-        limit: 10,
-        search: {
-          storeId: store._id,
-        },
-      },
+      input: filters,
     },
     skip: !store._id,
   });
@@ -78,15 +86,7 @@ export default function StoreDetailPage({ store }: StoreDetailProps) {
         },
       });
 
-      await getProductsRefetch({
-        input: {
-          page: 1,
-          limit: 10,
-          search: {
-            storeId: store._id,
-          },
-        },
-      });
+      await getProductsRefetch({ input: filters });
       toast("success");
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -96,6 +96,13 @@ export default function StoreDetailPage({ store }: StoreDetailProps) {
         toast("Unexpected error occurred");
       }
     }
+  };
+  const totalProducts =
+    getProductsData?.getProducts?.metaCounter?.[0]?.total || 0;
+  const totalPages = Math.ceil(totalProducts / filters.limit);
+  const handlePageChange = (newPage: number) => {
+    setFilters((prev) => ({ ...prev, page: newPage }));
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const rating =
@@ -276,17 +283,50 @@ export default function StoreDetailPage({ store }: StoreDetailProps) {
                       />
                     ))}
                   </div>
+
+                  {/* PAGINATION UI */}
+                  <div className="mt-12 flex justify-center items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      disabled={filters.page === 1}
+                      onClick={() => handlePageChange(filters.page - 1)}
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </Button>
+
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (p) => (
+                        <Button
+                          key={p}
+                          variant={filters.page === p ? "default" : "outline"}
+                          className={cn(
+                            "w-10 h-10",
+                            filters.page === p &&
+                              "bg-pink-500 hover:bg-pink-600",
+                          )}
+                          onClick={() => handlePageChange(p)}
+                        >
+                          {p}
+                        </Button>
+                      ),
+                    )}
+
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      disabled={filters.page === totalPages}
+                      onClick={() => handlePageChange(filters.page + 1)}
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </>
               ) : (
                 <>
                   <div className="text-center py-12">
                     <Package className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">
-                      Store products will be displayed here
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-2">
-                      Total: {store.storeProductsCount} products
-                    </p>
+                    <p className="text-muted-foreground">Product Not Found</p>
                   </div>
                 </>
               )}

@@ -134,7 +134,7 @@ export default function ProductCard({
       {/* CONTENT */}
       <CardContent className="p-2 sm:p-4 space-y-2 sm:space-y-3 mt-5">
         {/* Product name */}
-        <h3 className="text-xs sm:text-sm font-medium leading-snug line-clamp-2">
+        <h3 className="text-xs sm:text-sm font-medium leading-snug line-clamp-1">
           {product.productName}
         </h3>
 
