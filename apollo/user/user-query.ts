@@ -207,6 +207,7 @@ export const GET_FILTER_OPTIONS = gql`
 export const GET_STORE = gql`
   query GetStore($input: String!) {
     getStore(storeId: $input) {
+      _id
       storeName
       ownerId
       storeDesc
@@ -217,6 +218,7 @@ export const GET_STORE = gql`
       storeComments
       storeViews
       storeLikes
+      storePhone
       meLiked {
         memberId
         likeRefId

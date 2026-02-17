@@ -32,7 +32,7 @@ const SORT_OPTIONS: SortOption[] = [
 export default function StorePage() {
   const [filters, setFilters] = useState<StoresInquiry>({
     page: 1,
-    limit: 12,
+    limit: 8,
     sort: "createdAt",
     direction: Direction.DESC,
     search: {},

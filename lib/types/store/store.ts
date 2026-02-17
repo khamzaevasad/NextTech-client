@@ -15,6 +15,7 @@ export interface _Store {
   storeComments: number;
   storeViews: number;
   storeLikes: number;
+  storePhone: string;
   /* ---------------------------- FROM AGGREGATION ---------------------------- */
   ownerData?: Member;
   meLiked?: MeLiked[];

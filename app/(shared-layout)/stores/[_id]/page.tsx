@@ -13,8 +13,9 @@ interface StorePageProps {
 export default function StorePage({ params }: StorePageProps) {
   const { _id } = use(params);
 
-  console.log("id", _id);
-
+  /* -------------------------------------------------------------------------- */
+  /*                                APOLLO CLIENT                               */
+  /* -------------------------------------------------------------------------- */
   const {
     data: storeData,
     loading: storeLoading,
