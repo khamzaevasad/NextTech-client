@@ -11,32 +11,50 @@ import { toast } from "sonner";
 import { CREATE_COMMENT } from "@/apollo/user/user-mutation";
 import { Message } from "@/lib/enums/common.enum";
 import { CommentGroup } from "@/lib/enums/comment.enum";
+import { GET_STORE } from "@/apollo/user/user-query";
 
 interface CreateCommentProps {
-  productId: string;
+  id: string;
+  commentGroup: CommentGroup;
   onCommentCreated?: () => void;
+  showRating?: boolean;
+  title?: string;
+  placeholder?: string;
 }
 
 export default function CreateComment({
-  productId,
+  id,
+  commentGroup,
   onCommentCreated,
+  showRating = true,
+  title = "Leave A Review",
+  placeholder = "Share your thoughts...",
 }: CreateCommentProps) {
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const [createComment] = useMutation(CREATE_COMMENT);
+  /* -------------------------------------------------------------------------- */
+  /*                                APOLLO CLIENT                               */
+  /* -------------------------------------------------------------------------- */
+  const [createComment] = useMutation(CREATE_COMMENT, {
+    refetchQueries: [{ query: GET_STORE, variables: { input: id } }],
+    awaitRefetchQueries: true,
+  });
 
+  /* -------------------------------------------------------------------------- */
+  /*                                  HANDLERS                                  */
+  /* -------------------------------------------------------------------------- */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!comment.trim()) {
-      toast.error("Please write a review");
+      toast.error("Please write a comment");
       return;
     }
 
-    if (rating === 0) {
+    if (showRating && rating === 0) {
       toast.error("Please select a rating");
       return;
     }
@@ -47,15 +65,15 @@ export default function CreateComment({
       await createComment({
         variables: {
           input: {
-            commentGroup: CommentGroup.PRODUCT,
+            commentGroup: commentGroup,
             commentContent: comment.trim(),
-            commentRefId: productId,
-            rating: rating,
+            commentRefId: id,
+            ...(showRating && { rating: rating }),
           },
         },
       });
 
-      toast.success("Review submitted successfully!");
+      toast.success("Comment submitted successfully!");
       setComment("");
       setRating(0);
 
@@ -72,7 +90,7 @@ export default function CreateComment({
         ) {
           toast.error(Message.NOT_AUTHENTICATED);
         } else {
-          toast.error(err.message || "Failed to submit review");
+          toast.error(err.message || "Failed to submit comment");
         }
       } else {
         toast.error("Unexpected error occurred");
@@ -85,57 +103,59 @@ export default function CreateComment({
   return (
     <Card className="border-border shadow-sm hover:shadow-md transition-shadow">
       <CardHeader>
-        <CardTitle className="text-xl font-bold">Leave A Review</CardTitle>
+        <CardTitle className="text-xl font-bold">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Rating Stars */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground">
-              Rating
-            </label>
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, i) => {
-                const starValue = i + 1;
-                return (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => setRating(starValue)}
-                    onMouseEnter={() => setHoverRating(starValue)}
-                    onMouseLeave={() => setHoverRating(0)}
-                    className="transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 rounded"
-                  >
-                    <Star
-                      className={cn(
-                        "h-8 w-8 transition-colors cursor-pointer",
-                        starValue <= (hoverRating || rating)
-                          ? "fill-pink-500 text-pink-500"
-                          : "text-muted-foreground/60 hover:text-pink-500/50",
-                      )}
-                    />
-                  </button>
-                );
-              })}
-              {rating > 0 && (
-                <span className="ml-3 text-sm font-medium text-pink-500">
-                  {rating} {rating === 1 ? "star" : "stars"}
-                </span>
-              )}
+          {/* Rating Stars - Only show if showRating is true */}
+          {showRating && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">
+                Rating
+              </label>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: 5 }).map((_, i) => {
+                  const starValue = i + 1;
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setRating(starValue)}
+                      onMouseEnter={() => setHoverRating(starValue)}
+                      onMouseLeave={() => setHoverRating(0)}
+                      className="transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 rounded"
+                    >
+                      <Star
+                        className={cn(
+                          "h-8 w-8 transition-colors cursor-pointer",
+                          starValue <= (hoverRating || rating)
+                            ? "fill-pink-500 text-pink-500"
+                            : "text-muted-foreground/60 hover:text-pink-500/50",
+                        )}
+                      />
+                    </button>
+                  );
+                })}
+                {rating > 0 && (
+                  <span className="ml-3 text-sm font-medium text-pink-500">
+                    {rating} {rating === 1 ? "star" : "stars"}
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Review Textarea */}
+          {/* Comment Textarea */}
           <div className="space-y-2">
             <label
-              htmlFor="review"
+              htmlFor="comment"
               className="text-sm font-medium text-muted-foreground"
             >
-              Review
+              {showRating ? "Review" : "Comment"}
             </label>
             <Textarea
-              id="review"
-              placeholder="Share your thoughts about this product..."
+              id="comment"
+              placeholder={placeholder}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={5}
@@ -151,7 +171,9 @@ export default function CreateComment({
           <div className="flex justify-end">
             <Button
               type="submit"
-              disabled={isSubmitting || !comment.trim() || rating === 0}
+              disabled={
+                isSubmitting || !comment.trim() || (showRating && rating === 0)
+              }
               className="bg-pink-600 hover:bg-pink-500 text-white font-semibold px-8 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {isSubmitting ? (
@@ -179,7 +201,7 @@ export default function CreateComment({
                   Submitting...
                 </span>
               ) : (
-                "Submit Review"
+                `Submit ${showRating ? "Review" : "Comment"}`
               )}
             </Button>
           </div>

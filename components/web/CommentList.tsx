@@ -12,14 +12,11 @@ import { useEffect, useState } from "react";
 import { Comment } from "@/lib/types/comments/comment";
 
 interface CommentListProps {
-  productId: string;
+  id: string;
   refreshTrigger?: number;
 }
 
-export default function CommentList({
-  productId,
-  refreshTrigger,
-}: CommentListProps) {
+export default function CommentList({ id, refreshTrigger }: CommentListProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const ITEMS_PER_PAGE = 5;
 
@@ -33,11 +30,11 @@ export default function CommentList({
         page: currentPage,
         limit: ITEMS_PER_PAGE,
         search: {
-          commentRefId: productId,
+          commentRefId: id,
         },
       },
     },
-    skip: !productId,
+    skip: !id,
     fetchPolicy: "cache-and-network",
     notifyOnNetworkStatusChange: true,
   });

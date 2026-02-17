@@ -27,6 +27,7 @@ import { useCartStore } from "@/stores/cartStore";
 import { buttonVariants } from "@/components/ui/button";
 import { gql } from "@apollo/client";
 import { LoadingBar } from "@/components/web/LoadingBar";
+import ProductReviews from "@/components/products/ProductReviews";
 
 // GET_FILTER_OPTIONS query
 const GET_FILTER_OPTIONS = gql`
@@ -537,7 +538,7 @@ export default function ProductDetailPage({ params }: DetailProps) {
 
           {/* Comment & review */}
           <div>
-            <Reviews productId={product._id} />
+            <ProductReviews id={product._id} />
           </div>
 
           {/* Store Products */}

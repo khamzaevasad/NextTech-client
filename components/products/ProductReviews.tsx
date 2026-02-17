@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import CreateComment from "./CreateComment";
-import CommentList from "./CommentList";
 import { CommentGroup } from "@/lib/enums/comment.enum";
+import CommentList from "../web/CommentList";
+import CreateComment from "../web/CreateComment";
 interface ProductReviewsProps {
   id: string;
 }
 
-export default function Reviews({ id }: ProductReviewsProps) {
+export default function ProductReviews({ id }: ProductReviewsProps) {
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
 
   const handleCommentCreated = () => {

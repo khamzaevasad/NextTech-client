@@ -33,6 +33,7 @@ import { toast } from "sonner";
 import { ProductsInquiry } from "@/lib/types/product/product.input";
 import { Direction } from "@/lib/enums/comment.enum";
 import { Button } from "../ui/button";
+import StoreReviews from "./StoreReviews";
 
 interface StoreDetailProps {
   store: _Store;
@@ -97,9 +98,11 @@ export default function StoreDetailPage({ store }: StoreDetailProps) {
       }
     }
   };
+
   const totalProducts =
     getProductsData?.getProducts?.metaCounter?.[0]?.total || 0;
   const totalPages = Math.ceil(totalProducts / filters.limit);
+
   const handlePageChange = (newPage: number) => {
     setFilters((prev) => ({ ...prev, page: newPage }));
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -334,15 +337,7 @@ export default function StoreDetailPage({ store }: StoreDetailProps) {
 
             {/* Reviews Store */}
             <TabsContent value="reviews" className="mt-0">
-              <div className="text-center py-12">
-                <Star className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                <p className="text-muted-foreground">
-                  Customer reviews will be displayed here
-                </p>
-                <p className="text-sm text-muted-foreground mt-2">
-                  Total: {store.storeComments} reviews
-                </p>
-              </div>
+              <StoreReviews id={store._id} />
             </TabsContent>
 
             {/* About Store */}
