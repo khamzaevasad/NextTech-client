@@ -52,7 +52,7 @@ export default function StorePage({ params }: StorePageProps) {
   return (
     <>
       <LoadingBar loading={storeLoading} />
-      {/* <StoreDetailPage store={getStoreData} /> */}
+      <StoreDetailPage store={getStoreData} />
     </>
   );
 }

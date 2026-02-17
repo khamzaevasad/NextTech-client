@@ -75,7 +75,7 @@ export default function ProductsPage() {
       toast("success");
     } catch (err: unknown) {
       if (err instanceof Error) {
-        console.log("likePropertyHandler error", err.message);
+        console.log("LikeProductHandler error", err.message);
         toast(err.message);
       } else {
         toast("Unexpected error occurred");

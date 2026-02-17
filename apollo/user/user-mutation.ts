@@ -55,7 +55,9 @@ export const SIGNUP = gql`
     }
   }
 `;
-
+/* -------------------------------------------------------------------------- */
+/*                                    LIKES                                   */
+/* -------------------------------------------------------------------------- */
 export const LIKE_TARGET_PRODUCT = gql`
   mutation LikeTargetProduct($input: String!) {
     likeTargetProduct(productId: $input) {
@@ -77,6 +79,26 @@ export const LIKE_TARGET_PRODUCT = gql`
       productComments
       createdAt
       updatedAt
+    }
+  }
+`;
+
+export const LIKE_TARGET_STORE = gql`
+  mutation LikeTargetStore($input: String!) {
+    likeTargetStore(storeId: $input) {
+      _id
+      storeName
+      ownerId
+      storeDesc
+      storeStatus
+      storeAddress
+      storeProductsCount
+      storeRating
+      storeComments
+      storeViews
+      storeLikes
+      storeLogo
+      storeLocation
     }
   }
 `;

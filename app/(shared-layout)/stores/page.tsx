@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import StoreCard from "@/components/web/StoreCard";
 import { Direction } from "@/lib/enums/comment.enum";
 import { StoresInquiry } from "@/lib/types/store/store.input";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import {
@@ -15,9 +15,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { SortOption } from "@/lib/types/common";
+import { SortOption, T } from "@/lib/types/common";
 import { cn } from "@/lib/utils";
 import { LoadingBar } from "@/components/web/LoadingBar";
+import { LIKE_TARGET_STORE } from "@/apollo/user/user-mutation";
+import { Message } from "@/lib/enums/common.enum";
+import { toast } from "sonner";
 
 const SORT_OPTIONS: SortOption[] = [
   { label: "Newest First", value: "createdAt" },
@@ -39,6 +42,7 @@ export default function StorePage() {
   /* -------------------------------------------------------------------------- */
   /*                                APOLLO CLIENT                               */
   /* -------------------------------------------------------------------------- */
+  const [likeTargetStore] = useMutation(LIKE_TARGET_STORE, {});
 
   const {
     data: storeData,
@@ -61,6 +65,29 @@ export default function StorePage() {
   /* -------------------------------------------------------------------------- */
   /*                                  HANDLERS                                  */
   /* -------------------------------------------------------------------------- */
+
+  const likeStoreHandler = async (user: T, id: string) => {
+    try {
+      if (!id) return;
+      if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+
+      await likeTargetStore({
+        variables: {
+          input: id,
+        },
+      });
+
+      await storeRefetch({ input: filters });
+      toast("success");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.log("likeStoreHandler error", err.message);
+        toast(err.message);
+      } else {
+        toast("Unexpected error occurred");
+      }
+    }
+  };
 
   const handleSearchChange = (value: string) => {
     setSearchText(value);
@@ -177,7 +204,13 @@ export default function StorePage() {
         {/* STORES GRID */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-3">
           {stores.length > 0 ? (
-            stores.map((store) => <StoreCard key={store._id} store={store} />)
+            stores.map((store) => (
+              <StoreCard
+                likeStoreHandler={likeStoreHandler}
+                key={store._id}
+                store={store}
+              />
+            ))
           ) : (
             <div className="col-span-full text-center py-12">
               <p className="text-muted-foreground text-lg">

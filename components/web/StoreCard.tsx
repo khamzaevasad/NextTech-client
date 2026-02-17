@@ -2,12 +2,7 @@
 
 import Image from "next/image";
 import { MapPin, Star, Eye, Heart, Package, Store } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,18 +10,24 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { _Store } from "@/lib/types/store/store";
 import { API_URL } from "@/lib/config";
+import { T } from "@/lib/types/common";
+import { userVar } from "@/apollo/store";
+import { useReactiveVar } from "@apollo/client";
 
 interface StoreCardProps {
   store: _Store;
   className?: string;
+  likeStoreHandler?: (user: T, id: string) => Promise<void>;
 }
 
 export default function StoreCard({
   store,
   className,
-  //   onLike,
+  likeStoreHandler,
 }: StoreCardProps) {
-  const isLiked = [];
+  const isLiked = store?.meLiked && store?.meLiked[0]?.myFavorite;
+
+  const user = useReactiveVar(userVar);
 
   return (
     <Link
@@ -64,7 +65,7 @@ export default function StoreCard({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            // onLike?.(store._id);
+            likeStoreHandler?.(user, store._id);
           }}
         >
           {isLiked ? (
