@@ -3,15 +3,7 @@ import { use } from "react";
 import { format, isValid } from "date-fns";
 import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { GET_BOARD_ARTICLE } from "@/apollo/user/user-query";
-import { GridPattern } from "@/components/ui/grid-pattern";
-import {
-  ArrowLeft,
-  Calendar,
-  Eye,
-  Heart,
-  MessageCircle,
-  Share2,
-} from "lucide-react";
+import { Calendar, Eye, Heart, MessageCircle, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { API_URL } from "@/lib/config";
@@ -26,12 +18,13 @@ import { Message } from "@/lib/enums/common.enum";
 import { toast } from "sonner";
 import { userVar } from "@/apollo/store";
 import ArticleReviews from "@/components/community/ArticleReviews";
+import { Card } from "@/components/ui/card";
 
 interface ArticleDetailProps {
   params: Promise<{ _id: string }>;
 }
 
-export default function ArticleDetailpage({ params }: ArticleDetailProps) {
+export default function ArticleDetailPage({ params }: ArticleDetailProps) {
   const { _id } = use(params);
   const user = useReactiveVar(userVar);
 
@@ -39,7 +32,7 @@ export default function ArticleDetailpage({ params }: ArticleDetailProps) {
   /*                                APOLLO CLIENT                               */
   /* -------------------------------------------------------------------------- */
 
-  const [LikeTargetArticle] = useMutation(LIKE_TARGET_ARTICLE, {});
+  const [LikeTargetArticle] = useMutation(LIKE_TARGET_ARTICLE);
 
   const {
     data: articleData,
@@ -51,7 +44,11 @@ export default function ArticleDetailpage({ params }: ArticleDetailProps) {
     skip: !_id,
   });
 
-  const article: BoardArticle = articleData?.getBoardArticle ?? [];
+  /* -------------------------------------------------------------------------- */
+  /*                                  HANDLERS                                  */
+  /* -------------------------------------------------------------------------- */
+
+  const article: BoardArticle = articleData?.getBoardArticle ?? {};
 
   const {
     articleTitle,
@@ -65,9 +62,6 @@ export default function ArticleDetailpage({ params }: ArticleDetailProps) {
     memberData,
   } = article;
 
-  /* -------------------------------------------------------------------------- */
-  /*                                  HANDLERS                                  */
-  /* -------------------------------------------------------------------------- */
   const date = new Date(createdAt);
   const formattedDate = isValid(date)
     ? format(date, "MMM dd, yyyy")
@@ -75,25 +69,22 @@ export default function ArticleDetailpage({ params }: ArticleDetailProps) {
 
   const isLiked = article?.meLiked && article?.meLiked[0]?.myFavorite;
 
-  /* --------------------------- likeArticleHandler --------------------------- */
   const likeArticleHandler = async (user: T, id: string) => {
     try {
       if (!id) return;
       if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 
       await LikeTargetArticle({
-        variables: {
-          input: id,
-        },
+        variables: { input: id },
       });
       await articleRefetch({ input: _id });
-      toast("success");
+      toast.success("Success");
     } catch (err: unknown) {
       if (err instanceof Error) {
-        console.log("LikeProductHandler error", err.message);
-        toast(err.message);
+        console.log("LikeArticleHandler error", err.message);
+        toast.error(err.message);
       } else {
-        toast("Unexpected error occurred");
+        toast.error("Unexpected error occurred");
       }
     }
   };
@@ -101,80 +92,73 @@ export default function ArticleDetailpage({ params }: ArticleDetailProps) {
   return (
     <>
       <LoadingBar loading={articleLoading} />
-      <div className="relative bg-background">
-        <div className="relative bg-background overflow-x-hidden"></div>
-        {/* BG Grid Pattern */}
-        <div className="pointer-events-none absolute inset-0 z-0 opacity-40 [mask-image:radial-gradient(farthest-side_at_top,white,transparent)]">
-          <GridPattern
-            className="absolute inset-0 size-full stroke-border"
-            height={30}
-            width={30}
-            x={0}
-            y={0}
-          />
-        </div>
-
-        <main className="relative z-10 my-8">
-          <div className="text-sm text-gray-400 mb-8">
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          {/* Breadcrumb */}
+          <nav className="text-sm text-muted-foreground mb-6">
             <Link
               href="/community"
-              className="hover:text-pink-500 text-muted-foreground cursor-pointer"
+              className="hover:text-foreground transition-colors"
             >
               Community
             </Link>
             <span className="mx-2">/</span>
-            <span>{article.articleTitle}</span>
-          </div>
+            <span className="text-foreground">{articleTitle}</span>
+          </nav>
+
           <article className="space-y-8">
-            {/*  Meta info */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <Badge variant={"secondary"}>{articleCategory}</Badge>
-                <span className="text-muted-foreground text-xs flex items-center gap-1.5">
-                  <Calendar className="size-3.5" />
+            {/* Header Section */}
+            <header className="space-y-4">
+              <div className="flex flex-wrap items-center gap-3">
+                <Badge variant="secondary" className="font-medium">
+                  {articleCategory}
+                </Badge>
+                <span className="text-sm text-muted-foreground flex items-center gap-1.5">
+                  <Calendar className="h-3.5 w-3.5" />
                   {formattedDate}
                 </span>
               </div>
 
-              <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.1]">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
                 {articleTitle}
               </h1>
-            </div>
 
-            {/* author */}
-            <div className="flex items-center justify-between py-6 border-y border-border/60">
-              <div className="flex items-center gap-3">
-                <Avatar className="size-12 border-2 border-background shadow-sm">
-                  <AvatarImage
-                    src={`${API_URL}/${memberData?.memberImage}`}
-                    alt={memberData?.memberNick}
-                  />
-                  <AvatarFallback className="bg-rose-500 text-white">
-                    {memberData?.memberNick?.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="text-sm font-semibold text-foreground">
-                    {memberData?.memberNick}
-                  </p>
-                  <p className="text-[11px] text-muted-foreground">
-                    {memberData?.memberArticles} articles ·{" "}
-                    {memberData?.memberFollowers} followers
-                  </p>
+              {/* Author Card */}
+              <Card className="p-4 bg-muted/30">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-12 w-12">
+                      <AvatarImage
+                        src={`${API_URL}/${memberData?.memberImage}`}
+                        alt={memberData?.memberNick}
+                      />
+                      <AvatarFallback className="bg-pink-500 text-white">
+                        <User className="h-5 w-5" />
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-semibold text-foreground">
+                        {memberData?.memberNick}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {memberData?.memberArticles} articles ·{" "}
+                        {memberData?.memberFollowers} followers
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    size="sm"
+                    className="bg-pink-500 hover:bg-pink-600 text-white"
+                  >
+                    Follow
+                  </Button>
                 </div>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="rounded-full px-5 hover:bg-rose-500 hover:text-white transition-colors"
-              >
-                Follow
-              </Button>
-            </div>
+              </Card>
+            </header>
 
-            {/* article image */}
+            {/* Featured Image */}
             {articleImage && (
-              <div className="relative aspect-video w-full overflow-hidden rounded-[2rem] border bg-muted shadow-sm">
+              <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-muted border">
                 <Image
                   src={`${API_URL}/${articleImage}`}
                   alt={articleTitle}
@@ -186,62 +170,55 @@ export default function ArticleDetailpage({ params }: ArticleDetailProps) {
               </div>
             )}
 
-            {/* article title */}
-            <div className="prose prose-rose max-w-none">
-              <p className="text-lg text-foreground/80 leading-relaxed whitespace-pre-wrap">
-                {articleContent}
-              </p>
+            {/* Content */}
+            <div className="prose prose-lg prose-neutral dark:prose-invert max-w-none">
+              <div
+                className="text-foreground/90 leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: articleContent }}
+              />
             </div>
 
-            {/* stats */}
-            <div className="flex items-center pt-10 border-t">
-              <div className="flex items-center gap-6">
-                <div className="flex items-center gap-2 group cursor-pointer">
-                  <div
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      likeArticleHandler(user, _id);
-                    }}
-                    className="flex items-center gap-1.5 text-rose-500 ml-auto"
+            {/* Stats Bar */}
+            <Card className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-6">
+                  <button
+                    onClick={() => likeArticleHandler(user, _id)}
+                    className="flex items-center gap-2 group"
                   >
-                    {isLiked ? (
-                      <Heart className="size-5 fill-current" />
-                    ) : (
-                      <Heart className="size-5" />
-                    )}
-                  </div>
-                  <span className="text-sm font-medium text-muted-foreground">
-                    {articleLikes}
-                  </span>
-                </div>
+                    <Heart
+                      className={`h-5 w-5 transition-colors ${
+                        isLiked
+                          ? "fill-pink-500 text-pink-500"
+                          : "text-muted-foreground group-hover:text-pink-500"
+                      }`}
+                    />
+                    <span className="text-sm font-medium text-muted-foreground">
+                      {articleLikes}
+                    </span>
+                  </button>
 
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-full">
-                    <MessageCircle className="size-5 text-muted-foreground" />
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <MessageCircle className="h-5 w-5" />
+                    <span className="text-sm font-medium">
+                      {articleComments}
+                    </span>
                   </div>
-                  <span className="text-sm font-medium text-muted-foreground">
-                    {articleComments}
-                  </span>
-                </div>
 
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-full">
-                    <Eye className="size-5 text-muted-foreground" />
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Eye className="h-5 w-5" />
+                    <span className="text-sm font-medium">{articleViews}</span>
                   </div>
-                  <span className="text-sm font-medium text-muted-foreground">
-                    {articleViews}
-                  </span>
                 </div>
               </div>
-            </div>
+            </Card>
 
-            {/* reviews */}
-            <div className="my-8">
+            {/* Comments Section */}
+            <div className="pt-8">
               <ArticleReviews id={_id} />
             </div>
           </article>
-        </main>
+        </div>
       </div>
     </>
   );

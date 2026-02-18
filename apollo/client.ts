@@ -28,6 +28,9 @@ const authLink = setContext((_, { headers }) => {
 /* ------------------------------ HTTP LINK ------------------------------ */
 const httpLink = createUploadLink({
   uri: process.env.NEXT_PUBLIC_API_GRAPHQL_URL,
+  headers: {
+    "apollo-require-preflight": "true",
+  },
 });
 
 /* ------------------------------ ERROR LINK ------------------------------ */

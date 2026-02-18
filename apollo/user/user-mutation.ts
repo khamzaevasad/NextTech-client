@@ -138,3 +138,32 @@ export const CREATE_COMMENT = gql`
     }
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                  ARTICLES                                  */
+/* -------------------------------------------------------------------------- */
+
+export const CREATE_BOARD_ARTICLE = gql`
+  mutation CreateBoardArticle($input: BoardArticleInput!) {
+    createBoardArticle(input: $input) {
+      _id
+      articleCategory
+      articleStatus
+      articleTitle
+      articleContent
+      articleImage
+      articleViews
+      articleLikes
+      articleComments
+      memberId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const IMAGE_UPLOADER = gql`
+  mutation ImageUploader($file: Upload!, $target: String!) {
+    imageUploader(file: $file, target: $target)
+  }
+`;

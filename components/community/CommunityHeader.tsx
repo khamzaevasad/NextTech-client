@@ -1,7 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { userVar } from "@/apollo/store";
+import { buttonVariants } from "@/components/ui/button";
+import { useReactiveVar } from "@apollo/client";
 import { PenLineIcon } from "lucide-react";
+import Link from "next/link";
 
 interface CommunityHeaderProps {
   activeCategory: string;
@@ -18,6 +21,8 @@ const categoryTitles: Record<string, string> = {
 export default function CommunityHeader({
   activeCategory,
 }: CommunityHeaderProps) {
+  const user = useReactiveVar(userVar);
+
   return (
     <div className="border-b bg-background">
       <div className="container mx-auto px-4 py-6">
@@ -30,12 +35,14 @@ export default function CommunityHeader({
               Express your opinions freely here without content restrictions
             </p>
           </div>
-          <Button
-            size="lg"
-            className="bg-pink-500 hover:bg-pink-600 text-white font-medium"
-          >
-            <PenLineIcon /> Write Article
-          </Button>
+          {user._id && (
+            <Link
+              href={"/article"}
+              className={buttonVariants({ variant: "ghost" })}
+            >
+              <PenLineIcon /> Write Article
+            </Link>
+          )}
         </div>
       </div>
     </div>

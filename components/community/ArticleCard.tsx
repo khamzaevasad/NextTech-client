@@ -5,7 +5,6 @@ import { GridPattern } from "@/components/ui/grid-pattern";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Eye, Heart, MessageCircle } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import { format } from "date-fns";
 import { API_URL } from "@/lib/config";
 import { BoardArticle } from "@/lib/types/articles/article";
@@ -19,7 +18,6 @@ export default function ArticleCard({ article, className }: ArticleCardProps) {
   const {
     articleTitle,
     memberData,
-    articleImage,
     articleViews,
     articleLikes,
     articleComments,
@@ -69,19 +67,6 @@ export default function ArticleCard({ article, className }: ArticleCardProps) {
               {formattedDate}
             </span>
           </figcaption>
-
-          {/* Article*/}
-          {articleImage && (
-            <div className="relative mt-3 aspect-video w-full overflow-hidden rounded-lg border bg-muted">
-              <Image
-                src={`${API_URL}/${articleImage}`}
-                alt={articleTitle}
-                fill
-                className="object-cover transition-transform duration-300 hover:scale-105"
-                unoptimized
-              />
-            </div>
-          )}
 
           {/* Title */}
           <blockquote className="mt-3 flex-grow">

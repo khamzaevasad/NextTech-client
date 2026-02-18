@@ -7,15 +7,8 @@ import { BoardArticlesInquiry } from "@/lib/types/articles/article.input";
 import { BoardArticles } from "@/lib/types/articles/article";
 import { LoadingBar } from "../web/LoadingBar";
 import { useState } from "react";
-import { Direction } from "@/lib/enums/comment.enum";
-import { BoardArticleCategory } from "@/lib/enums/board-article.enum";
 import { Button } from "../ui/button";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsRight,
-  ChevronsRightLeft,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ArticleGridProps {
