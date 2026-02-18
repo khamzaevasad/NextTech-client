@@ -22,7 +22,6 @@ import { Message } from "@/lib/enums/common.enum";
 import { toast } from "sonner";
 import { userVar } from "@/apollo/store";
 import StoreProduct from "@/components/products/StoreProduct";
-import Reviews from "@/components/web/Reviews";
 import { useCartStore } from "@/stores/cartStore";
 import { buttonVariants } from "@/components/ui/button";
 import { gql } from "@apollo/client";

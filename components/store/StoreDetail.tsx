@@ -124,6 +124,16 @@ export default function StoreDetailPage({ store }: StoreDetailProps) {
   return (
     <div className="my-8">
       {/* Store Info Card */}
+      <div className="text-sm text-gray-400 mb-8">
+        <Link
+          href="/stores"
+          className="hover:text-pink-500 text-muted-foreground cursor-pointer"
+        >
+          Stores
+        </Link>
+        <span className="mx-2">/</span>
+        <span>{store.storeName.toLowerCase()}</span>
+      </div>
       <div className="mb-6">
         <CardContent className="p-6">
           {/* Store Name & ownerdata */}
