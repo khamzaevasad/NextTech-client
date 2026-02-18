@@ -6,11 +6,10 @@ import CommunityHeader from "@/components/community/CommunityHeader";
 import ArticleGrid from "@/components/community/ArticleGrid";
 
 export default function CommunityPage() {
-  const [activeCategory, setActiveCategory] = useState("RECOMMEND");
+  const [activeCategory, setActiveCategory] = useState("FREE");
 
   return (
     <div className="my-8">
-      {/* Pass activeCategory to header */}
       <CommunityHeader activeCategory={activeCategory} />
 
       <div className="container mx-auto px-4 py-8">

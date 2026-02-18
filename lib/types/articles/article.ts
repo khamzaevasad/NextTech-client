@@ -7,7 +7,6 @@ import { MeLiked } from "../product/product";
 
 export interface BoardArticle {
   _id: string;
-
   articleCategory: BoardArticleCategory;
   articleStatus: BoardArticleStatus;
   articleTitle: string;

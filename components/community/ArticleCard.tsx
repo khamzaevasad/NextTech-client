@@ -101,7 +101,7 @@ export default function ArticleCard({ article, className }: ArticleCardProps) {
               <span className="text-[11px] font-medium">{articleComments}</span>
             </div>
             <div className="flex items-center gap-1.5 text-rose-500 ml-auto">
-              <Heart className="size-3.5 fill-current" />
+              <Heart className="size-3.5" />
               <span className="text-[11px] font-bold">{articleLikes}</span>
             </div>
           </div>

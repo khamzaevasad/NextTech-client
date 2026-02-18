@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { PenLineIcon } from "lucide-react";
 
 interface CommunityHeaderProps {
   activeCategory: string;
@@ -33,7 +34,7 @@ export default function CommunityHeader({
             size="lg"
             className="bg-pink-500 hover:bg-pink-600 text-white font-medium"
           >
-            Write
+            <PenLineIcon /> Write Article
           </Button>
         </div>
       </div>

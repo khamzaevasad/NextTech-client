@@ -102,6 +102,24 @@ export const LIKE_TARGET_STORE = gql`
     }
   }
 `;
+export const LIKE_TARGET_ARTICLE = gql`
+  mutation LikeTargetArticle($input: String!) {
+    likeTargetArticle(articleId: $input) {
+      _id
+      articleCategory
+      articleStatus
+      articleTitle
+      articleContent
+      articleImage
+      articleViews
+      articleLikes
+      articleComments
+      memberId
+      createdAt
+      updatedAt
+    }
+  }
+`;
 
 /* -------------------------------------------------------------------------- */
 /*                                  COMMENTS                                  */

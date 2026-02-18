@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { GridPattern } from "@/components/ui/grid-pattern";
-import { ChevronRight } from "lucide-react"; // Yo'nalish ko'rsatish uchun
+import { ChevronRight } from "lucide-react";
 
 interface CommunitySidebarProps {
   activeCategory: string;
@@ -24,7 +24,7 @@ export default function CommunitySidebar({
   return (
     <aside className="w-full lg:w-80 shrink-0">
       <div className="sticky top-4 space-y-px border-x border-y bg-border shadow-sm rounded-3xl overflow-hidden">
-        {/* Logo/Header qismi */}
+        {/* Header */}
         <div className="relative overflow-hidden bg-background p-6">
           {/* MagicUI Grid Pattern */}
           <div className="mask-[radial-gradient(farthest-side_at_top,white,transparent)] pointer-events-none absolute top-0 left-1/2 -mt-2 -ml-20 size-full opacity-50">
@@ -53,7 +53,7 @@ export default function CommunitySidebar({
           </div>
         </div>
 
-        {/* Kategoriyalar ro'yxati */}
+        {/* category list */}
         <nav className="bg-background overflow-hidden">
           {categories.map((category) => {
             const isActive = activeCategory === category.id;

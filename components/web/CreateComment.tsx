@@ -11,7 +11,11 @@ import { toast } from "sonner";
 import { CREATE_COMMENT } from "@/apollo/user/user-mutation";
 import { Message } from "@/lib/enums/common.enum";
 import { CommentGroup } from "@/lib/enums/comment.enum";
-import { GET_STORE } from "@/apollo/user/user-query";
+import {
+  GET_BOARD_ARTICLE,
+  GET_PRODUCT,
+  GET_STORE,
+} from "@/apollo/user/user-query";
 
 interface CreateCommentProps {
   id: string;
@@ -35,11 +39,29 @@ export default function CreateComment({
   const [comment, setComment] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  const getRefetchQueries = () => {
+    switch (commentGroup) {
+      case CommentGroup.STORE:
+        return [{ query: GET_STORE, variables: { input: id } }];
+      case CommentGroup.PRODUCT:
+        return [{ query: GET_PRODUCT, variables: { input: id } }];
+      case CommentGroup.ARTICLE:
+        return [
+          {
+            query: GET_BOARD_ARTICLE,
+            variables: { input: id },
+          },
+        ];
+      default:
+        return [];
+    }
+  };
+
   /* -------------------------------------------------------------------------- */
   /*                                APOLLO CLIENT                               */
   /* -------------------------------------------------------------------------- */
   const [createComment] = useMutation(CREATE_COMMENT, {
-    refetchQueries: [{ query: GET_STORE, variables: { input: id } }],
+    refetchQueries: getRefetchQueries(),
     awaitRefetchQueries: true,
   });
 
