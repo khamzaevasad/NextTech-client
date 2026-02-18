@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { MenuIcon, XIcon } from "lucide-react";
 import React from "react";
 import { createPortal } from "react-dom";
-import { navLinks } from "./header";
 import Link from "next/link";
 import { logout } from "@/lib/auth";
 import { useReactiveVar } from "@apollo/client";
@@ -110,7 +109,7 @@ export function MobileNav() {
                 </Link>
                 {user?._id && (
                   <Link
-                    href="/myPage"
+                    href="/my-page"
                     className={buttonVariants({
                       variant: "ghost",
                       className: "justify-start",

@@ -9,7 +9,6 @@ import { useReactiveVar } from "@apollo/client";
 import { authReadyVar, userVar } from "@/apollo/store";
 import { logout } from "@/lib/auth";
 import { CartDropdown } from "./Cartdropdown";
-import { WishlistButton } from "./Wishlistbutton";
 
 export function Header() {
   const scrolled = useScroll(10);
@@ -57,7 +56,7 @@ export function Header() {
           </Link>
           {user?._id && (
             <Link
-              href="/myPage"
+              href="/my-page"
               className={buttonVariants({ variant: "ghost" })}
             >
               My Page
@@ -65,7 +64,6 @@ export function Header() {
           )}
         </div>
         <div className="flex gap-1 items-center">
-          <WishlistButton userId={user?._id} />
           <CartDropdown userId={user?._id} />
           <ThemeToggle />
           <div className="hidden items-center gap-1 md:flex">

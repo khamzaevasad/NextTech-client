@@ -37,7 +37,7 @@ export default function CommunityHeader({
           </div>
           {user._id && (
             <Link
-              href={"/article"}
+              href={"/write-article"}
               className={buttonVariants({ variant: "ghost" })}
             >
               <PenLineIcon /> Write Article

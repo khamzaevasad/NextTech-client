@@ -3,7 +3,7 @@ import {
   MemberStatus,
   MemberType,
 } from "@/lib/enums/member.enum";
-import { Store } from "../store/store";
+import { _Store } from "../store/store";
 import { MeFollowed } from "../follow/follow";
 
 export interface Member {
@@ -30,7 +30,7 @@ export interface Member {
   updatedAt: Date;
   accessToken?: string;
   /* ---------------------------- from aggregation ---------------------------- */
-  storeData?: Store;
+  storeData?: _Store;
   meFollowed?: MeFollowed[];
 }
 
