@@ -395,3 +395,59 @@ export const GET_COMMENTS = gql`
     }
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                  ARTICLES                                  */
+/* -------------------------------------------------------------------------- */
+
+export const GET_BOARD_ARTICLES = gql`
+  query GetBoardArticles($input: BoardArticlesInquiry!) {
+    getBoardArticles(articleId: $input) {
+      list {
+        _id
+        articleCategory
+        articleStatus
+        articleTitle
+        articleContent
+        articleImage
+        articleViews
+        articleLikes
+        articleComments
+        memberId
+        createdAt
+        updatedAt
+        meLiked {
+          memberId
+          likeRefId
+          myFavorite
+        }
+        memberData {
+          _id
+          memberType
+          memberStatus
+          memberAuthType
+          memberPhone
+          memberNick
+          memberFullName
+          memberImage
+          memberAddress
+          memberDesc
+          memberArticles
+          memberFollowers
+          memberFollowings
+          memberPoints
+          memberRank
+          memberWarnings
+          memberBlocks
+          deletedAt
+          createdAt
+          updatedAt
+          accessToken
+        }
+      }
+      metaCounter {
+        total
+      }
+    }
+  }
+`;
