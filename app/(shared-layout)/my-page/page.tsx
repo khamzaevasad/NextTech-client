@@ -16,6 +16,7 @@ import { MyProfileHeader } from "@/components/my-page/MyProfileHeader";
 import { AuthGuard } from "@/app/auth/AuthGuard";
 import WishListPage from "../wishlist/page";
 import MemberArticle from "@/components/community/MemberArticle";
+import RecentlyVisited from "@/components/my-page/Visited";
 
 export default function MyPage() {
   const user = useReactiveVar(userVar);
@@ -88,12 +89,7 @@ export default function MyPage() {
                 value="visited"
                 className="animate-in fade-in slide-in-from-bottom-4 duration-500"
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {/*  RecentlyVisited */}
-                  <p className="text-muted-foreground italic text-center col-span-full py-20">
-                    No recently visited items.
-                  </p>
-                </div>
+                <RecentlyVisited />
               </TabsContent>
 
               <TabsContent

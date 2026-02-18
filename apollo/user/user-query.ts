@@ -204,6 +204,60 @@ export const GET_FILTER_OPTIONS = gql`
 /*                                    STORE                                   */
 /* -------------------------------------------------------------------------- */
 
+export const GET_VISITED = gql`
+  query GetVisited($input: OrdinaryInquiry!) {
+    getVisited(input: $input) {
+      list {
+        _id
+        storeName
+        ownerId
+        storeDesc
+        storeStatus
+        storeAddress
+        storeProductsCount
+        storeRating
+        storeComments
+        storeViews
+        storeLikes
+        ownerData {
+          _id
+          memberType
+          memberStatus
+          memberAuthType
+          memberPhone
+          memberNick
+          memberFullName
+          memberImage
+          memberAddress
+          memberDesc
+          memberArticles
+          memberFollowers
+          memberFollowings
+          memberPoints
+          memberRank
+          memberWarnings
+          memberBlocks
+          deletedAt
+          createdAt
+          updatedAt
+          accessToken
+        }
+        storeLocation
+        storeLogo
+        storePhone
+        meLiked {
+          memberId
+          likeRefId
+          myFavorite
+        }
+      }
+      metaCounter {
+        total
+      }
+    }
+  }
+`;
+
 export const GET_STORE = gql`
   query GetStore($input: String!) {
     getStore(storeId: $input) {

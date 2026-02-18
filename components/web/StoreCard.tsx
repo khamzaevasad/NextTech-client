@@ -58,22 +58,26 @@ export default function StoreCard({
         )}
 
         {/* Wishlist Button */}
-        <button
-          type="button"
-          className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 rounded-full shadow-sm cursor-pointer"
-          aria-label="Like store"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            likeStoreHandler?.(user, store._id);
-          }}
-        >
-          {isLiked ? (
-            <Image src="/liked-true.png" alt="liked" width={20} height={20} />
-          ) : (
-            <Image src="/liked-false.png" alt="like" width={20} height={20} />
-          )}
-        </button>
+        {isLiked !== null ? (
+          <button
+            type="button"
+            className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 rounded-full shadow-sm cursor-pointer"
+            aria-label="Like store"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              likeStoreHandler?.(user, store._id);
+            }}
+          >
+            {isLiked ? (
+              <Image src="/liked-true.png" alt="liked" width={20} height={20} />
+            ) : (
+              <Image src="/liked-false.png" alt="like" width={20} height={20} />
+            )}
+          </button>
+        ) : (
+          ""
+        )}
 
         {/* Status Badge */}
         <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10">
