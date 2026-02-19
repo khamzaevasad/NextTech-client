@@ -5,7 +5,12 @@ import { API_URL } from "@/lib/config";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { T } from "@/lib/types/common";
 
-export function ProfileHeader({ member }: { member: T }) {
+interface ProfileHeaderProps {
+  member: T;
+  isMe: boolean;
+}
+
+export function ProfileHeader({ member }: ProfileHeaderProps) {
   return (
     <div className="relative overflow-hidden rounded-xl border p-8 md:p-12 mb-8 dark:bg-[radial-gradient(85%_30%_at_85%_0%,--theme(--color-foreground/.1),transparent)]">
       <div className="pointer-events-none absolute inset-0 z-0 opacity-20 mask-[radial-gradient(circle_at_center,white,transparent)]">

@@ -138,7 +138,11 @@ export default function ArticleDetailPage({ params }: ArticleDetailProps) {
                     </Avatar>
                     <div>
                       <Link
-                        href={`/member-page/${memberData?._id}`}
+                        href={
+                          memberData?._id === user._id
+                            ? "/profile/me"
+                            : `/profile/${memberData?._id}`
+                        }
                         className="font-semibold text-foreground"
                       >
                         {memberData?.memberNick}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import { Star, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import { Comment } from "@/lib/types/comments/comment";
 import { EmptyState } from "./EmptyState";
 import { LoadingBar } from "./LoadingBar";
 import Link from "next/link";
+import { userVar } from "@/apollo/store";
 
 interface CommentListProps {
   id: string;
@@ -22,7 +23,7 @@ interface CommentListProps {
 export default function CommentList({ id, refreshTrigger }: CommentListProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const ITEMS_PER_PAGE = 5;
-
+  const user = useReactiveVar(userVar);
   /* -------------------------------------------------------------------------- */
   /*                                APOLLO CLIENT                               */
   /* -------------------------------------------------------------------------- */
@@ -139,7 +140,11 @@ export default function CommentList({ id, refreshTrigger }: CommentListProps) {
                       <div className="flex items-start justify-between gap-4 mb-2">
                         <div>
                           <Link
-                            href={`/member-page/${comment?.memberData?._id}`}
+                            href={
+                              comment.memberData?._id === user._id
+                                ? "/me"
+                                : `/profile/${comment.memberData?._id}`
+                            }
                             className="font-semibold text-foreground"
                           >
                             {comment?.memberData?.memberFullName ||

@@ -57,7 +57,7 @@ export function Header() {
           </Link>
           {user?._id && (
             <Link
-              href="/my-page"
+              href="/profile/me"
               className={buttonVariants({ variant: "ghost" })}
             >
               My Page

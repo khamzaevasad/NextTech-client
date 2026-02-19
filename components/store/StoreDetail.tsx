@@ -21,7 +21,7 @@ import { useState } from "react";
 import { _Store } from "@/lib/types/store/store";
 import { API_URL } from "@/lib/config";
 import Link from "next/link";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { GET_PRODUCTS } from "@/apollo/user/user-query";
 import { LoadingBar } from "../web/LoadingBar";
 import ProductCard from "../web/ProductCard";
@@ -34,6 +34,7 @@ import { ProductsInquiry } from "@/lib/types/product/product.input";
 import { Direction } from "@/lib/enums/comment.enum";
 import { Button } from "../ui/button";
 import StoreReviews from "./StoreReviews";
+import { userVar } from "@/apollo/store";
 
 interface StoreDetailProps {
   store: _Store;
@@ -53,6 +54,7 @@ export default function StoreDetailPage({ store }: StoreDetailProps) {
     },
   });
 
+  const user = useReactiveVar(userVar);
   /* -------------------------------------------------------------------------- */
   /*                                APOLLO CLIENT                               */
   /* -------------------------------------------------------------------------- */
@@ -154,13 +156,15 @@ export default function StoreDetailPage({ store }: StoreDetailProps) {
                     {store.storeName.toUpperCase()}
                   </h1>
                   <Link
-                    href={"#"}
+                    href={
+                      store.ownerData?._id === user._id
+                        ? "/me"
+                        : `/profile/${store.ownerData?._id}`
+                    }
                     className="flex items-center gap-1.5 text-foreground"
                   >
                     <User className="text-pink-500" />
-                    <Link href={`/member-page/${store.ownerData?._id}`}>
-                      {store.ownerData?.memberNick}
-                    </Link>
+                    <p>{store.ownerData?.memberNick}</p>
                   </Link>
                 </div>
               </div>
