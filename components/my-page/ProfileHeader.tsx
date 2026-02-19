@@ -32,6 +32,7 @@ export function ProfileHeader({ member }: ProfileHeaderProps) {
           <p className="text-muted-foreground max-w-md">
             {member?.memberDesc || ""}
           </p>
+          <p className="text-muted-foreground max-w-md">{member?.memberType}</p>
 
           <div className="flex flex-wrap justify-center md:justify-start gap-6 pt-4">
             <StatItem label="Articles" value={member?.memberArticles} />

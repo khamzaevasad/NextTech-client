@@ -43,8 +43,6 @@ export default function CommentList({ id, refreshTrigger }: CommentListProps) {
     notifyOnNetworkStatusChange: true,
   });
 
-  // Refetch when refreshTrigger changes
-
   useEffect(() => {
     if (refreshTrigger !== undefined) {
       refetch();
@@ -142,7 +140,7 @@ export default function CommentList({ id, refreshTrigger }: CommentListProps) {
                           <Link
                             href={
                               comment.memberData?._id === user._id
-                                ? "/me"
+                                ? "/profile/me"
                                 : `/profile/${comment.memberData?._id}`
                             }
                             className="font-semibold text-foreground"

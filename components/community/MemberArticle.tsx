@@ -1,37 +1,42 @@
 "use client";
 
 import { GET_BOARD_ARTICLES } from "@/apollo/user/user-query";
-import { BoardArticlesInquiry } from "@/lib/types/articles/article.input";
 import { useQuery } from "@apollo/client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ArticleCard from "./ArticleCard";
 import { BoardArticle } from "@/lib/types/articles/article";
-import { ChevronLeft, ChevronRight, PenLineIcon } from "lucide-react";
-import { Button, buttonVariants } from "../ui/button";
+import { ChevronLeft, ChevronRight, FileText } from "lucide-react";
+import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { EmptyState } from "../web/EmptyState";
 
 interface MemberArticleProps {
   _id: string;
 }
 
 export default function MemberArticle({ _id }: MemberArticleProps) {
-  const [articles, setArticles] = useState<BoardArticlesInquiry>({
-    page: 1,
-    limit: 12,
-    search: {
-      memberId: _id,
-    },
-  });
+  const [page, setPage] = useState(1);
+
+  const articlesInput = useMemo(() => {
+    if (!_id) return null;
+
+    return {
+      page,
+      limit: 12,
+      search: {
+        memberId: _id,
+      },
+    };
+  }, [_id, page]);
 
   /* -------------------------------------------------------------------------- */
   /*                                APOLLO CLIENT                               */
   /* -------------------------------------------------------------------------- */
 
   const { data: articlesData } = useQuery(GET_BOARD_ARTICLES, {
-    variables: { input: articles },
+    variables: { input: articlesInput },
     fetchPolicy: "cache-and-network",
-    skip: !_id,
+    skip: !articlesInput,
   });
 
   const memberArticles = articlesData?.getBoardArticles?.list || [];
@@ -39,9 +44,8 @@ export default function MemberArticle({ _id }: MemberArticleProps) {
   /* -------------------------------------------------------------------------- */
   /*                                  HANDLERS                                  */
   /* -------------------------------------------------------------------------- */
-
   const handlePageChange = (newPage: number) => {
-    setArticles((prev) => ({ ...prev, page: newPage }));
+    setPage(newPage);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -49,7 +53,9 @@ export default function MemberArticle({ _id }: MemberArticleProps) {
     articlesData?.getBoardArticles?.metaCounter?.[0]?.total ??
     memberArticles.length;
 
-  const totalPages = Math.ceil(totalArticles / articles.limit);
+  const totalPages = Math.ceil(totalArticles / 12);
+
+  if (!_id) return null;
 
   return (
     <>
@@ -72,8 +78,8 @@ export default function MemberArticle({ _id }: MemberArticleProps) {
                 <Button
                   variant="outline"
                   size="icon"
-                  disabled={articles.page === 1}
-                  onClick={() => handlePageChange(articles.page - 1)}
+                  disabled={page === 1}
+                  onClick={() => handlePageChange(page - 1)}
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </Button>
@@ -82,10 +88,10 @@ export default function MemberArticle({ _id }: MemberArticleProps) {
                   (p) => (
                     <Button
                       key={p}
-                      variant={articles.page === p ? "default" : "outline"}
+                      variant={page === p ? "default" : "outline"}
                       className={cn(
                         "w-10 h-10",
-                        articles.page === p && "bg-pink-500 hover:bg-pink-600",
+                        page === p && "bg-pink-500 hover:bg-pink-600",
                       )}
                       onClick={() => handlePageChange(p)}
                     >
@@ -97,8 +103,8 @@ export default function MemberArticle({ _id }: MemberArticleProps) {
                 <Button
                   variant="outline"
                   size="icon"
-                  disabled={articles.page === totalPages}
-                  onClick={() => handlePageChange(articles.page + 1)}
+                  disabled={page === totalPages}
+                  onClick={() => handlePageChange(page + 1)}
                 >
                   <ChevronRight className="w-4 h-4" />
                 </Button>
@@ -108,19 +114,10 @@ export default function MemberArticle({ _id }: MemberArticleProps) {
         ) : (
           <>
             <div className="text-center py-20 bg-accent/10 rounded-3xl border-2 border-dashed">
-              <div className="text-xl text-muted-foreground">
-                <p> You haven&apos;t published any articles yet.</p>
-                <p>
-                  Start sharing your knowledge and ideas with the community!
-                  Click the button below to write your first post.
-                </p>
-              </div>
-              <Link
-                href={"/write-article"}
-                className={`${buttonVariants({})} my-9`}
-              >
-                <PenLineIcon /> Write Article
-              </Link>
+              <EmptyState
+                icon={<FileText size={"40"} />}
+                title={"Article not found"}
+              />
             </div>
           </>
         )}

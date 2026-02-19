@@ -18,7 +18,7 @@ export function EmptyState({
     <div className="py-12 text-center">
       <div className="flex flex-col items-center gap-3">
         {icon && <div className="text-muted-foreground/30">{icon}</div>}
-        <p className="text-muted-foreground font-medium">{title}</p>
+        <p className="text-xl text-muted-foreground font-medium">{title}</p>
         {description && (
           <p className="text-sm text-muted-foreground">{description}</p>
         )}

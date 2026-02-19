@@ -13,6 +13,7 @@ import { API_URL } from "@/lib/config";
 import { T } from "@/lib/types/common";
 import { userVar } from "@/apollo/store";
 import { useReactiveVar } from "@apollo/client";
+import { useRouter } from "next/navigation";
 
 interface StoreCardProps {
   store: _Store;
@@ -26,8 +27,16 @@ export default function StoreCard({
   likeStoreHandler,
 }: StoreCardProps) {
   const isLiked = store?.meLiked && store?.meLiked[0]?.myFavorite;
-
+  const router = useRouter();
   const user = useReactiveVar(userVar);
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  HANDLERS                                  */
+  /* -------------------------------------------------------------------------- */
+
+  const getProfile = (_id) => {
+    router.replace(_id === user._id ? "profile/me" : `/profile/${_id}`);
+  };
 
   return (
     <Link
@@ -178,10 +187,11 @@ export default function StoreCard({
         <Button
           size="lg"
           className="w-full bg-pink-600 text-white font-semibold hover:bg-pink-500 transition-colors
-                     text-xs sm:text-sm h-9 sm:h-11"
+                     text-xs sm:text-sm h-9 sm:h-11 cursor-pointer"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
+            getProfile(store.ownerData?._id);
           }}
         >
           <Store className="mr-1.5 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
