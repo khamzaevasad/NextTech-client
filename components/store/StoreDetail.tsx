@@ -60,7 +60,6 @@ export default function StoreDetailPage({ store }: StoreDetailProps) {
   const [LikeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT, {});
   const {
     loading: getProductsLoading,
-    error: getProductsError,
     refetch: getProductsRefetch,
     data: getProductsData,
   } = useQuery(GET_PRODUCTS, {
@@ -159,7 +158,9 @@ export default function StoreDetailPage({ store }: StoreDetailProps) {
                     className="flex items-center gap-1.5 text-foreground"
                   >
                     <User className="text-pink-500" />
-                    <span>{store.ownerData?.memberNick}</span>
+                    <Link href={`/member-page/${store.ownerData?._id}`}>
+                      {store.ownerData?.memberNick}
+                    </Link>
                   </Link>
                 </div>
               </div>

@@ -9,6 +9,7 @@ import { useReactiveVar } from "@apollo/client";
 import { authReadyVar, userVar } from "@/apollo/store";
 import { logout } from "@/lib/auth";
 import { CartDropdown } from "./Cartdropdown";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Header() {
   const scrolled = useScroll(10);
@@ -66,6 +67,7 @@ export function Header() {
         <div className="flex gap-1 items-center">
           <CartDropdown userId={user?._id} />
           <ThemeToggle />
+          <LanguageSwitcher />
           <div className="hidden items-center gap-1 md:flex">
             {!user?._id ? (
               <>

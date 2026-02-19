@@ -403,6 +403,51 @@ export const GET_SELLER = gql`
   }
 `;
 
+export const GET_MEMBER = gql`
+  query GetMember($input: String!) {
+    getMember(memberId: $input) {
+      _id
+      memberStatus
+      memberAuthType
+      memberPhone
+      memberNick
+      memberFullName
+      memberImage
+      memberAddress
+      memberDesc
+      memberArticles
+      memberFollowers
+      memberFollowings
+      memberPoints
+      memberRank
+      memberWarnings
+      memberBlocks
+      deletedAt
+      createdAt
+      updatedAt
+      accessToken
+      memberType
+      storeData {
+        storeName
+        ownerId
+        storeDesc
+        storeStatus
+        storeAddress
+        storeProductsCount
+        storeRating
+        storeComments
+        storeViews
+        storeLikes
+      }
+      meFollowed {
+        followingId
+        followerId
+        myFollowing
+      }
+    }
+  }
+`;
+
 /* -------------------------------------------------------------------------- */
 /*                                  COMMENTS                                  */
 /* -------------------------------------------------------------------------- */

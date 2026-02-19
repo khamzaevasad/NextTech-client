@@ -39,7 +39,11 @@ export function CartDropdown({ userId }: CartDropdownProps) {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="relative" size="icon">
+        <Button
+          variant="outline"
+          className="relative cursor-pointer"
+          size="icon"
+        >
           <ShoppingCartIcon className="h-5 w-5" />
           {getTotalItems() > 0 && (
             <Badge

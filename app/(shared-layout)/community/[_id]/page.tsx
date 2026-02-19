@@ -137,9 +137,12 @@ export default function ArticleDetailPage({ params }: ArticleDetailProps) {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-semibold text-foreground">
+                      <Link
+                        href={`/member-page/${memberData?._id}`}
+                        className="font-semibold text-foreground"
+                      >
                         {memberData?.memberNick}
-                      </p>
+                      </Link>
                       <p className="text-xs text-muted-foreground">
                         {memberData?.memberArticles} articles ·{" "}
                         {memberData?.memberFollowers} followers

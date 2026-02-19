@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { Comment } from "@/lib/types/comments/comment";
 import { EmptyState } from "./EmptyState";
 import { LoadingBar } from "./LoadingBar";
+import Link from "next/link";
 
 interface CommentListProps {
   id: string;
@@ -137,10 +138,13 @@ export default function CommentList({ id, refreshTrigger }: CommentListProps) {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-4 mb-2">
                         <div>
-                          <h4 className="font-semibold text-foreground">
+                          <Link
+                            href={`/member-page/${comment?.memberData?._id}`}
+                            className="font-semibold text-foreground"
+                          >
                             {comment?.memberData?.memberFullName ||
                               comment.memberData?.memberNick}
-                          </h4>
+                          </Link>
                           <p className="text-xs text-muted-foreground">
                             {formatDate(comment.createdAt)}
                           </p>

@@ -12,7 +12,7 @@ import {
   Settings,
   Heart,
 } from "lucide-react";
-import { MyProfileHeader } from "@/components/my-page/MyProfileHeader";
+import { ProfileHeader } from "@/components/my-page/ProfileHeader";
 import { AuthGuard } from "@/app/auth/AuthGuard";
 import WishListPage from "../wishlist/page";
 import MemberArticle from "@/components/community/MemberArticle";
@@ -20,13 +20,12 @@ import RecentlyVisited from "@/components/my-page/Visited";
 
 export default function MyPage() {
   const user = useReactiveVar(userVar);
-  console.log("user", user);
 
   return (
     <AuthGuard>
       <div className="my-8">
-        <main className="">
-          <MyProfileHeader member={user} />
+        <main>
+          <ProfileHeader member={user} />
 
           <Tabs defaultValue="articles" className="w-full">
             <div className="sticky top-0 z-20 bg-background/80 backdrop-blur-md pt-2">
