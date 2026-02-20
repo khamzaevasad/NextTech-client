@@ -167,3 +167,31 @@ export const IMAGE_UPLOADER = gql`
     imageUploader(file: $file, target: $target)
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                   FOLLOWS                                  */
+/* -------------------------------------------------------------------------- */
+
+export const SUBSCRIBE = gql`
+  mutation Subscribe($input: String!) {
+    subscribe(input: $input) {
+      _id
+      followingId
+      followerId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const UN_SUBSCRIBE = gql`
+  mutation Unsubscribe($input: String!) {
+    unsubscribe(input: $input) {
+      _id
+      followingId
+      followerId
+      createdAt
+      updatedAt
+    }
+  }
+`;

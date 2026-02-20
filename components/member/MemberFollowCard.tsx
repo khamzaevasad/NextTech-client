@@ -3,12 +3,14 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { API_URL } from "@/lib/config";
+import { API_URL, Messages } from "@/lib/config";
 import { FileText, Users, UserPlus, UserMinus } from "lucide-react";
 import Link from "next/link";
 import { T } from "@/lib/types/common";
-import { useReactiveVar } from "@apollo/client";
+import { useMutation, useReactiveVar } from "@apollo/client";
 import { userVar } from "@/apollo/store";
+import { SUBSCRIBE, UN_SUBSCRIBE } from "@/apollo/user/user-mutation";
+import { toast } from "sonner";
 
 interface MemberFollowCardProps {
   data: T;
@@ -18,6 +20,48 @@ export function MemberFollowCard({ data }: MemberFollowCardProps) {
   const user = useReactiveVar(userVar);
   const member = data.followingData || data.followerData;
   const isFollowing = data.meFollowed?.[0]?.myFollowing;
+
+  /* -------------------------------------------------------------------------- */
+  /*                                APOLLO CLIENT                               */
+  /* -------------------------------------------------------------------------- */
+  const [subscribe] = useMutation(SUBSCRIBE);
+  const [unsubscribe] = useMutation(UN_SUBSCRIBE);
+
+  const subscribeHandler = async (id: string) => {
+    try {
+      if (!id) throw new Error(Messages.error1);
+      if (!user._id) throw new Error(Messages.error2);
+
+      await subscribe({ variables: { input: id } });
+      toast("Subscribed");
+      // todo refetch
+    } catch (err) {
+      if (err instanceof Error) {
+        console.log("subscribe error", err.message);
+        toast.error(err.message);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
+    }
+  };
+
+  const unsubscribeHandler = async (id: string) => {
+    try {
+      if (!id) throw new Error(Messages.error1);
+      if (!user._id) throw new Error(Messages.error2);
+
+      await unsubscribe({ variables: { input: id } });
+      toast("Subscribed");
+      // todo refetch
+    } catch (err) {
+      if (err instanceof Error) {
+        console.log("unsubscribeHandler error", err.message);
+        toast.error(err.message);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
+    }
+  };
 
   return (
     <div className="flex items-center justify-between px-5 py-4 rounded-2xl transition-all duration-200 gap-4">
@@ -84,11 +128,17 @@ export function MemberFollowCard({ data }: MemberFollowCardProps) {
           }`}
         >
           {isFollowing ? (
-            <span className="flex items-center gap-1.5">
+            <span
+              onClick={() => unsubscribeHandler(member?._id)}
+              className="flex items-center gap-1.5"
+            >
               <UserMinus size={12} /> Unfollow
             </span>
           ) : (
-            <span className="flex items-center gap-1.5">
+            <span
+              onClick={() => subscribeHandler(member?._id)}
+              className="flex items-center gap-1.5"
+            >
               <UserPlus size={12} /> Follow
             </span>
           )}

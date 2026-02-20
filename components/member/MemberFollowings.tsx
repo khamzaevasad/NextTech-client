@@ -4,10 +4,7 @@ import { T } from "@/lib/types/common";
 import { MemberFollowCard } from "./MemberFollowCard";
 import { ChevronLeft, ChevronRight, Users } from "lucide-react";
 import { useQuery } from "@apollo/client";
-import {
-  GET_MEMBER_FOLLOWERS,
-  GET_MEMBER_FOLLOWINGS,
-} from "@/apollo/user/user-query";
+import { GET_MEMBER_FOLLOWINGS } from "@/apollo/user/user-query";
 import { useMemo, useState } from "react";
 import { Separator } from "../ui/separator";
 import { EmptyState } from "../web/EmptyState";
