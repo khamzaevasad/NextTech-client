@@ -69,10 +69,10 @@ export function FollowersList({ _id }: FollowersListProps) {
         <div className="grid grid-cols-1">
           <>
             {followersData.map((item: T) => (
-              <>
-                <MemberFollowCard key={item._id} data={item} />
+              <div key={item._id}>
+                <MemberFollowCard data={item} />
                 <Separator />
-              </>
+              </div>
             ))}
             {/* Pagination */}
             {totalPages > 1 && (
