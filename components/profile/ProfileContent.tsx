@@ -9,10 +9,11 @@ import {
   Settings,
   Heart,
 } from "lucide-react";
-import { ProfileHeader } from "@/components/my-page/ProfileHeader";
+import { ProfileHeader } from "@/components/profile/ProfileHeader";
 import MemberArticle from "@/components/community/MemberArticle";
-import RecentlyVisited from "@/components/my-page/Visited";
+import RecentlyVisited from "@/components/profile/Visited";
 import WishListPage from "@/app/(shared-layout)/wishlist/page";
+import { FollowersList } from "../member/MemberFollowers";
 
 interface ProfileContentProps {
   member: T;
@@ -94,9 +95,7 @@ export default function ProfileContent({ member, isMe }: ProfileContentProps) {
             )}
 
             <TabsContent value="followers">
-              <p className="text-muted-foreground italic text-center py-20">
-                followers
-              </p>
+              <FollowersList _id={member?._id} />
             </TabsContent>
 
             <TabsContent value="following">

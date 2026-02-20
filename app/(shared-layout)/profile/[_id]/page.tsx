@@ -5,7 +5,7 @@ import { useQuery, useReactiveVar } from "@apollo/client";
 import { userVar } from "@/apollo/store";
 import { AuthGuard } from "@/app/auth/AuthGuard";
 import { GET_MEMBER } from "@/apollo/user/user-query";
-import ProfileContent from "@/components/my-page/ProfileContent";
+import ProfileContent from "@/components/profile/ProfileContent";
 
 export default function ProfilePage() {
   const params = useParams();

@@ -597,3 +597,107 @@ export const GET_BOARD_ARTICLE = gql`
     }
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                   FOLLOW                                   */
+/* -------------------------------------------------------------------------- */
+
+export const GET_MEMBER_FOLLOWERS = gql`
+  query GetMemberFollowers($input: FollowInquiry!) {
+    getMemberFollowers(input: $input) {
+      list {
+        _id
+        followingId
+        followerId
+        createdAt
+        updatedAt
+        meFollowed {
+          followingId
+          followerId
+          myFollowing
+        }
+        meLiked {
+          memberId
+          likeRefId
+          myFavorite
+        }
+        followerData {
+          _id
+          memberType
+          memberStatus
+          memberAuthType
+          memberPhone
+          memberNick
+          memberFullName
+          memberImage
+          memberAddress
+          memberDesc
+          memberArticles
+          memberFollowers
+          memberFollowings
+          memberPoints
+          memberRank
+          memberWarnings
+          memberBlocks
+          deletedAt
+          createdAt
+          updatedAt
+          accessToken
+        }
+      }
+      metaCounter {
+        total
+      }
+    }
+  }
+`;
+
+export const GET_MEMBER_FOLLOWINGS = gql`
+  query GetMemberFollowings($input: FollowInquiry!) {
+    getMemberFollowings(input: $input) {
+      metaCounter {
+        total
+      }
+      list {
+        _id
+        followingId
+        followerId
+        createdAt
+        updatedAt
+        followingData {
+          _id
+          memberType
+          memberStatus
+          memberAuthType
+          memberPhone
+          memberNick
+          memberFullName
+          memberImage
+          memberAddress
+          memberDesc
+          memberArticles
+          memberFollowers
+          memberFollowings
+          memberPoints
+          memberRank
+          memberWarnings
+          memberBlocks
+          deletedAt
+          createdAt
+          updatedAt
+          accessToken
+        }
+        meLiked {
+          memberId
+          likeRefId
+          myFavorite
+        }
+        meFollowed {
+          followingId
+          followerId
+          myFollowing
+        }
+      }
+    }
+  }
+`;
