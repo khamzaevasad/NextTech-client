@@ -14,6 +14,7 @@ import MemberArticle from "@/components/community/MemberArticle";
 import RecentlyVisited from "@/components/profile/Visited";
 import WishListPage from "@/app/(shared-layout)/wishlist/page";
 import { FollowersList } from "../member/MemberFollowers";
+import { FollowingsList } from "../member/MemberFollowings";
 
 interface ProfileContentProps {
   member: T;
@@ -99,9 +100,7 @@ export default function ProfileContent({ member, isMe }: ProfileContentProps) {
             </TabsContent>
 
             <TabsContent value="following">
-              <p className="text-muted-foreground italic text-center py-20">
-                following
-              </p>
+              <FollowingsList _id={member?._id} />
             </TabsContent>
 
             {isMe && (
