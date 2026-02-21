@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { SellerGuard } from "@/app/auth/SellerGuard";
-import { Sidebar } from "@/components/seller/Sidebar";
-import { DashboardHeader } from "@/components/seller/DashboardHeader";
+import { Sidebar } from "@/components/dashboard/Sidebar";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 
 export default function SellerLayout({ children }: { children: ReactNode }) {
   return (

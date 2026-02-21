@@ -359,6 +359,27 @@ export const GET_STORES = gql`
   }
 `;
 
+export const GET_MY_STORE = gql`
+  query GetMyStore {
+    getMyStore {
+      _id
+      storeName
+      ownerId
+      storeDesc
+      storeStatus
+      storeAddress
+      storeLocation
+      storeProductsCount
+      storeRating
+      storeLogo
+      storeComments
+      storePhone
+      storeViews
+      storeLikes
+    }
+  }
+`;
+
 /* -------------------------------------------------------------------------- */
 /*                                   MEMBER                                   */
 /* -------------------------------------------------------------------------- */
