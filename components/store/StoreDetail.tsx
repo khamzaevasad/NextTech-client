@@ -158,7 +158,7 @@ export default function StoreDetailPage({ store }: StoreDetailProps) {
                   <Link
                     href={
                       store.ownerData?._id === user._id
-                        ? "/me"
+                        ? "/profile/me"
                         : `/profile/${store.ownerData?._id}`
                     }
                     className="flex items-center gap-1.5 text-foreground"
