@@ -15,6 +15,7 @@ import RecentlyVisited from "@/components/profile/Visited";
 import WishListPage from "@/app/(shared-layout)/wishlist/page";
 import { FollowersList } from "../member/MemberFollowers";
 import { FollowingsList } from "../member/MemberFollowings";
+import ProfileSettings from "./ProfileSettings";
 
 interface ProfileContentProps {
   member: T;
@@ -110,9 +111,7 @@ export default function ProfileContent({
 
             {isMe && (
               <TabsContent value="settings">
-                <p className="text-muted-foreground italic text-center py-20">
-                  settings
-                </p>
+                <ProfileSettings />
               </TabsContent>
             )}
           </div>
