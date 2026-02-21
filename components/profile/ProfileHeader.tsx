@@ -4,9 +4,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { API_URL } from "@/lib/config";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { T } from "@/lib/types/common";
-import { Button } from "../ui/button";
-import { Loader2, UserMinus, UserPlus } from "lucide-react";
+import { Button, buttonVariants } from "../ui/button";
+import { Loader2, LucideSettings2, UserMinus, UserPlus } from "lucide-react";
 import { useFollowMember } from "@/hooks/useFollowMember";
+import Link from "next/link";
+import { MemberType } from "@/lib/enums/member.enum";
 
 interface ProfileHeaderProps {
   member: T;
@@ -69,7 +71,7 @@ export function ProfileHeader({
                   : subscribeHandler(member?._id)
               }
               size="sm"
-              className={`h-8 px-4 text-xs font-semibold transition-all ${
+              className={`h-8 px-4 text-xs font-semibold transition-all cursor-pointer ${
                 isFollowing
                   ? "bg-pink-600 hover:bg-pink-500"
                   : "bg-blue-600 hover:bg-blue-500 text-white"
@@ -88,6 +90,15 @@ export function ProfileHeader({
               )}
             </Button>
           </div>
+        )}
+
+        {isMe && member.memberType === MemberType.SELLER && (
+          <Link
+            href={"/dashboard"}
+            className={buttonVariants({ variant: "secondary" })}
+          >
+            <LucideSettings2 /> Manage Store
+          </Link>
         )}
       </div>
     </div>

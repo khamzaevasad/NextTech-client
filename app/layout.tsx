@@ -39,7 +39,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <main className="align-elements">{children}</main>
+            <main className="">{children}</main>
             <Toaster closeButton />
           </ThemeProvider>
         </ApolloWrapper>
