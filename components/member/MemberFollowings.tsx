@@ -34,11 +34,12 @@ export function FollowingsList({ _id }: FollowingsListProps) {
   /*                                APOLLO CLIENT                               */
   /* -------------------------------------------------------------------------- */
 
-  const { data: getMemberFollowingsData } = useQuery(GET_MEMBER_FOLLOWINGS, {
-    variables: { input: input },
-    fetchPolicy: "network-only",
-    skip: !input,
-  });
+  const { data: getMemberFollowingsData, refetch: getMemberFollowingsRefetch } =
+    useQuery(GET_MEMBER_FOLLOWINGS, {
+      variables: { input: input },
+      fetchPolicy: "network-only",
+      skip: !input,
+    });
 
   const followingsData =
     getMemberFollowingsData?.getMemberFollowings?.list || [];
@@ -70,10 +71,15 @@ export function FollowingsList({ _id }: FollowingsListProps) {
         <div className="grid grid-cols-1">
           <>
             {followingsData.map((item: T) => (
-              <>
-                <MemberFollowCard key={item._id} data={item} />
+              <div key={item._id}>
+                <MemberFollowCard
+                  data={item}
+                  onFollowChange={async () => {
+                    await getMemberFollowingsRefetch();
+                  }}
+                />
                 <Separator />
-              </>
+              </div>
             ))}
             {/* Pagination */}
             {totalPages > 1 && (

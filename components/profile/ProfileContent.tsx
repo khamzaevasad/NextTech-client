@@ -19,13 +19,18 @@ import { FollowingsList } from "../member/MemberFollowings";
 interface ProfileContentProps {
   member: T;
   isMe: boolean;
+  onRefetch?: () => void | Promise<void>;
 }
 
-export default function ProfileContent({ member, isMe }: ProfileContentProps) {
+export default function ProfileContent({
+  member,
+  isMe,
+  onRefetch,
+}: ProfileContentProps) {
   return (
     <div className="my-8">
       <main>
-        <ProfileHeader member={member} isMe={isMe} />
+        <ProfileHeader onFollowChange={onRefetch} member={member} isMe={isMe} />
         <Tabs defaultValue="articles" className="w-full">
           <div className="sticky top-0 z-20 bg-background/80 backdrop-blur-md pt-2">
             <TabsList

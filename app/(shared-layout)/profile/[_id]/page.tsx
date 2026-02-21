@@ -17,21 +17,29 @@ export default function ProfilePage() {
   /* -------------------------------------------------------------------------- */
   const isMe = profileId === "me" || profileId === user?._id;
 
-  const { data: getMemberData } = useQuery(GET_MEMBER, {
-    variables: { input: profileId },
-    fetchPolicy: "cache-and-network",
-    skip: isMe || !profileId || profileId === "me",
-  });
+  const { data: getMemberData, refetch: getMemberRefetch } = useQuery(
+    GET_MEMBER,
+    {
+      variables: { input: profileId },
+      fetchPolicy: "cache-and-network",
+      skip: isMe || !profileId || profileId === "me",
+    },
+  );
 
   const member = isMe ? user : getMemberData?.getMember;
+  const handleRefetch = async () => {
+    await getMemberRefetch();
+  };
 
   if (isMe) {
     return (
       <AuthGuard>
-        <ProfileContent member={member} isMe={isMe} />
+        <ProfileContent onRefetch={handleRefetch} member={member} isMe={isMe} />
       </AuthGuard>
     );
   }
 
-  return <ProfileContent member={member} isMe={isMe} />;
+  return (
+    <ProfileContent onRefetch={handleRefetch} member={member} isMe={isMe} />
+  );
 }

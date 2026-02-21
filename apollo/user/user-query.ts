@@ -593,6 +593,11 @@ export const GET_BOARD_ARTICLE = gql`
         createdAt
         updatedAt
         accessToken
+        meFollowed {
+          followingId
+          followerId
+          myFollowing
+        }
       }
     }
   }

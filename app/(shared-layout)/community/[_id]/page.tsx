@@ -4,7 +4,6 @@ import { format, isValid } from "date-fns";
 import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { GET_BOARD_ARTICLE } from "@/apollo/user/user-query";
 import { Calendar, Eye, Heart, MessageCircle, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { API_URL } from "@/lib/config";
 import Image from "next/image";
@@ -153,12 +152,6 @@ export default function ArticleDetailPage({ params }: ArticleDetailProps) {
                       </p>
                     </div>
                   </div>
-                  <Button
-                    size="sm"
-                    className="bg-pink-500 hover:bg-pink-600 text-white"
-                  >
-                    Follow
-                  </Button>
                 </div>
               </Card>
             </header>
