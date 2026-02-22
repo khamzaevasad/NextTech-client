@@ -15,14 +15,12 @@ export function MobileNav() {
   const [open, setOpen] = React.useState(false);
   const { isMobile } = useMediaQuery();
 
-  // 🚫 Disable body scroll when open
   React.useEffect(() => {
     if (open && isMobile) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
-    // Cleanup on unmount too
     return () => {
       document.body.style.overflow = "";
     };
@@ -109,7 +107,7 @@ export function MobileNav() {
                 </Link>
                 {user?._id && (
                   <Link
-                    href="/my-page"
+                    href="/profile/me"
                     className={buttonVariants({
                       variant: "ghost",
                       className: "justify-start",

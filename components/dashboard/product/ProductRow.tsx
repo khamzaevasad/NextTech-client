@@ -29,7 +29,6 @@ export function ProductRow({ product, onUpdate }: ProductRowProps) {
   /* -------------------------------------------------------------------------- */
   /*                                APOLLO CLIENT                               */
   /* -------------------------------------------------------------------------- */
-  const router = useRouter();
   const [updateProduct] = useMutation(UPDATE_PRODUCT);
 
   const handleStatusChange = async (newStatus: string) => {

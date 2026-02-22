@@ -293,3 +293,70 @@ export const CREATE_PRODUCT = gql`
     }
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                    STORE                                   */
+/* -------------------------------------------------------------------------- */
+
+export const CREATE_STORE = gql`
+  mutation CreateStore($input: StoreInput!) {
+    createStore(input: $input) {
+      storeName
+      ownerId
+      storeDesc
+      storeStatus
+      storeAddress
+      storeProductsCount
+      storeRating
+      storeComments
+      storeViews
+      storeLikes
+      storeLocation
+      storeLogo
+      storePhone
+    }
+  }
+`;
+
+export const UPDATE_STORE = gql`
+  mutation UpdateStore($input: StoreUpdate!) {
+    updateStore(input: $input) {
+      storeName
+      ownerId
+      storeDesc
+      storeStatus
+      storeAddress
+      storeProductsCount
+      storeRating
+      storeComments
+      storeViews
+      storeLikes
+      storeLocation
+      storeLogo
+      storePhone
+      ownerData {
+        _id
+        memberType
+        memberStatus
+        memberAuthType
+        memberPhone
+        memberNick
+        memberFullName
+        memberImage
+        memberAddress
+        memberDesc
+        memberArticles
+        memberFollowers
+        memberFollowings
+        memberPoints
+        memberRank
+        memberWarnings
+        memberBlocks
+        deletedAt
+        createdAt
+        updatedAt
+        accessToken
+      }
+    }
+  }
+`;

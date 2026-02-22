@@ -8,7 +8,8 @@ export interface _Store {
   ownerId: string;
   storeDesc: string;
   storeStatus: StoreStatus;
-  storeAddress: StoreLocation;
+  storeAddress: string;
+  storeLocation: StoreLocation;
   storeProductsCount: number;
   storeLogo: string;
   storeRating: number;

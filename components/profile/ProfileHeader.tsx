@@ -5,10 +5,19 @@ import { API_URL } from "@/lib/config";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { T } from "@/lib/types/common";
 import { Button, buttonVariants } from "../ui/button";
-import { Loader2, LucideSettings2, UserMinus, UserPlus } from "lucide-react";
+import {
+  Loader2,
+  LucideSettings2,
+  StoreIcon,
+  UserMinus,
+  UserPlus,
+} from "lucide-react";
 import { useFollowMember } from "@/hooks/useFollowMember";
 import Link from "next/link";
 import { MemberType } from "@/lib/enums/member.enum";
+import { cn } from "@/lib/utils";
+import { useQuery } from "@apollo/client";
+import { GET_MY_STORE } from "@/apollo/user/user-query";
 
 interface ProfileHeaderProps {
   member: T;
@@ -26,6 +35,19 @@ export function ProfileHeader({
   const { subscribeHandler, unsubscribeHandler, isLoading } = useFollowMember({
     onFollowChange,
   });
+
+  /* -------------------------------------------------------------------------- */
+  /*                                APOLLO CLIENT                               */
+  /* -------------------------------------------------------------------------- */
+
+  const { data: storeData, loading: storeLoading } = useQuery(GET_MY_STORE, {
+    variables: { input: member?._id },
+    fetchPolicy: "network-only",
+    skip: !isMe || member.memberType !== MemberType.SELLER,
+  });
+
+  const myStore = storeData?.getMyStore;
+
   return (
     <div className="relative overflow-hidden rounded-xl border p-8 md:p-12 mb-8 dark:bg-[radial-gradient(85%_30%_at_85%_0%,--theme(--color-foreground/.1),transparent)]">
       <div className="pointer-events-none absolute inset-0 z-0 opacity-20 mask-[radial-gradient(circle_at_center,white,transparent)]">
@@ -62,7 +84,7 @@ export function ProfileHeader({
         </div>
 
         {!isMe && (
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0  mt-8 sm:mt-0">
             <Button
               disabled={isLoading}
               onClick={() =>
@@ -91,15 +113,30 @@ export function ProfileHeader({
             </Button>
           </div>
         )}
-
-        {isMe && member.memberType === MemberType.SELLER && (
-          <Link
-            href={"/dashboard"}
-            className={buttonVariants({ variant: "secondary" })}
-          >
-            <LucideSettings2 /> Manage Store
-          </Link>
-        )}
+        {isMe &&
+          member.memberType === MemberType.SELLER &&
+          !storeLoading &&
+          (myStore ? (
+            <Link
+              href="/dashboard"
+              className={cn(
+                buttonVariants({ variant: "secondary" }),
+                "mt-8 sm:mt-0",
+              )}
+            >
+              <LucideSettings2 /> Manage Store
+            </Link>
+          ) : (
+            <Link
+              href="/create-store"
+              className={cn(
+                buttonVariants({ variant: "secondary" }),
+                "bg-pink-600 hover:bg-pink-500 text-white mt-8 sm:mt-0",
+              )}
+            >
+              <StoreIcon /> Create Store
+            </Link>
+          ))}
       </div>
     </div>
   );
