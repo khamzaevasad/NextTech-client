@@ -229,3 +229,38 @@ export const UN_SUBSCRIBE = gql`
     }
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                  PRODUCTS                                  */
+/* -------------------------------------------------------------------------- */
+
+export const UPDATE_PRODUCT = gql`
+  mutation UpdateProduct($input: UpdateProductInput!) {
+    updateProduct(input: $input) {
+      _id
+      productName
+      productSlug
+      productDesc
+      productBrand
+      productPrice
+      productStock
+      productStatus
+      productCategory
+      storeId
+      productSpecsKeys
+      productSpecs
+      productImages
+      productViews
+      productLikes
+      productComments
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const IMAGES_UPLOADER = gql`
+  mutation ImagesUploader($files: [Upload!]!, $target: String!) {
+    imagesUploader(files: $files, target: $target)
+  }
+`;

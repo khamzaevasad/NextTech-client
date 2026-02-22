@@ -24,7 +24,7 @@ export function Sidebar() {
           </p>
           <Button
             variant="link"
-            className="text-xs text-rose-500 h-auto p-0 mt-1"
+            className="text-xs text-pink-500 h-auto p-0 mt-1"
           >
             Contact Support
           </Button>

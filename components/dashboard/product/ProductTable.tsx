@@ -11,17 +11,22 @@ import { Product } from "@/lib/types/product/product";
 import { EmptyState } from "@/components/web/EmptyState";
 import { Package } from "lucide-react";
 
-export function ProductTable({ products, onUpdate }: any) {
+interface ProductTableProps {
+  products: Product[];
+  onUpdate: () => void;
+}
+
+export function ProductTable({ products, onUpdate }: ProductTableProps) {
   return (
     <div className="rounded border bg-card overflow-hidden">
       <Table>
         <TableHeader className="bg-muted/50">
           <TableRow>
-            <TableHead>Image</TableHead>
+            <TableHead className="hidden md:table-cell">Image</TableHead>
             <TableHead>Product Name</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Stock</TableHead>
-            <TableHead>Status</TableHead>
+            <TableHead className="hidden md:table-cell">Price</TableHead>
+            <TableHead className="hidden md:table-cell">Stock</TableHead>
+            <TableHead className="hidden md:table-cell">Status</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>

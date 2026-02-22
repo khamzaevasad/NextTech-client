@@ -10,7 +10,15 @@ import {
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
 
-export function ProductSearchPanel({ onSearch, onStatusChange }: any) {
+interface ProductSearchPanelProps {
+  onSearch: (value: string) => void;
+  onStatusChange: (value: string) => void;
+}
+
+export function ProductSearchPanel({
+  onSearch,
+  onStatusChange,
+}: ProductSearchPanelProps) {
   return (
     <div className="flex items-center gap-3 w-full md:w-auto">
       <div className="relative flex-1 md:w-64">
@@ -22,12 +30,11 @@ export function ProductSearchPanel({ onSearch, onStatusChange }: any) {
         />
       </div>
 
-      <Select onValueChange={onStatusChange} defaultValue="ALL">
+      <Select onValueChange={onStatusChange} defaultValue="ACTIVE">
         <SelectTrigger className="w-32 rounded-xl">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="ALL">All Status</SelectItem>
           <SelectItem value="ACTIVE">Active</SelectItem>
           <SelectItem value="PAUSE">Pause</SelectItem>
         </SelectContent>

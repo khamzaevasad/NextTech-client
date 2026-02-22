@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ProductStatus } from "@/lib/enums/product.enum";
-import { Store } from "../store/store";
+import { _Store } from "../store/store";
 
 export interface MeLiked {
   memberId: string;
@@ -48,7 +48,7 @@ export interface Product {
   updatedAt: Date;
 
   /* ---------------------------- FROM AGGREGATION ---------------------------- */
-  storeData?: Store;
+  storeData?: _Store;
 
   meLiked?: MeLiked[];
 }
@@ -61,3 +61,5 @@ export interface Products {
 export interface TotalCounter {
   total: number;
 }
+
+export type ProductSpecs = Record<string, any>;

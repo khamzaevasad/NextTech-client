@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useQuery, useReactiveVar } from "@apollo/client";
-import { ProductStatus } from "@/lib/enums/product.enum";
 import { GET_MY_STORE, GET_PRODUCTS } from "@/apollo/user/user-query";
 import { ProductSearchPanel } from "@/components/dashboard/product/ProductSearchPanel";
 import { ProductTable } from "@/components/dashboard/product/ProductTable";
