@@ -1,7 +1,7 @@
 "use client";
 
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Edit, Package } from "lucide-react";
 import { API_URL } from "@/lib/config";
 import {

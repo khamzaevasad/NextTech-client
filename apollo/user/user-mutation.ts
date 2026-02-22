@@ -1,5 +1,9 @@
 import { gql } from "@apollo/client";
 
+/* -------------------------------------------------------------------------- */
+/*                                   MEMBER                                   */
+/* -------------------------------------------------------------------------- */
+
 export const LOGIN = gql`
   mutation Login($input: LoginInput!) {
     login(input: $input) {
@@ -262,5 +266,30 @@ export const UPDATE_PRODUCT = gql`
 export const IMAGES_UPLOADER = gql`
   mutation ImagesUploader($files: [Upload!]!, $target: String!) {
     imagesUploader(files: $files, target: $target)
+  }
+`;
+
+export const CREATE_PRODUCT = gql`
+  mutation CreateProduct($input: CreateProductInput!) {
+    createProduct(input: $input) {
+      _id
+      productName
+      productSlug
+      productDesc
+      productBrand
+      productPrice
+      productStock
+      productStatus
+      productCategory
+      storeId
+      productSpecsKeys
+      productSpecs
+      productImages
+      productViews
+      productLikes
+      productComments
+      createdAt
+      updatedAt
+    }
   }
 `;
