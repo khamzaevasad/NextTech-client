@@ -8,7 +8,7 @@ import "swiper/css/pagination";
 import Image from "next/image";
 import { CardAction, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Star } from "lucide-react";
+import { Heart, ShoppingCart, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 import { API_URL } from "../../lib/config";
@@ -91,7 +91,7 @@ export default function ProductCard({
         {/* Wishlist */}
         <button
           type="button"
-          className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 rounded-full shadow-sm cursor-pointer"
+          className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 cursor-pointer"
           aria-label="Add to wishlist"
           onClick={(e) => {
             e.preventDefault();
@@ -99,21 +99,13 @@ export default function ProductCard({
             likeProductHandler?.(user, product._id);
           }}
         >
-          {isLiked ? (
-            <Image
-              src="/liked-true.png"
-              alt="like-icon"
-              width={20}
-              height={20}
-            />
-          ) : (
-            <Image
-              src="/liked-false.png"
-              alt="like-icon"
-              width={20}
-              height={20}
-            />
-          )}
+          <Heart
+            className={`h-5 w-5 transition-colors cursor-pointer ${
+              isLiked
+                ? "fill-pink-500 text-pink-500"
+                : "text-muted-foreground group-hover:text-pink-500"
+            }`}
+          />
         </button>
 
         {/* Brand Badge */}

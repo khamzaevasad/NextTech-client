@@ -187,7 +187,7 @@ export default function ArticleDetailPage({ params }: ArticleDetailProps) {
                     className="flex items-center gap-2 group"
                   >
                     <Heart
-                      className={`h-5 w-5 transition-colors ${
+                      className={`h-5 w-5 transition-colors cursor-pointer ${
                         isLiked
                           ? "fill-pink-500 text-pink-500"
                           : "text-muted-foreground group-hover:text-pink-500"

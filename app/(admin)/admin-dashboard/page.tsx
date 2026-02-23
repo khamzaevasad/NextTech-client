@@ -1,13 +1,12 @@
 "use client";
 
 import { GET_ALL_MEMBERS_BY_ADMIN } from "@/apollo/admin/admin-query";
-import { userVar } from "@/apollo/store";
 import { MemberSearchPanel } from "@/components/admin/member/MemberSearchPanel";
 import { MemberTable } from "@/components/admin/member/MemberTable";
 import { Button } from "@/components/ui/button";
 import { LoadingBar } from "@/components/web/LoadingBar";
 import { cn } from "@/lib/utils";
-import { useQuery, useReactiveVar } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
@@ -16,7 +15,6 @@ export default function UserList() {
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [memberTypeFilter, setMemberTypeFilter] = useState<string>("ALL");
   const [page, setPage] = useState(1);
-  const user = useReactiveVar(userVar);
 
   /* -------------------------------------------------------------------------- */
   /*                                APOLLO CLIENT                               */

@@ -78,11 +78,13 @@ export default function StoreCard({
               likeStoreHandler?.(user, store._id);
             }}
           >
-            {isLiked ? (
-              <Image src="/liked-true.png" alt="liked" width={20} height={20} />
-            ) : (
-              <Image src="/liked-false.png" alt="like" width={20} height={20} />
-            )}
+            <Heart
+              className={`h-5 w-5 transition-colors cursor-pointer ${
+                isLiked
+                  ? "fill-pink-500 text-pink-500"
+                  : "text-muted-foreground group-hover:text-pink-500"
+              }`}
+            />
           </button>
         ) : (
           ""
