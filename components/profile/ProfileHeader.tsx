@@ -7,6 +7,7 @@ import { T } from "@/lib/types/common";
 import { Button, buttonVariants } from "../ui/button";
 import {
   Loader2,
+  LockKeyholeIcon,
   LucideSettings2,
   StoreIcon,
   UserMinus,
@@ -137,6 +138,18 @@ export function ProfileHeader({
               <StoreIcon /> Create Store
             </Link>
           ))}
+
+        {isMe && member.memberType === MemberType.ADMIN && !storeLoading && (
+          <Link
+            href="/admin-dashboard"
+            className={cn(
+              buttonVariants({ variant: "secondary" }),
+              "bg-pink-600 hover:bg-pink-500 text-white mt-8 sm:mt-0",
+            )}
+          >
+            <LockKeyholeIcon /> Admin Page
+          </Link>
+        )}
       </div>
     </div>
   );

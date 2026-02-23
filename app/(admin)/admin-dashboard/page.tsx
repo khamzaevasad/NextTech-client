@@ -1,20 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery, useReactiveVar } from "@apollo/client";
-import { GET_MY_STORE, GET_PRODUCTS } from "@/apollo/user/user-query";
-import { ProductSearchPanel } from "@/components/dashboard/product/ProductSearchPanel";
-import { ProductTable } from "@/components/dashboard/product/ProductTable";
+import { GET_ALL_MEMBERS_BY_ADMIN } from "@/apollo/admin/admin-query";
 import { userVar } from "@/apollo/store";
-import { LoadingBar } from "@/components/web/LoadingBar";
-import { _Store } from "@/lib/types/store/store";
+import { MemberSearchPanel } from "@/components/admin/member/MemberSearchPanel";
+import { MemberTable } from "@/components/admin/member/MemberTable";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { LoadingBar } from "@/components/web/LoadingBar";
 import { cn } from "@/lib/utils";
+import { useQuery, useReactiveVar } from "@apollo/client";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
 
-export default function ProductList() {
+export default function UserList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [memberTypeFilter, setMemberTypeFilter] = useState<string>("ALL");
   const [page, setPage] = useState(1);
   const user = useReactiveVar(userVar);
 
@@ -22,64 +22,55 @@ export default function ProductList() {
   /*                                APOLLO CLIENT                               */
   /* -------------------------------------------------------------------------- */
 
-  const { data: storeData } = useQuery(GET_MY_STORE, {
-    fetchPolicy: "cache-and-network",
-    skip: !user._id,
-  });
-
-  const store: _Store | undefined = storeData?.getMyStore;
-
   const {
-    data: productData,
-    loading: productLoading,
-    refetch: productRefetch,
-  } = useQuery(GET_PRODUCTS, {
+    data: memberData,
+    loading: memberLoading,
+    refetch: memberRefetch,
+  } = useQuery(GET_ALL_MEMBERS_BY_ADMIN, {
     variables: {
       input: {
         page,
         limit: 10,
-        sort: "createdAt",
+
         search: {
-          storeId: store?._id,
-          productStatus: statusFilter !== "ALL" ? statusFilter : undefined,
+          memberStatus: statusFilter !== "ALL" ? statusFilter : undefined,
+          memberType: memberTypeFilter !== "ALL" ? memberTypeFilter : undefined,
           text: searchQuery || undefined,
         },
       },
     },
     fetchPolicy: "cache-and-network",
-    skip: !store?._id,
   });
 
   /* -------------------------------------------------------------------------- */
   /*                                  HANDLERS                                  */
   /* -------------------------------------------------------------------------- */
 
-  const products = productData?.getProducts?.list || [];
+  const members = memberData?.getAllMembersByAdmin?.list || [];
   const totalCount =
-    productData?.getProducts?.metaCounter?.[0]?.total || products.length;
-
+    memberData?.getAllMembersByAdmin?.metaCounter?.[0]?.total || members.length;
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
   const totalPages = Math.ceil(totalCount / 10);
 
   return (
     <>
-      <LoadingBar loading={productLoading} />
+      <LoadingBar loading={memberLoading} />
       <div className="space-y-6 animate-in fade-in duration-500">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <h1 className="text-2xl font-bold tracking-tight">
-            Products Management
+            Members Management
           </h1>
-          <ProductSearchPanel
+          <MemberSearchPanel
             onSearch={setSearchQuery}
             onStatusChange={setStatusFilter}
+            onMemberTypeChange={setMemberTypeFilter}
           />
         </div>
 
-        <ProductTable products={products} onUpdate={productRefetch} />
+        <MemberTable members={members} onUpdate={memberRefetch} />
 
         {/* Pagination */}
         {totalPages > 1 && (

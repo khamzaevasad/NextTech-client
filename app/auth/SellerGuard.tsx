@@ -13,7 +13,7 @@ export function SellerGuard({ children }: { children: React.ReactNode }) {
   const { data, loading: storeLoading } = useQuery(GET_MY_STORE, {
     variables: { input: user?._id },
     skip: !user?._id,
-    fetchPolicy: "network-only", // MUHIM
+    fetchPolicy: "network-only",
   });
 
   const myStore = data?.getMyStore;
