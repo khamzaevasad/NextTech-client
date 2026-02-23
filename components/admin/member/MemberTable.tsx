@@ -29,7 +29,6 @@ export function MemberTable({ members, onUpdate }: MemberTableProps) {
             <TableHead className="hidden md:table-cell">Phone</TableHead>
             <TableHead className="hidden md:table-cell">Member Type</TableHead>
             <TableHead className="hidden md:table-cell">Status</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

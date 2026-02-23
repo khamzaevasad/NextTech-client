@@ -52,6 +52,28 @@ export function MemberRow({ member, onUpdate }: MemberRowProps) {
     }
   };
 
+  const handleTypeChange = async (newType: string) => {
+    try {
+      await updateMember({
+        variables: {
+          input: {
+            _id: member._id,
+            memberType: newType,
+          },
+        },
+      });
+      toast.success(`Status changed to ${newType}`);
+      onUpdate();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.log("handleTypeChange error", err.message);
+        toast(err.message);
+      } else {
+        toast("Unexpected error occurred");
+      }
+    }
+  };
+
   return (
     <TableRow className="group hover:bg-muted/30 transition-colors">
       {/* IMAGE */}
@@ -88,7 +110,25 @@ export function MemberRow({ member, onUpdate }: MemberRowProps) {
 
       {/* memberType */}
       <TableCell className="hidden md:table-cell">
-        {member.memberType.toLowerCase()}
+        <Select
+          defaultValue={member.memberType}
+          onValueChange={handleTypeChange}
+        >
+          <SelectTrigger
+            className={`h-8 w-24 rounded-full text-[10px] font-bold uppercase cursor-pointer ${
+              member.memberType === "ADMIN"
+                ? "text-pink-500 border-pink-200"
+                : ""
+            }`}
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="CUSTOMER">Customer</SelectItem>
+            <SelectItem value="SELLER">Seller</SelectItem>
+            <SelectItem value="ADMIN">Admin</SelectItem>
+          </SelectContent>
+        </Select>
       </TableCell>
 
       {/* STATUS */}
@@ -112,19 +152,6 @@ export function MemberRow({ member, onUpdate }: MemberRowProps) {
             <SelectItem value="DELETE">Delete</SelectItem>
           </SelectContent>
         </Select>
-      </TableCell>
-
-      {/* edit icon */}
-      <TableCell className="text-right">
-        <Link
-          href="#"
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "rounded-full hover:bg-rose-50 hover:text-pink-500 cursor-pointer",
-          )}
-        >
-          <Edit size={16} />
-        </Link>
       </TableCell>
     </TableRow>
   );

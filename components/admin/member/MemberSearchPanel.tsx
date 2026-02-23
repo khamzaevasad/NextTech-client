@@ -52,6 +52,7 @@ export function MemberSearchPanel({
           <SelectItem value="ALL">All Users</SelectItem>
           <SelectItem value="SELLER">Sellers</SelectItem>
           <SelectItem value="CUSTOMER">Customers</SelectItem>
+          <SelectItem value="ADMIN">Admin</SelectItem>
         </SelectContent>
       </Select>
     </div>
