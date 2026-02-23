@@ -28,7 +28,9 @@ export function ProductTable({ products, onUpdate }: ProductTableProps) {
           <TableRow>
             <TableHead className="hidden md:table-cell">Image</TableHead>
             <TableHead>Product Name</TableHead>
-            <TableHead className="hidden md:table-cell">Store</TableHead>
+            {user.memberType === MemberType.ADMIN && (
+              <TableHead className="hidden md:table-cell">Store</TableHead>
+            )}
             <TableHead className="hidden md:table-cell">Price</TableHead>
             <TableHead className="hidden md:table-cell">Stock</TableHead>
             <TableHead className="hidden md:table-cell">Status</TableHead>
