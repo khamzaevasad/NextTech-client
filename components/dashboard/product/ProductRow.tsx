@@ -13,12 +13,13 @@ import {
 } from "@/components/ui/select";
 import Image from "next/image";
 import { Product } from "@/lib/types/product/product";
-import { useRouter } from "next/navigation";
-import { useMutation } from "@apollo/client";
-import { UPDATE_PRODUCT } from "@/apollo/user/user-mutation";
+import { useMutation, useReactiveVar } from "@apollo/client";
 import { toast } from "sonner";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { userVar } from "@/apollo/store";
+import { MemberType } from "@/lib/enums/member.enum";
+import { UPDATE_PRODUCTS_BY_ADMIN } from "@/apollo/admin/admin-mutation";
 
 interface ProductRowProps {
   product: Product;
@@ -26,10 +27,11 @@ interface ProductRowProps {
 }
 
 export function ProductRow({ product, onUpdate }: ProductRowProps) {
+  const user = useReactiveVar(userVar);
   /* -------------------------------------------------------------------------- */
   /*                                APOLLO CLIENT                               */
   /* -------------------------------------------------------------------------- */
-  const [updateProduct] = useMutation(UPDATE_PRODUCT);
+  const [updateProduct] = useMutation(UPDATE_PRODUCTS_BY_ADMIN);
 
   const handleStatusChange = async (newStatus: string) => {
     try {
@@ -82,6 +84,13 @@ export function ProductRow({ product, onUpdate }: ProductRowProps) {
         </div>
       </TableCell>
 
+      {/* Store */}
+      {user.memberType === MemberType.ADMIN && (
+        <TableCell className="hidden md:table-cell">
+          {product.storeData?.storeName}
+        </TableCell>
+      )}
+
       {/* PRICE */}
       <TableCell className="text-pink-500 font-bold hidden md:table-cell">
         ${product.productPrice.toLocaleString()}
@@ -125,17 +134,19 @@ export function ProductRow({ product, onUpdate }: ProductRowProps) {
       </TableCell>
 
       {/* EDIT ICON */}
-      <TableCell className="text-right">
-        <Link
-          href={`/dashboard/${product.productSlug}`}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "rounded-full hover:bg-rose-50 hover:text-pink-500 cursor-pointer",
-          )}
-        >
-          <Edit size={16} />
-        </Link>
-      </TableCell>
+      {user.memberType === MemberType.SELLER && (
+        <TableCell className="text-right">
+          <Link
+            href={`/dashboard/${product.productSlug}`}
+            className={cn(
+              buttonVariants({ variant: "ghost" }),
+              "rounded-full hover:bg-rose-50 hover:text-pink-500 cursor-pointer",
+            )}
+          >
+            <Edit size={16} />
+          </Link>
+        </TableCell>
+      )}
     </TableRow>
   );
 }

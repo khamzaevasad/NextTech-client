@@ -30,3 +30,32 @@ export const UPDATE_MEMBER_BY_ADMIN = gql`
     }
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                  PRODUCTS                                  */
+/* -------------------------------------------------------------------------- */
+
+export const UPDATE_PRODUCTS_BY_ADMIN = gql`
+  mutation UpdateProductByAdmin($input: UpdateProductInputAdmin!) {
+    updateProductByAdmin(input: $input) {
+      _id
+      productName
+      productSlug
+      productDesc
+      productBrand
+      productPrice
+      productStock
+      productStatus
+      productCategory
+      storeId
+      productSpecsKeys
+      productSpecs
+      productImages
+      productViews
+      productLikes
+      productComments
+      createdAt
+      updatedAt
+    }
+  }
+`;

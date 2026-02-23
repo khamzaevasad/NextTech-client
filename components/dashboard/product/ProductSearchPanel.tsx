@@ -30,11 +30,12 @@ export function ProductSearchPanel({
         />
       </div>
 
-      <Select onValueChange={onStatusChange} defaultValue="ACTIVE">
+      <Select onValueChange={onStatusChange} defaultValue="ALL">
         <SelectTrigger className="w-32 rounded-xl">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
+          <SelectItem value="ALL">All</SelectItem>
           <SelectItem value="ACTIVE">Active</SelectItem>
           <SelectItem value="PAUSE">Pause</SelectItem>
         </SelectContent>

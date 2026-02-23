@@ -10,6 +10,9 @@ import { ProductRow } from "./ProductRow";
 import { Product } from "@/lib/types/product/product";
 import { EmptyState } from "@/components/web/EmptyState";
 import { Package } from "lucide-react";
+import { useReactiveVar } from "@apollo/client";
+import { userVar } from "@/apollo/store";
+import { MemberType } from "@/lib/enums/member.enum";
 
 interface ProductTableProps {
   products: Product[];
@@ -17,17 +20,21 @@ interface ProductTableProps {
 }
 
 export function ProductTable({ products, onUpdate }: ProductTableProps) {
+  const user = useReactiveVar(userVar);
   return (
     <div className="rounded border bg-card overflow-hidden">
       <Table>
         <TableHeader className="bg-muted/50">
           <TableRow>
             <TableHead className="hidden md:table-cell">Image</TableHead>
-            <TableHead>Product Name</TableHead>
+            <TableHead className="hidden md:table-cell">Product Name</TableHead>
+            <TableHead>Store</TableHead>
             <TableHead className="hidden md:table-cell">Price</TableHead>
             <TableHead className="hidden md:table-cell">Stock</TableHead>
             <TableHead className="hidden md:table-cell">Status</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            {user.memberType === MemberType.SELLER && (
+              <TableHead className="text-right">Actions</TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
