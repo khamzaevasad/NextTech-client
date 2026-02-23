@@ -58,7 +58,7 @@ export function ProductRow({ product, onUpdate }: ProductRowProps) {
   return (
     <TableRow className="group hover:bg-muted/30 transition-colors">
       {/* IMAGE */}
-      <TableCell className="w-20 hidden md:table-cell">
+      <TableCell className="hidden md:table-cell">
         <div className="relative size-12 rounded-lg border overflow-hidden bg-muted">
           <Image
             src={`${API_URL}/${product.productImages?.[0]}`}
@@ -74,7 +74,7 @@ export function ProductRow({ product, onUpdate }: ProductRowProps) {
       <TableCell className="font-semibold py-4">
         <div className="flex flex-col">
           <Link
-            href={`${product.productStatus === "ACTIVE" ? `/products/${product.productSlug}` : ""}`}
+            href={`${product.productStatus === "ACTIVE" ? `/products/${product.productSlug}` : "#"}`}
           >
             {product.productName}
           </Link>

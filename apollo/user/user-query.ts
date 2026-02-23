@@ -322,6 +322,7 @@ export const GET_STORES = gql`
         storeViews
         storeLikes
         storeLogo
+        storeLocation
         ownerData {
           _id
           memberType
