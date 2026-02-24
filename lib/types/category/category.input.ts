@@ -10,3 +10,11 @@ export interface CategoriesInquiry {
   direction?: string;
   search: SearchCategory;
 }
+
+export interface CreateCategoryInput {
+  categoryName: string;
+  categoryImage?: string;
+  categoryDesc?: string;
+  parentId?: string;
+  categoryFilterKeys?: string[];
+}

@@ -191,6 +191,22 @@ export const GET_CATEGORIES = gql`
   }
 `;
 
+export const GET_CATEGORY_BY_ID = gql`
+  query GetCategoryById($input: String!) {
+    getCategoryById(input: $input) {
+      _id
+      categoryName
+      categorySlug
+      categoryImage
+      categoryDesc
+      parentId
+      categoryFilterKeys
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const GET_FILTER_OPTIONS = gql`
   query GetFilterOptions($categoryId: String!) {
     getFilterOptions(categoryId: $categoryId) {

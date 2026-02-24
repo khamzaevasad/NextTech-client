@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Compass,
+  LayoutGrid,
   MessageCircle,
   Package,
   PlusSquare,
@@ -37,6 +38,11 @@ const navItemsAdmin = [
     label: "StoreList",
     href: "/admin-dashboard/store-list",
     icon: Store,
+  },
+  {
+    label: "Category",
+    href: "/admin-dashboard/category",
+    icon: LayoutGrid,
   },
   {
     label: "Community",

@@ -218,3 +218,49 @@ export const REMOVE_FAQ_BY_ADMIN = gql`
     }
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                  CATEGORY                                  */
+/* -------------------------------------------------------------------------- */
+export const CREATE_CATEGORY = gql`
+  mutation CreateCategory($input: CreateCategoryInput!) {
+    createCategory(input: $input) {
+      _id
+      categoryName
+      categorySlug
+      categoryImage
+      categoryDesc
+      parentId
+      categoryFilterKeys
+      createdAt
+      updatedAt
+      children {
+        _id
+        categoryName
+        categorySlug
+        categoryImage
+        categoryDesc
+        parentId
+        categoryFilterKeys
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const UPDATE_CATEGORY = gql`
+  mutation UpdateCategory($input: UpdateCategoryInput!) {
+    updateCategory(input: $input) {
+      _id
+      categoryName
+      categorySlug
+      categoryImage
+      categoryDesc
+      parentId
+      categoryFilterKeys
+      createdAt
+      updatedAt
+    }
+  }
+`;
