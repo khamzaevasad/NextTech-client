@@ -728,3 +728,129 @@ export const GET_MEMBER_FOLLOWINGS = gql`
     }
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                   NOTICE                                   */
+/* -------------------------------------------------------------------------- */
+
+export const GET_NOTICES = gql`
+  query GetNotices($input: NoticeInquiry!) {
+    getNotices(input: $input) {
+      list {
+        _id
+        noticeTitle
+        noticeStatus
+        noticeContent
+        memberId
+        noticeViews
+        createdAt
+        updatedAt
+        authorData {
+          _id
+          memberType
+          memberStatus
+          memberAuthType
+          memberPhone
+          memberNick
+          memberFullName
+          memberImage
+          memberAddress
+          memberDesc
+          memberArticles
+          memberFollowers
+          memberFollowings
+          memberPoints
+          memberRank
+          memberWarnings
+          memberBlocks
+          deletedAt
+          createdAt
+          updatedAt
+          accessToken
+        }
+      }
+      metaCounter {
+        total
+      }
+    }
+  }
+`;
+
+export const GET_NOTICE = gql`
+  query GetNotice($input: String!) {
+    getNotice(noticeId: $input) {
+      _id
+      noticeTitle
+      noticeStatus
+      noticeContent
+      memberId
+      noticeViews
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+/* -------------------------------------------------------------------------- */
+/*                                     FAQ                                    */
+/* -------------------------------------------------------------------------- */
+
+export const GET_FAQS = gql`
+  query GetFaqs($input: FaqInquiry!) {
+    getFaqs(input: $input) {
+      list {
+        _id
+        question
+        answer
+        category
+        memberId
+        order
+        isActive
+        createdAt
+        updatedAt
+        authorData {
+          _id
+          memberType
+          memberStatus
+          memberAuthType
+          memberPhone
+          memberNick
+          memberFullName
+          memberImage
+          memberAddress
+          memberDesc
+          memberArticles
+          memberFollowers
+          memberFollowings
+          memberPoints
+          memberRank
+          memberWarnings
+          memberBlocks
+          deletedAt
+          createdAt
+          updatedAt
+          accessToken
+        }
+      }
+      metaCounter {
+        total
+      }
+    }
+  }
+`;
+
+export const GET_FAQ = gql`
+  query GetFaq($input: String!) {
+    getFaq(faqId: $input) {
+      _id
+      question
+      answer
+      category
+      memberId
+      order
+      isActive
+      createdAt
+      updatedAt
+    }
+  }
+`;

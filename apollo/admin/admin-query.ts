@@ -1,3 +1,4 @@
+import { GET_NOTICE } from "./../user/user-query";
 import { gql } from "@apollo/client";
 
 /* -------------------------------------------------------------------------- */
@@ -185,6 +186,101 @@ export const GET_ALL_BOARDARTICLES_BY_ADMIN = gql`
         createdAt
         updatedAt
         memberData {
+          _id
+          memberType
+          memberStatus
+          memberAuthType
+          memberPhone
+          memberNick
+          memberFullName
+          memberImage
+          memberAddress
+          memberDesc
+          memberArticles
+          memberFollowers
+          memberFollowings
+          memberPoints
+          memberRank
+          memberWarnings
+          memberBlocks
+          deletedAt
+          createdAt
+          updatedAt
+          accessToken
+        }
+      }
+      metaCounter {
+        total
+      }
+    }
+  }
+`;
+
+/* -------------------------------------------------------------------------- */
+/*                                   NOTICE                                   */
+/* -------------------------------------------------------------------------- */
+
+export const GET_NOTICE_BY_ADMIN = gql`
+  query GetNoticesByAdmin($input: NoticeInquiry!) {
+    getNoticesByAdmin(input: $input) {
+      list {
+        _id
+        noticeTitle
+        noticeStatus
+        noticeContent
+        memberId
+        noticeViews
+        createdAt
+        updatedAt
+        authorData {
+          _id
+          memberType
+          memberStatus
+          memberAuthType
+          memberPhone
+          memberNick
+          memberFullName
+          memberImage
+          memberAddress
+          memberDesc
+          memberArticles
+          memberFollowers
+          memberFollowings
+          memberPoints
+          memberRank
+          memberWarnings
+          memberBlocks
+          deletedAt
+          createdAt
+          updatedAt
+          accessToken
+        }
+      }
+      metaCounter {
+        total
+      }
+    }
+  }
+`;
+
+/* -------------------------------------------------------------------------- */
+/*                                     FAQ                                    */
+/* -------------------------------------------------------------------------- */
+
+export const GET_FAQS_BY_ADMIN = gql`
+  query GetFaqsByAdmin($input: FaqInquiry!) {
+    getFaqsByAdmin(input: $input) {
+      list {
+        _id
+        question
+        answer
+        category
+        memberId
+        order
+        isActive
+        createdAt
+        updatedAt
+        authorData {
           _id
           memberType
           memberStatus

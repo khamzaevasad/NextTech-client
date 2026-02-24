@@ -121,3 +121,100 @@ export const REMOVE_BOARD_ARTICLE_BY_ADMIN = gql`
     }
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                     CS                                     */
+/* -------------------------------------------------------------------------- */
+
+export const CREATE_NOTICE = gql`
+  mutation CreateNotice($input: NoticeInput!) {
+    createNotice(input: $input) {
+      _id
+      noticeTitle
+      noticeStatus
+      noticeContent
+      memberId
+      noticeViews
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const UPDATE_NOTICE = gql`
+  mutation UpdateNotice($input: UpdateNotice!) {
+    updateNotice(input: $input) {
+      _id
+      noticeTitle
+      noticeStatus
+      noticeContent
+      memberId
+      noticeViews
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const REMOVE_NOTICE_BY_ADMIN = gql`
+  mutation RemoveNoticeByAdmin($input: String!) {
+    removeNoticeByAdmin(input: $input) {
+      _id
+      noticeTitle
+      noticeStatus
+      noticeContent
+      memberId
+      noticeViews
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const CREATE_FAQ = gql`
+  mutation CreateFaq($input: FaqInput!) {
+    createFaq(input: $input) {
+      _id
+      question
+      answer
+      category
+      memberId
+      order
+      isActive
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const UPDATE_FAQ = gql`
+  mutation UpdateFaq($input: UpdateFaq!) {
+    updateFaq(input: $input) {
+      _id
+      question
+      answer
+      category
+      memberId
+      order
+      isActive
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const REMOVE_FAQ_BY_ADMIN = gql`
+  mutation RemoveFaqByAdmin($input: String!) {
+    removeFaqByAdmin(input: $input) {
+      _id
+      question
+      answer
+      category
+      memberId
+      order
+      isActive
+      createdAt
+      updatedAt
+    }
+  }
+`;
