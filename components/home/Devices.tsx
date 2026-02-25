@@ -1,6 +1,6 @@
 import DeviceCard from "../web/DeviceCard";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Grid } from "swiper/modules";
+import { Navigation, Grid, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/grid";
@@ -63,37 +63,24 @@ function Devices({
       <Swiper
         slidesPerView={4}
         slidesPerGroup={4}
-        grid={{
-          rows: 2,
-          fill: "row",
-        }}
+        grid={{ rows: 2, fill: "row" }}
         spaceBetween={16}
         navigation={{
           prevEl: ".devices-prev",
           nextEl: ".devices-next",
         }}
-        modules={[Navigation, Grid]}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
+        speed={600}
+        modules={[Navigation, Grid, Autoplay]}
         breakpoints={{
-          320: {
-            slidesPerView: 1,
-            grid: { rows: 2 },
-            spaceBetween: 12,
-          },
-          640: {
-            slidesPerView: 2,
-            grid: { rows: 2 },
-            spaceBetween: 12,
-          },
-          1024: {
-            slidesPerView: 3,
-            grid: { rows: 2 },
-            spaceBetween: 16,
-          },
-          1280: {
-            slidesPerView: 4,
-            grid: { rows: 2 },
-            spaceBetween: 16,
-          },
+          320: { slidesPerView: 1, grid: { rows: 2 }, spaceBetween: 12 },
+          640: { slidesPerView: 2, grid: { rows: 2 }, spaceBetween: 12 },
+          1024: { slidesPerView: 3, grid: { rows: 2 }, spaceBetween: 16 },
+          1280: { slidesPerView: 4, grid: { rows: 2 }, spaceBetween: 16 },
         }}
       >
         {categories.map((category) => (

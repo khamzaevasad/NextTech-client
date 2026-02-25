@@ -11,6 +11,7 @@ export interface SpecFilterInput {
 export interface SearchProduct {
   storeId?: string;
   categoryId?: string;
+  categoryIds?: string[];
   priceRange?: PriceRange;
   specs?: SpecFilterInput[];
   brands?: string[];
