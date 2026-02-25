@@ -56,12 +56,20 @@ export function Header() {
             CS
           </Link>
           {user?._id && (
-            <Link
-              href="/profile/me"
-              className={buttonVariants({ variant: "ghost" })}
-            >
-              My Page
-            </Link>
+            <>
+              <Link
+                href="/orders"
+                className={buttonVariants({ variant: "ghost" })}
+              >
+                Orders
+              </Link>
+              <Link
+                href="/profile/me"
+                className={buttonVariants({ variant: "ghost" })}
+              >
+                My Page
+              </Link>
+            </>
           )}
         </div>
         <div className="flex gap-1 items-center">

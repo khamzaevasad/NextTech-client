@@ -106,15 +106,26 @@ export function MobileNav() {
                   CS
                 </Link>
                 {user?._id && (
-                  <Link
-                    href="/profile/me"
-                    className={buttonVariants({
-                      variant: "ghost",
-                      className: "justify-start",
-                    })}
-                  >
-                    My Page
-                  </Link>
+                  <>
+                    <Link
+                      href="/orders"
+                      className={buttonVariants({
+                        variant: "ghost",
+                        className: "justify-start",
+                      })}
+                    >
+                      Orders
+                    </Link>
+                    <Link
+                      href="/profile/me"
+                      className={buttonVariants({
+                        variant: "ghost",
+                        className: "justify-start",
+                      })}
+                    >
+                      My Page
+                    </Link>
+                  </>
                 )}
               </div>
               <div className="mt-12 flex flex-col gap-2">

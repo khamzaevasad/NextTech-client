@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCartIcon, X, Trash2, Plus, Minus } from "lucide-react";
+import { ShoppingCartIcon, Trash2, Plus, Minus } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -46,20 +46,14 @@ export function CartDropdown({ userId }: CartDropdownProps) {
         >
           <ShoppingCartIcon className="h-5 w-5" />
           {getTotalItems() > 0 && (
-            <Badge
-              className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 bg-pink-600 hover:bg-pink-600 text-white text-xs font-bold"
-              variant="destructive"
-            >
+            <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 bg-pink-600 hover:bg-pink-600 text-white text-xs font-bold">
               {getTotalItems() > 99 ? "99+" : cartCount}
             </Badge>
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent
-        className="w-[380px] p-0 dark:bg-[radial-gradient(35%_80%_at_30%_0%,--theme(--color-foreground/.1),transparent)]"
-        align="end"
-        sideOffset={8}
-      >
+
+      <PopoverContent className="w-[380px] p-0" align="end" sideOffset={8}>
         <div className="flex items-center justify-between p-4 border-b">
           <h3 className="font-semibold text-lg">Shopping Cart</h3>
           <Badge variant="secondary" className="font-semibold">
@@ -96,7 +90,6 @@ export function CartDropdown({ userId }: CartDropdownProps) {
                     key={item._id}
                     className="flex gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
                   >
-                    {/* Product Image */}
                     <div className="relative h-20 w-20 rounded-md overflow-hidden flex-shrink-0 bg-muted">
                       {item.productImages ? (
                         <Image
@@ -113,7 +106,6 @@ export function CartDropdown({ userId }: CartDropdownProps) {
                       )}
                     </div>
 
-                    {/* Product Info */}
                     <div className="flex-1 min-w-0">
                       <Link
                         href={`/products/${item.productSlug}`}
@@ -124,7 +116,7 @@ export function CartDropdown({ userId }: CartDropdownProps) {
                       </Link>
                       <div className="mt-1 flex items-center gap-2">
                         <span className="font-bold text-pink-500">
-                          ${item.productPrice}
+                          ${item.productPrice.toLocaleString()}
                         </span>
                         {item.productStock === 0 && (
                           <Badge variant="destructive" className="text-xs">
@@ -133,7 +125,6 @@ export function CartDropdown({ userId }: CartDropdownProps) {
                         )}
                       </div>
 
-                      {/* Quantity Controls */}
                       <div className="mt-2 flex items-center justify-between">
                         <div className="flex items-center border rounded-md">
                           <Button
@@ -176,28 +167,52 @@ export function CartDropdown({ userId }: CartDropdownProps) {
 
             <Separator />
 
-            {/* Cart Footer */}
             <div className="p-4 space-y-4">
-              <div className="flex items-center justify-between text-base">
-                <span className="font-medium">Subtotal:</span>
-                <span className="font-bold text-lg text-pink-500">
-                  ${getTotalPrice()}
-                </span>
+              <div className="space-y-1.5">
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>Subtotal</span>
+                  <span>${getTotalPrice().toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>Delivery</span>
+                  {getTotalPrice() >= 500 ? (
+                    <span className="text-green-600 font-medium">Free</span>
+                  ) : (
+                    <span>$5</span>
+                  )}
+                </div>
+                {getTotalPrice() < 500 && (
+                  <p className="text-xs text-muted-foreground">
+                    Add ${(500 - getTotalPrice()).toLocaleString()} more for
+                    free delivery
+                  </p>
+                )}
+                <Separator />
+                <div className="flex items-center justify-between text-base">
+                  <span className="font-medium">Total</span>
+                  <span className="font-bold text-lg text-pink-500">
+                    $
+                    {(
+                      getTotalPrice() + (getTotalPrice() >= 500 ? 0 : 5)
+                    ).toLocaleString()}
+                  </span>
+                </div>
               </div>
 
               <div className="flex gap-2">
                 <Button
-                  className={cn(
-                    buttonVariants({ variant: "destructive" }),
-                    "flex-1 cursor-pointer",
-                  )}
+                  variant="destructive"
+                  className="flex-1 cursor-pointer"
                   onClick={() => onDeleteAll()}
                 >
                   Clear
                 </Button>
                 <Link
                   href="/checkout"
-                  className={cn(buttonVariants({}), "flex-1")}
+                  className={cn(
+                    buttonVariants({}),
+                    "flex-1 bg-pink-600 hover:bg-pink-500 text-white text-center",
+                  )}
                   onClick={() => setIsOpen(false)}
                 >
                   Checkout

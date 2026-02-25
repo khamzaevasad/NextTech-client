@@ -360,3 +360,45 @@ export const UPDATE_STORE = gql`
     }
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                   ORDERS                                   */
+/* -------------------------------------------------------------------------- */
+
+export const CREATE_ORDER = gql`
+  mutation CreateOrder($input: CreateOrderInput!) {
+    createOrder(input: $input) {
+      _id
+      orderTotal
+      orderDelivery
+      orderStatus
+      memberId
+      createdAt
+      updatedAt
+      deliveryAddress {
+        fullName
+        phone
+        address
+      }
+    }
+  }
+`;
+
+export const UPDATE_ORDER = gql`
+  mutation UpdateOrder($input: OrderUpdateInput!) {
+    updateOrder(input: $input) {
+      _id
+      orderTotal
+      orderDelivery
+      orderStatus
+      memberId
+      createdAt
+      updatedAt
+      deliveryAddress {
+        fullName
+        phone
+        address
+      }
+    }
+  }
+`;

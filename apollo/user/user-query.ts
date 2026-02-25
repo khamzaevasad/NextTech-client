@@ -870,3 +870,60 @@ export const GET_FAQ = gql`
     }
   }
 `;
+
+/* -------------------------------------------------------------------------- */
+/*                                   ORDERS                                   */
+/* -------------------------------------------------------------------------- */
+
+export const GET_MY_ORDERS = gql`
+  query GetMyOrders($input: OrdersInquiry!) {
+    getMyOrders(input: $input) {
+      list {
+        _id
+        orderTotal
+        orderDelivery
+        orderStatus
+        memberId
+        createdAt
+        updatedAt
+        orderItems {
+          _id
+          itemQuantity
+          itemPrice
+          orderId
+          productId
+          createdAt
+          updatedAt
+        }
+        productData {
+          _id
+          productName
+          productSlug
+          productDesc
+          productBrand
+          productPrice
+          productStock
+          productStatus
+          productCategory
+          storeId
+          productSpecsKeys
+          productSpecs
+          productImages
+          productViews
+          productLikes
+          productComments
+          createdAt
+          updatedAt
+        }
+        deliveryAddress {
+          fullName
+          phone
+          address
+        }
+      }
+      metaCounter {
+        total
+      }
+    }
+  }
+`;
