@@ -13,7 +13,7 @@ import { onError } from "@apollo/client/link/error";
 import createUploadLink from "apollo-upload-client/public/createUploadLink.js";
 import { getJwtToken } from "@/lib/auth";
 
-/* --------------------------- AUTH LINK (MUHIM) --------------------------- */
+/* --------------------------- AUTH LINK --------------------------- */
 const authLink = setContext((_, { headers }) => {
   const token = getJwtToken();
 
