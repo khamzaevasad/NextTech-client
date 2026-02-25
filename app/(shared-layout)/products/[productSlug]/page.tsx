@@ -2,7 +2,7 @@
 import { GET_PRODUCT } from "@/apollo/user/user-query";
 import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { use, useState, useMemo } from "react";
-import { ArrowBigLeft, ArrowBigRight, Star } from "lucide-react";
+import { ArrowBigLeft, ArrowBigRight, Package, Star } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs, FreeMode } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
@@ -27,6 +27,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { gql } from "@apollo/client";
 import { LoadingBar } from "@/components/web/LoadingBar";
 import ProductReviews from "@/components/products/ProductReviews";
+import { EmptyState } from "@/components/web/EmptyState";
 
 // GET_FILTER_OPTIONS query
 const GET_FILTER_OPTIONS = gql`
@@ -78,7 +79,6 @@ export default function ProductDetailPage({ params }: DetailProps) {
 
   const {
     loading: getProductLoading,
-    error: getProductError,
     refetch: getProductRefetch,
     data: getProductData,
   } = useQuery(GET_PRODUCT, {
@@ -200,15 +200,20 @@ export default function ProductDetailPage({ params }: DetailProps) {
     );
   }, [getProductData, filterOptionsData]);
 
-  if (!getProductData?.getProduct) {
+  if (getProductLoading && !getProductData?.getProduct) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-white text-xl">Product not found</div>
-      </div>
+      <>
+        <LoadingBar loading />
+        <div className="min-h-screen" />
+      </>
     );
   }
 
-  const product = getProductData?.getProduct;
+  if (!getProductData?.getProduct) {
+    return <EmptyState icon={<Package />} title="No Data Found" />;
+  }
+
+  const product = getProductData?.getProduct ?? [];
 
   const rating =
     product?.productRatingCount > 0
@@ -229,11 +234,11 @@ export default function ProductDetailPage({ params }: DetailProps) {
               Products
             </Link>
             <span className="mx-2">/</span>
-            <span>{product.productName}</span>
+            <span>{product?.productName}</span>
           </div>
 
           {/* Product Title */}
-          <h1 className="text-4xl font-bold mb-8">{product.productName}</h1>
+          <h1 className="text-4xl font-bold mb-8">{product?.productName}</h1>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Left Column - Image Gallery */}

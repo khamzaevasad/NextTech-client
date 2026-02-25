@@ -61,8 +61,19 @@ export default function CreateComment({
   /*                                APOLLO CLIENT                               */
   /* -------------------------------------------------------------------------- */
   const [createComment] = useMutation(CREATE_COMMENT, {
-    refetchQueries: getRefetchQueries(),
-    awaitRefetchQueries: true,
+    update(cache) {
+      cache.modify({
+        id: cache.identify({
+          __typename: "Product",
+          _id: id,
+        }),
+        fields: {
+          productComments(existing = 0) {
+            return existing + 1;
+          },
+        },
+      });
+    },
   });
 
   /* -------------------------------------------------------------------------- */
