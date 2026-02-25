@@ -12,6 +12,7 @@ import { CategoriesInquiry } from "@/lib/types/category/category.input";
 import { useQuery } from "@apollo/client";
 import { GET_CATEGORIES } from "@/apollo/user/user-query";
 import { T } from "@/lib/types/common";
+import { useTranslations } from "next-intl";
 
 interface CategoryProps {
   initialInput?: CategoriesInquiry;
@@ -28,6 +29,7 @@ function Devices({
   },
 }: CategoryProps) {
   const [categories, setCategories] = useState<Category[]>([]);
+  const t = useTranslations("home.devices");
 
   /* ------------------------------ APOLLO CLIENT ------------------------------ */
   const {
@@ -47,7 +49,7 @@ function Devices({
   return (
     <div className="my-8">
       <div className="flex justify-between items-center my-6">
-        <h2 className="text-4xl font-semibold">Devices</h2>
+        <h2 className="text-4xl font-semibold">{t("title")}</h2>
 
         {/* Navigation Buttons */}
         <div className="flex gap-3">

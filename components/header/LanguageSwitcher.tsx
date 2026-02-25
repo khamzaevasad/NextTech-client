@@ -1,5 +1,4 @@
 "use client";
-
 import * as React from "react";
 import {
   DropdownMenu,
@@ -9,43 +8,51 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Globe } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { setLocale } from "@/lib/actions/locale";
 
 const languages = [
-  { code: "EN", name: "English", flag: "🇺🇸" },
-  { code: "RU", name: "Русский", flag: "🇷🇺" },
-  { code: "KR", name: "한국어", flag: "🇰🇷" },
+  { code: "en", label: "EN", name: "English" },
+  { code: "ru", label: "RU", name: "Русский" },
+  { code: "kr", label: "KR", name: "한국어" },
 ];
 
 export function LanguageSwitcher() {
-  // TODO: CHANGE DYNAMIC LANGUAGE
-  const [currentLang, setCurrentLang] = React.useState(languages[0]);
+  const router = useRouter();
+  const [currentCode, setCurrentCode] = React.useState("en");
+
+  React.useEffect(() => {
+    const match = document.cookie.match(/locale=([^;]+)/);
+    if (match) setCurrentCode(match[1]);
+  }, []);
+
+  const currentLang =
+    languages.find((l) => l.code === currentCode) || languages[0];
+
+  const handleChange = async (code: string) => {
+    await setLocale(code);
+    setCurrentCode(code);
+    router.refresh();
+  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          className="flex items-center gap-2 px-4 h-10 border-input hover:bg-muted transition-all cursor-pointer"
-        >
-          <Globe className="size-4 text-foreground" />
-          <span className="text-sm font-bold tracking-tighter">
-            {currentLang.code}
-          </span>
+        <Button variant="outline" className="cursor-pointer">
+          <Globe className="h-4 w-4" />
+          {currentLang.label}
         </Button>
       </DropdownMenuTrigger>
-
-      <DropdownMenuContent
-        align="end"
-        className="w-40 rounded-2xl p-2 shadow-xl border-border"
-      >
+      <DropdownMenuContent align="end" className="min-w-[120px]">
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
-            className="flex items-center gap-3 rounded-xl cursor-pointer py-2.5 focus:bg-muted transition-colors"
-            onClick={() => setCurrentLang(lang)}
+            onClick={() => handleChange(lang.code)}
+            className={`cursor-pointer ${
+              currentLang.code === lang.code ? "font-semibold text-primary" : ""
+            }`}
           >
-            <span className="text-lg leading-none">{lang.flag}</span>
-            <span className="text-sm font-medium">{lang.name}</span>
+            {lang.name}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

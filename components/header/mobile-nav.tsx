@@ -9,8 +9,10 @@ import Link from "next/link";
 import { logout } from "@/lib/auth";
 import { useReactiveVar } from "@apollo/client";
 import { userVar } from "@/apollo/store";
+import { useTranslations } from "next-intl";
 
 export function MobileNav() {
+  const t = useTranslations("nav");
   const user = useReactiveVar(userVar);
   const [open, setOpen] = React.useState(false);
   const { isMobile } = useMediaQuery();
@@ -67,7 +69,7 @@ export function MobileNav() {
                     className: "justify-start",
                   })}
                 >
-                  Home
+                  {t("home")}
                 </Link>
                 <Link
                   href="/products"
@@ -76,7 +78,7 @@ export function MobileNav() {
                     className: "justify-start",
                   })}
                 >
-                  Products
+                  {t("products")}
                 </Link>
                 <Link
                   href="/stores"
@@ -85,7 +87,7 @@ export function MobileNav() {
                     className: "justify-start",
                   })}
                 >
-                  Stores
+                  {t("stores")}
                 </Link>
                 <Link
                   href="/community"
@@ -94,7 +96,7 @@ export function MobileNav() {
                     className: "justify-start",
                   })}
                 >
-                  Community
+                  {t("community")}
                 </Link>
                 <Link
                   href="/cs"
@@ -103,7 +105,7 @@ export function MobileNav() {
                     className: "justify-start",
                   })}
                 >
-                  CS
+                  {t("cs")}
                 </Link>
                 {user?._id && (
                   <>
@@ -114,7 +116,7 @@ export function MobileNav() {
                         className: "justify-start",
                       })}
                     >
-                      Orders
+                      {t("orders")}
                     </Link>
                     <Link
                       href="/profile/me"
@@ -123,7 +125,7 @@ export function MobileNav() {
                         className: "justify-start",
                       })}
                     >
-                      My Page
+                      {t("myPage")}
                     </Link>
                   </>
                 )}
@@ -135,7 +137,7 @@ export function MobileNav() {
                       href="/auth/sign-up/"
                       className={buttonVariants({ variant: "outline" })}
                     >
-                      Sign up
+                      {t("signUp")}
                     </Link>
                     <Link className={buttonVariants({})} href="/auth/login">
                       Login
@@ -143,7 +145,7 @@ export function MobileNav() {
                   </>
                 ) : (
                   <Button onClick={() => logout()} className="cursor-pointer">
-                    Logout
+                    {t("logout")}
                   </Button>
                 )}
               </div>

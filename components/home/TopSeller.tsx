@@ -10,6 +10,7 @@ import { T } from "@/lib/types/common";
 import { useState } from "react";
 import { Member } from "@/lib/types/member/member";
 import { RATING } from "@/lib/config";
+import { useTranslations } from "next-intl";
 
 interface SellersProps {
   initialInput?: SellersInquiry;
@@ -23,7 +24,7 @@ function TopSeller({
   },
 }: SellersProps) {
   const [sellers, setSellers] = useState<Member[]>([]);
-
+  const t = useTranslations("home.topSellers");
   const {
     loading: getSellerLoading,
     error: getSellerError,
@@ -44,7 +45,7 @@ function TopSeller({
     <div className="my-8">
       <div className="flex justify-between items-center my-6">
         <h2 className="text-4xl font-semibold mt-6 tracking-tight md:text-3xl">
-          Top Sellers
+          {t("title")}
         </h2>
 
         {topSellers.length > 0 && (

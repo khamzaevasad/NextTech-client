@@ -10,8 +10,11 @@ import { authReadyVar, userVar } from "@/apollo/store";
 import { logout } from "@/lib/auth";
 import { CartDropdown } from "./Cartdropdown";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useTranslations } from "next-intl";
 
 export function Header() {
+  const t = useTranslations("nav");
+
   const scrolled = useScroll(10);
   const user = useReactiveVar(userVar);
   const authReady = useReactiveVar(authReadyVar);
@@ -35,25 +38,25 @@ export function Header() {
         </Link>
         <div className="hidden items-center gap-1 md:flex">
           <Link href="/" className={buttonVariants({ variant: "ghost" })}>
-            Home
+            {t("home")}
           </Link>
           <Link
             href="/products"
             className={buttonVariants({ variant: "ghost" })}
           >
-            Products
+            {t("products")}
           </Link>
           <Link href="/stores" className={buttonVariants({ variant: "ghost" })}>
-            Stores
+            {t("stores")}
           </Link>
           <Link
             href="/community"
             className={buttonVariants({ variant: "ghost" })}
           >
-            Community
+            {t("community")}
           </Link>
           <Link href="/cs" className={buttonVariants({ variant: "ghost" })}>
-            CS
+            {t("cs")}
           </Link>
           {user?._id && (
             <>
@@ -61,13 +64,13 @@ export function Header() {
                 href="/orders"
                 className={buttonVariants({ variant: "ghost" })}
               >
-                Orders
+                {t("orders")}
               </Link>
               <Link
                 href="/profile/me"
                 className={buttonVariants({ variant: "ghost" })}
               >
-                My Page
+                {t("myPage")}
               </Link>
             </>
           )}
@@ -83,15 +86,15 @@ export function Header() {
                   href="/auth/sign-up/"
                   className={buttonVariants({ variant: "outline" })}
                 >
-                  Sign up
+                  {t("signUp")}
                 </Link>
                 <Link className={buttonVariants({})} href="/auth/login">
-                  Login
+                  {t("login")}
                 </Link>
               </>
             ) : (
               <Button onClick={() => logout()} className="cursor-pointer">
-                Logout
+                {t("logout")}
               </Button>
             )}
           </div>

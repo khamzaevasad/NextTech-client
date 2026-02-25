@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ApolloWrapper } from "@/apollo/apollo-wrapper";
 import { AuthInitializer } from "@/lib/auth/AuthInitializer";
 import { Toaster } from "@/components/ui/sonner";
+import { NextIntlClientProvider } from "next-intl";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,18 +32,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ApolloWrapper>
-          <AuthInitializer />
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <main className="">{children}</main>
-            <Toaster closeButton />
-          </ThemeProvider>
-        </ApolloWrapper>
+        <NextIntlClientProvider>
+          <ApolloWrapper>
+            <AuthInitializer />
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <main className="">{children}</main>
+              <Toaster closeButton />
+            </ThemeProvider>
+          </ApolloWrapper>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
