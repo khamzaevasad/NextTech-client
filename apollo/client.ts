@@ -1,10 +1,4 @@
-import {
-  ApolloClient,
-  InMemoryCache,
-  split,
-  HttpLink,
-  from,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, split, from } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
@@ -83,5 +77,26 @@ export const createApolloClient = () =>
   new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: from([errorLink, authLink, splitLink]),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Store: {
+          fields: {
+            meLiked: {
+              merge(existing, incoming) {
+                return incoming;
+              },
+            },
+          },
+        },
+        Product: {
+          fields: {
+            meLiked: {
+              merge(existing, incoming) {
+                return incoming;
+              },
+            },
+          },
+        },
+      },
+    }),
   });

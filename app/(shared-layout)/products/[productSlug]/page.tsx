@@ -271,6 +271,7 @@ export default function ProductDetailPage({ params }: DetailProps) {
                             fill
                             className="object-contain"
                             unoptimized
+                            priority={true}
                           />
                         </div>
                       </SwiperSlide>
@@ -300,6 +301,7 @@ export default function ProductDetailPage({ params }: DetailProps) {
                             fill
                             className="object-cover"
                             unoptimized
+                            priority={true}
                           />
                         </div>
                       </SwiperSlide>

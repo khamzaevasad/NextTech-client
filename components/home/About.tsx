@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { FeatureSection } from "../web/FutureSection";
 
 function About() {
   const t = useTranslations("home.about");
@@ -23,6 +24,7 @@ function About() {
           <p className="text-muted-foreground leading-relaxed">{t("p3")}</p>
         </div>
       </div>
+      <FeatureSection />
     </div>
   );
 }

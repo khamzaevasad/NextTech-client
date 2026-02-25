@@ -1,8 +1,8 @@
 import { useTranslations } from "next-intl";
-import { LogoCloud } from "../web/LogoCloud";
+import { MotionProduct } from "../products/MotionProduct";
 
-export default function TopStores() {
-  const t = useTranslations("home.topStores");
+export default function TopProducts() {
+  const t = useTranslations("home.topProducts");
 
   return (
     <section className="my-12">
@@ -16,7 +16,7 @@ export default function TopStores() {
         </div>
 
         {/* Slider */}
-        <LogoCloud />
+        <MotionProduct />
 
         {/* Bottom divider */}
         <div className="mt-8 h-px bg-gradient-to-r from-transparent via-border to-transparent" />

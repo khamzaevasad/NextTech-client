@@ -1,3 +1,5 @@
+"use client";
+
 // https://motion-primitives.com/docs/infinite-slider
 
 import { useQuery } from "@apollo/client";
@@ -6,9 +8,11 @@ import { GET_STORES } from "@/apollo/user/user-query";
 import { StoresInquiry } from "@/lib/types/store/store.input";
 import { T } from "@/lib/types/common";
 import { useState } from "react";
-import { Store } from "@/lib/types/store/store";
-import { RATING } from "@/lib/config";
-import Link from "next/link";
+import { _Store } from "@/lib/types/store/store";
+import StoreCard from "./StoreCard";
+import { Empty } from "../ui/empty";
+import { EmptyState } from "./EmptyState";
+import { Store } from "lucide-react";
 
 interface TopStoresProps {
   initialInput?: StoresInquiry;
@@ -17,39 +21,47 @@ interface TopStoresProps {
 export function LogoCloud({
   initialInput = {
     page: 1,
-    limit: 8,
-    // sort: "createdAt",
+    limit: 12,
     search: {},
   },
 }: TopStoresProps) {
-  const [stores, setStores] = useState<Store[]>([]);
-  /* ------------------------------ APOLLO CLIENT ----------------------------- */
+  const [stores, setStores] = useState<_Store[]>([]);
 
-  const {
-    loading: getStoreLoading,
-    data: getStoreData,
-    error: getStoreError,
-    refetch: getStoreRefetch,
-  } = useQuery(GET_STORES, {
+  const { loading } = useQuery(GET_STORES, {
     fetchPolicy: "cache-and-network",
     variables: { input: initialInput },
     notifyOnNetworkStatusChange: true,
     onCompleted: (data: T) => {
-      setStores(data?.getStores?.list ?? []);
+      const filtered = (data?.getStores?.list ?? []).filter(
+        (store: _Store) => store.storeRating > 0,
+      );
+      setStores(filtered);
     },
   });
 
+  if (loading && stores.length === 0) {
+    return (
+      <div className="flex gap-5 overflow-hidden py-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div
+            key={i}
+            className="h-96 w-70 shrink-0 animate-pulse rounded-xl bg-muted"
+          />
+        ))}
+      </div>
+    );
+  }
+
+  if (!stores.length)
+    return <EmptyState icon={<Store />} title="No top Store Found" />;
+
   return (
-    <div className="mask-[linear-gradient(to_right,transparent,black,transparent)] overflow-hidden py-4">
-      <InfiniteSlider gap={42} reverse speed={80} speedOnHover={25}>
+    <div className="overflow-hidden py-4 mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+      <InfiniteSlider gap={20} reverse={false} speed={54} speedOnHover={20}>
         {stores.map((store) => (
-          <Link
-            href={"/stores"}
-            className=" h-4 select-none md:h-5 dark:brightness-0 dark:invert"
-            key={`logo-${store._id}`}
-          >
-            {store?.storeRating >= RATING ? store.storeName : ""}
-          </Link>
+          <div key={store._id} className="w-70 shrink-0">
+            <StoreCard store={store} />
+          </div>
         ))}
       </InfiniteSlider>
     </div>

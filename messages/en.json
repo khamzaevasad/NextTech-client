@@ -30,8 +30,17 @@
     "topStores": {
       "title": "Top Stores"
     },
-    "topSellers": {
-      "title": "Top Sellers"
+    "topProducts": {
+      "title": "Top Products"
+    },
+    "features": {
+      "title": "Empowering Your Tech Journey",
+      "f1_title": "Wide Tech Selection",
+      "f1_desc": "Explore hardware, digital devices, and the latest electronics.",
+      "f2_title": "Verified Stores",
+      "f2_desc": "Shop with confidence from our trusted technology partners.",
+      "f3_title": "Secure Ecosystem",
+      "f3_desc": "Seamless transactions with diverse payment and delivery methods."
     }
   }
 }
