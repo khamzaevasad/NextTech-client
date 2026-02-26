@@ -1,20 +1,11 @@
-"use client";
-import HeroSwiper from "@/components/header/heroSwiper";
-import About from "@/components/home/About";
-import Devices from "@/components/home/Devices";
-import LatestProducts from "@/components/home/LatestProducts";
-import TopProducts from "@/components/home/TopProducts";
-import TopStores from "@/components/home/TopStores";
+import Home from "@/components/home/MainHome";
+import { Metadata } from "next";
 
-export default function Home() {
-  return (
-    <div>
-      <HeroSwiper />
-      <LatestProducts />
-      <Devices />
-      <About />
-      <TopStores />
-      <TopProducts />
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "Home",
+  description: "NextTech — Best tech products, latest devices and top stores",
+};
+
+export default function Page() {
+  return <Home />;
 }

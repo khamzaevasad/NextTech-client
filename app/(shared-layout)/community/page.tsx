@@ -1,29 +1,19 @@
-"use client";
+import { Metadata } from "next";
+import CommunityPage from "./CommunityClient";
 
-import { useState } from "react";
-import CommunitySidebar from "@/components/community/CommunitySidebar";
-import CommunityHeader from "@/components/community/CommunityHeader";
-import ArticleGrid from "@/components/community/ArticleGrid";
+export const metadata: Metadata = {
+  title: "Community",
+  description:
+    "Join the NextTech community, share your experience and connect with tech enthusiasts",
+  keywords: ["community", "tech community", "forum", "discussions", "nexttech"],
+  openGraph: {
+    title: "Community | NextTech",
+    description:
+      "Join the NextTech community, share your experience and connect with tech enthusiasts",
+    images: ["/og-image.jpg"],
+  },
+};
 
-export default function CommunityPage() {
-  const [activeCategory, setActiveCategory] = useState("FREE");
-
-  return (
-    <div className="my-8">
-      <CommunityHeader activeCategory={activeCategory} />
-
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          <CommunitySidebar
-            activeCategory={activeCategory}
-            onCategoryChange={setActiveCategory}
-          />
-
-          <main className="flex-1">
-            <ArticleGrid category={activeCategory} />
-          </main>
-        </div>
-      </div>
-    </div>
-  );
+export default function Page() {
+  return <CommunityPage />;
 }

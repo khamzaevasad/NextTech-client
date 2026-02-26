@@ -18,7 +18,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NextTech",
+  metadataBase: new URL("https://nexttech.uz"),
+  title: {
+    default: "NextTech",
+    template: "%s | NextTech",
+  },
   description: "Modern tech store",
 };
 
