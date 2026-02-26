@@ -28,7 +28,8 @@ interface FaqFormModalProps {
   open: boolean;
   faq: Faq | null;
   onClose: () => void;
-  onSubmit: (input: Record<string, unknown>) => void;
+  onSubmit: (input: Record<string, unknown>) => void; // majburiy
+  onSuccess?: () => void; // ixtiyoriy
 }
 
 const FAQ_CATEGORIES: { value: FaqCategory; label: string }[] = [
@@ -44,6 +45,7 @@ export function FaqFormModal({
   faq,
   onClose,
   onSubmit,
+  onSuccess,
 }: FaqFormModalProps) {
   const isEdit = !!faq;
 
@@ -60,11 +62,15 @@ export function FaqFormModal({
       toast.error("Question and answer are required");
       return;
     }
+
+    // logic o‘zgarmagan
     if (isEdit) {
       onSubmit({ question, answer, category, isActive, order });
     } else {
       onSubmit({ question, answer, category });
     }
+
+    onSuccess?.(); // ✅ FIX: tashqi refetch/side-effect uchun
   };
 
   return (

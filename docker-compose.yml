@@ -1,0 +1,17 @@
+version: "3.3"
+
+services:
+  next-tech-client:
+    container_name: next-tech-client
+    restart: always
+    build: .
+    ports:
+      - "4000:3000"
+    environment:
+      PORT: 3000
+    networks:
+      - client-network
+
+networks:
+  client-network:
+    driver: bridge
