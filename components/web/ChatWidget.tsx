@@ -30,7 +30,7 @@ export default function ChatWidget() {
     sendMessage,
     isTyping,
     clearMessages,
-  } = useChat("ws://localhost:3001");
+  } = useChat(process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:4001");
 
   const initialGreeting = {
     id: "welcome",
