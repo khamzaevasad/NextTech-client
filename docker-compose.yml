@@ -1,5 +1,3 @@
-version: "3.3"
-
 services:
   next-tech-client:
     container_name: next-tech-client
