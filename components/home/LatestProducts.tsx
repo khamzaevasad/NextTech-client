@@ -10,9 +10,10 @@ import { buttonVariants } from "../ui/button";
 import { toast } from "sonner";
 import { Message } from "@/lib/enums/common.enum";
 import { LIKE_TARGET_PRODUCT } from "@/apollo/user/user-mutation";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Package } from "lucide-react";
 import { LoadingBar } from "../web/LoadingBar";
 import { useTranslations } from "next-intl";
+import { EmptyState } from "../web/EmptyState";
 
 interface LatestProductsProps {
   initialInput?: ProductsInquiry;
@@ -83,15 +84,24 @@ function LatestProducts({
             {t("viewAll")} <ArrowUpRight />
           </Link>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-3">
-          {products.map((product) => (
-            <ProductCard
-              key={product._id}
-              product={product}
-              likeProductHandler={likeProductHandler}
+        {products.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-3">
+            {products.map((product) => (
+              <ProductCard
+                key={product._id}
+                product={product}
+                likeProductHandler={likeProductHandler}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex items-center my-5 justify-center">
+            <EmptyState
+              icon={<Package size={"50"} />}
+              title="No Latest Products Found"
             />
-          ))}
-        </div>
+          </div>
+        )}
       </div>
     </>
   );
