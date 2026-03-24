@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useSearchParams, useRouter } from "next/navigation";
 import ProductCard from "@/components/web/ProductCard";
 import { ProductsInquiry } from "@/lib/types/product/product.input";
@@ -17,12 +17,10 @@ import { Message } from "@/lib/enums/common.enum";
 import { T } from "@/lib/types/common";
 import { toast } from "sonner";
 import { LoadingBar } from "@/components/web/LoadingBar";
-import { userVar } from "@/apollo/store";
 
 export default function ProductsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const user = useReactiveVar(userVar);
 
   const categoryIdFromUrl = searchParams.get("categoryId");
 
@@ -34,19 +32,15 @@ export default function ProductsPage() {
     search: {},
   });
 
-  /* -------------------------------------------------------------------------- */
-  /*                                APOLLO CLIENT                               */
-  /* -------------------------------------------------------------------------- */
-
   const [LikeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT);
+
+  /* -------------------------- Categories -------------------------- */
 
   const { data: catData } = useQuery(GET_CATEGORIES, {
     variables: { input: { page: 1, limit: 100, search: {} } },
   });
 
   const categories = catData?.getCategories?.list || [];
-
-  /* -------------------------- Category Helpers -------------------------- */
 
   const getChildCategoryIds = (parentId: string): string[] => {
     return categories
@@ -58,9 +52,7 @@ export default function ProductsPage() {
     return categories.some((cat) => cat.parentId === categoryId);
   };
 
-  const computeCategoryIds = (
-    categoryId: string | undefined,
-  ): string[] | undefined => {
+  const computeCategoryIds = (categoryId?: string): string[] | undefined => {
     if (!categoryId) return undefined;
 
     if (isParentCategory(categoryId)) {
@@ -71,10 +63,10 @@ export default function ProductsPage() {
     return undefined;
   };
 
-  /* -------------------------- Initialize from URL -------------------------- */
+  /* -------------------------- Init from URL -------------------------- */
 
   useEffect(() => {
-    if (categoryIdFromUrl) {
+    if (categoryIdFromUrl && categories.length > 0) {
       const categoryIds = computeCategoryIds(categoryIdFromUrl);
 
       setFilters({
@@ -84,13 +76,13 @@ export default function ProductsPage() {
         direction: Direction.DESC,
         search: {
           categoryId: categoryIdFromUrl,
-          categoryIds: categoryIds,
+          categoryIds,
         },
       });
     }
   }, [categoryIdFromUrl, categories.length]);
 
-  /* -------------------------- Products Query -------------------------- */
+  /* -------------------------- Products -------------------------- */
 
   const {
     data: prodData,
@@ -106,9 +98,12 @@ export default function ProductsPage() {
   const totalProducts = prodData?.getProducts?.metaCounter?.[0]?.total || 0;
   const totalPages = Math.ceil(totalProducts / filters.limit);
 
-  /* -------------------------------------------------------------------------- */
-  /*                                  HANDLERS                                  */
-  /* -------------------------------------------------------------------------- */
+  /* -------------------------- Loading States -------------------------- */
+
+  const isInitialLoading = prodLoading && !prodData;
+  const isEmpty = !prodLoading && prodData && products.length === 0;
+
+  /* -------------------------- Handlers -------------------------- */
 
   const handlePageChange = (newPage: number) => {
     setFilters((prev) => ({ ...prev, page: newPage }));
@@ -122,13 +117,12 @@ export default function ProductsPage() {
       ...newFilters,
       search: {
         ...newFilters.search,
-        categoryIds: categoryIds,
+        categoryIds,
       },
     };
 
     setFilters(updatedFilters);
 
-    // Update URL
     const params = new URLSearchParams();
 
     if (newFilters.search.categoryId) {
@@ -144,10 +138,10 @@ export default function ProductsPage() {
       params.set("maxPrice", newFilters.search.priceRange.end.toString());
     }
 
-    const newUrl = params.toString()
-      ? `/products?${params.toString()}`
-      : "/products";
-    router.push(newUrl, { scroll: false });
+    router.push(
+      params.toString() ? `/products?${params.toString()}` : "/products",
+      { scroll: false },
+    );
   };
 
   const likeProductHandler = async (user: T, id: string) => {
@@ -163,7 +157,6 @@ export default function ProductsPage() {
       toast.success("Success");
     } catch (err: unknown) {
       if (err instanceof Error) {
-        console.log("LikeProductHandler error", err.message);
         toast.error(err.message);
       } else {
         toast.error("Unexpected error occurred");
@@ -175,13 +168,23 @@ export default function ProductsPage() {
     ? categories.find((c) => c._id === filters.search.categoryId)?.categoryName
     : "All Products";
 
-  /* -------------------------------------------------------------------------- */
-  /*                                    RENDER                                  */
-  /* -------------------------------------------------------------------------- */
+  /* -------------------------- Render -------------------------- */
+
+  if (isInitialLoading) {
+    return (
+      <>
+        <LoadingBar loading />
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500" />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
       <LoadingBar loading={prodLoading} />
+
       <div className="container mx-auto px-4 py-10 min-h-screen">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="w-full lg:w-72 shrink-0">
@@ -203,7 +206,13 @@ export default function ProductsPage() {
               </p>
             </div>
 
-            {products.length > 0 ? (
+            {isEmpty ? (
+              <div className="text-center py-20 bg-accent/10 rounded-3xl border-2 border-dashed">
+                <p className="text-xl text-muted-foreground">
+                  No products found in this selection.
+                </p>
+              </div>
+            ) : (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {products.map((product: Product) => (
@@ -254,12 +263,6 @@ export default function ProductsPage() {
                   </div>
                 )}
               </>
-            ) : (
-              <div className="text-center py-20 bg-accent/10 rounded-3xl border-2 border-dashed">
-                <p className="text-xl text-muted-foreground">
-                  No products found in this selection.
-                </p>
-              </div>
             )}
           </div>
         </div>

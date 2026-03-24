@@ -95,7 +95,7 @@ export default function SignupPage() {
                   <FieldLabel>Phone number</FieldLabel>
                   <Input
                     aria-invalid={fieldState.invalid}
-                    placeholder="+821234567800"
+                    placeholder="01021339908"
                     {...field}
                   />
                   {fieldState.invalid && (

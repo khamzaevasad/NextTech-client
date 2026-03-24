@@ -127,6 +127,20 @@ export default function StorePage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const isInitialLoading = storeLoading && !storeData;
+  const isEmpty = !storeLoading && storeData && stores.length === 0;
+
+  if (isInitialLoading) {
+    return (
+      <>
+        <LoadingBar loading />
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500" />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <LoadingBar loading={storeLoading} />
@@ -203,15 +217,7 @@ export default function StorePage() {
 
         {/* STORES GRID */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-3">
-          {stores.length > 0 ? (
-            stores.map((store) => (
-              <StoreCard
-                likeStoreHandler={likeStoreHandler}
-                key={store._id}
-                store={store}
-              />
-            ))
-          ) : (
+          {isEmpty ? (
             <div className="col-span-full text-center py-12">
               <p className="text-muted-foreground text-lg">
                 {searchText
@@ -219,6 +225,14 @@ export default function StorePage() {
                   : "No stores available"}
               </p>
             </div>
+          ) : (
+            stores.map((store) => (
+              <StoreCard
+                likeStoreHandler={likeStoreHandler}
+                key={store._id}
+                store={store}
+              />
+            ))
           )}
         </div>
 

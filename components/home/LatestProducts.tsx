@@ -1,3 +1,5 @@
+"use client";
+
 import ProductCard from "../web/ProductCard";
 import { ProductsInquiry } from "@/lib/types/product/product.input";
 import { useState } from "react";
@@ -27,25 +29,25 @@ function LatestProducts({
     search: {},
   },
 }: LatestProductsProps) {
-  const [products, setProducts] = useState<Product[]>([]);
   const t = useTranslations("home.latestProducts");
 
   /* ------------------------------ APOLLO CLIENT ----------------------------- */
   const {
     loading: getProductsLoading,
-    error: getProductsError,
-    refetch: getProductsRefetch,
     data: getProductsData,
+    refetch: getProductsRefetch,
   } = useQuery(GET_PRODUCTS, {
     fetchPolicy: "cache-and-network",
     variables: { input: initialInput },
     notifyOnNetworkStatusChange: true,
-    onCompleted: (data: T) => {
-      setProducts(data?.getProducts?.list ?? []);
-    },
   });
 
   const [LikeTargetProduct] = useMutation(LIKE_TARGET_PRODUCT, {});
+
+  /* ------------------------- Derived States ------------------------- */
+  const products: Product[] = getProductsData?.getProducts?.list ?? [];
+  const isInitialLoading = getProductsLoading && !getProductsData;
+  const isEmpty = !getProductsLoading && products.length === 0;
 
   /* -------------------------------- HANDLERS -------------------------------- */
   const likeProductHandler = async (user: T, id: string) => {
@@ -53,12 +55,7 @@ function LatestProducts({
       if (!id) return;
       if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 
-      await LikeTargetProduct({
-        variables: {
-          input: id,
-        },
-      });
-
+      await LikeTargetProduct({ variables: { input: id } });
       await getProductsRefetch({ input: initialInput });
       toast("success");
     } catch (err: unknown) {
@@ -71,39 +68,45 @@ function LatestProducts({
     }
   };
 
-  return (
-    <>
-      <LoadingBar loading={getProductsLoading} />
-      <div className="my-8">
-        <div className="flex items-center justify-between">
-          <h2 className="text-4xl font-semibold my-6">{t("title")}</h2>
-          <Link
-            href="/products"
-            className={buttonVariants({ variant: "ghost" })}
-          >
-            {t("viewAll")} <ArrowUpRight />
-          </Link>
-        </div>
-        {products.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-3">
-            {products.map((product) => (
-              <ProductCard
-                key={product._id}
-                product={product}
-                likeProductHandler={likeProductHandler}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="flex items-center my-5 justify-center">
-            <EmptyState
-              icon={<Package size={"50"} />}
-              title="No Latest Products Found"
-            />
-          </div>
-        )}
+  /* ------------------------- RENDER ------------------------- */
+
+  if (isInitialLoading) {
+    return (
+      <div className="my-8 flex flex-col items-center justify-center min-h-[200px]">
+        <LoadingBar loading />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500" />
       </div>
-    </>
+    );
+  }
+
+  return (
+    <div className="my-8">
+      <div className="flex items-center justify-between">
+        <h2 className="text-4xl font-semibold my-6">{t("title")}</h2>
+        <Link href="/products" className={buttonVariants({ variant: "ghost" })}>
+          {t("viewAll")} <ArrowUpRight />
+        </Link>
+      </div>
+
+      {isEmpty ? (
+        <div className="flex items-center my-5 justify-center">
+          <EmptyState
+            icon={<Package size={50} />}
+            title="No Latest Products Found"
+          />
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-3">
+          {products.map((product) => (
+            <ProductCard
+              key={product._id}
+              product={product}
+              likeProductHandler={likeProductHandler}
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 

@@ -74,13 +74,13 @@ export function ProfileHeader({
             <p className="text-muted-foreground max-w-md">
               {member?.memberType}
             </p>
-
+            {/* 
             <div className="flex flex-wrap justify-center md:justify-start gap-6 pt-4">
               <StatItem label="Articles" value={member?.memberArticles} />
               <StatItem label="Followers" value={member?.memberFollowers} />
               <StatItem label="Following" value={member?.memberFollowings} />
-              {/* <StatItem label="Points" value={member?.memberPoints} /> */}
-            </div>
+              <StatItem label="Points" value={member?.memberPoints} />
+            </div> */}
           </div>
         </div>
 

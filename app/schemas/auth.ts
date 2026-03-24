@@ -11,7 +11,7 @@ export const signUpSchema = z.object({
     .max(12, "Password should be at most 12 characters long."),
   memberPhone: z
     .string()
-    .regex(/^\+82\d{9,10}$/, "The phone number is in the wrong format"),
+    .regex(/^\+?\d{7,14}$/, "The phone number is in the wrong format"),
   memberType: z.enum(["CUSTOMER", "SELLER"]),
 });
 
