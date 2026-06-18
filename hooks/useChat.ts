@@ -7,7 +7,7 @@ export interface ChatMessage {
   timestamp: Date;
 }
 
-const STORAGE_KEY = "chat_messages";
+const STORAGE_KEY = "admin_chat_messages";
 const MAX_STORED = 100;
 
 function loadFromStorage(): ChatMessage[] {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import {
   X,
   Send,
@@ -8,19 +8,26 @@ import {
   Loader2,
   Trash2,
   HeadsetIcon,
+  Bot,
+  UserRoundCog,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useChat } from "@/hooks/useChat";
+import { useAiChat } from "@/hooks/useAiChat";
 import { userVar } from "@/apollo/store";
 import { useReactiveVar } from "@apollo/client";
 
+type ChatTab = "ai" | "admin";
+
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<ChatTab>("ai");
   const [inputValue, setInputValue] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const user = useReactiveVar(userVar);
@@ -31,21 +38,47 @@ export default function ChatWidget() {
     isTyping,
     clearMessages,
   } = useChat(process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:4001");
+  const {
+    messages: aiMessages,
+    sendMessage: sendAiMessage,
+    isTyping: isAiTyping,
+    clearMessages: clearAiMessages,
+    error: aiError,
+  } = useAiChat();
 
-  const initialGreeting = {
-    id: "welcome",
-    text: "Welcome to NextTech Support! Ask us about our computers, laptops, peripherals, and accessories. We're happy to assist you find the perfect tech solution.",
-    sender: "assistant" as const,
-    timestamp: new Date(),
-  };
+  const aiGreeting = useMemo(
+    () => ({
+      id: "ai-welcome",
+      text: "Welcome to NextTech AI Chat. I can help with products, stores, categories, ordering steps, and platform guidance.",
+      sender: "assistant" as const,
+      timestamp: new Date(),
+    }),
+    [],
+  );
+  const adminGreeting = useMemo(
+    () => ({
+      id: "admin-welcome",
+      text: "Admin Chat sends your message to the NextTech admin team through Telegram. Replies will appear here.",
+      sender: "assistant" as const,
+      timestamp: new Date(),
+    }),
+    [],
+  );
 
-  const allMessages = [initialGreeting, ...socketMessages];
+  const allMessages = useMemo(
+    () =>
+      activeTab === "ai"
+        ? [aiGreeting, ...aiMessages]
+        : [adminGreeting, ...socketMessages],
+    [activeTab, adminGreeting, aiGreeting, aiMessages, socketMessages],
+  );
+  const activeTyping = activeTab === "ai" ? isAiTyping : isTyping;
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [allMessages, isTyping]);
+  }, [allMessages, activeTyping, activeTab]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -61,8 +94,20 @@ export default function ChatWidget() {
 
   const handleSendMessage = () => {
     if (!inputValue.trim()) return;
-    sendMessage(inputValue, user?.memberNick || "Guest");
+    if (activeTab === "ai") {
+      void sendAiMessage(inputValue);
+    } else {
+      sendMessage(inputValue, user?.memberNick || "Guest");
+    }
     setInputValue("");
+  };
+
+  const handleClearMessages = () => {
+    if (activeTab === "ai") {
+      clearAiMessages();
+    } else {
+      clearMessages();
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -136,7 +181,7 @@ export default function ChatWidget() {
             <div className="flex items-center gap-1">
               {/* Clear chat button */}
               <Button
-                onClick={clearMessages}
+                onClick={handleClearMessages}
                 size="icon"
                 variant="ghost"
                 title="Clear chat history"
@@ -154,6 +199,33 @@ export default function ChatWidget() {
               </Button>
             </div>
           </CardHeader>
+
+          <div className="border-b px-3 py-2 sm:px-4">
+            <Tabs
+              value={activeTab}
+              onValueChange={(value) => {
+                setActiveTab(value as ChatTab);
+                setInputValue("");
+              }}
+              className="w-full"
+            >
+              <TabsList className="grid h-10 w-full grid-cols-2">
+                <TabsTrigger value="ai" className="gap-2">
+                  <Bot className="h-4 w-4" />
+                  AI Chat
+                </TabsTrigger>
+                <TabsTrigger value="admin" className="gap-2">
+                  <UserRoundCog className="h-4 w-4" />
+                  Admin Chat
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            {activeTab === "admin" && (
+              <p className="mt-2 text-xs text-muted-foreground">
+                Messages in this tab are sent to the admin team.
+              </p>
+            )}
+          </div>
 
           {/* Messages Area */}
           <CardContent className="flex-1 p-0 bg-muted/5 min-h-0">
@@ -196,11 +268,11 @@ export default function ChatWidget() {
                 ))}
 
                 {/* Typing Indicator */}
-                {isTyping && (
+                {activeTyping && (
                   <div className="flex gap-2 items-end">
                     <Avatar className="h-7 w-7 sm:h-8 sm:w-8 mb-0.5 border shrink-0">
                       <AvatarFallback className="bg-muted text-[10px]">
-                        AI
+                        {activeTab === "ai" ? "AI" : "AD"}
                       </AvatarFallback>
                     </Avatar>
                     <div className="rounded-2xl rounded-bl-sm px-4 py-3 border shadow-sm">
@@ -219,6 +291,9 @@ export default function ChatWidget() {
 
           {/* Input Area */}
           <div className="border-t p-3 sm:p-4  shrink-0 pb-[calc(0.75rem+env(safe-area-inset-bottom))] sm:pb-4">
+            {aiError && activeTab === "ai" && (
+              <p className="mb-2 text-xs text-destructive">{aiError}</p>
+            )}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -230,18 +305,22 @@ export default function ChatWidget() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyPress}
-                placeholder="Type your message..."
+                placeholder={
+                  activeTab === "ai"
+                    ? "Ask the AI assistant..."
+                    : "Message the admin team..."
+                }
                 className="flex-1 rounded-xl h-10 sm:h-11 text-sm"
-                disabled={isTyping}
+                disabled={activeTyping}
                 autoComplete="off"
               />
               <Button
                 type="submit"
-                disabled={!inputValue.trim() || isTyping}
+                disabled={!inputValue.trim() || activeTyping}
                 size="icon"
                 className="rounded-full h-10 w-10 sm:h-11 sm:w-11 shrink-0 bg-pink-500 hover:bg-pink-600 shadow-md"
               >
-                {isTyping ? (
+                {activeTyping ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <Send className="h-4 w-4" />
