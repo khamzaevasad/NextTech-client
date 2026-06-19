@@ -44,6 +44,7 @@ export const useAiChat = () => {
   const sendMessage = useCallback(async (text: string) => {
     const message = text.trim();
     if (!message || isTyping) return;
+    const aiChatUrl = `${API_URL}/chat/ai`;
 
     const userMessage: ChatMessage = {
       id: `ai-u-${Date.now()}`,
@@ -57,7 +58,11 @@ export const useAiChat = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${API_URL}/chat/ai`, {
+      if (process.env.NODE_ENV === "development") {
+        console.info("[AI_CHAT_DEBUG]", { url: aiChatUrl });
+      }
+
+      const response = await fetch(aiChatUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,6 +76,12 @@ export const useAiChat = () => {
       };
 
       if (!response.ok || !data.reply) {
+        if (process.env.NODE_ENV === "development") {
+          console.error("[AI_CHAT_ERROR]", {
+            status: response.status,
+            body: data,
+          });
+        }
         throw new Error(data.message || "AI chat failed");
       }
 
